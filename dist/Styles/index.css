@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+    background-color: rgb(103, 228, 124);
+    width: 100%;
+    min-height: 100vh;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.link {
+    margin: 0 1em;
+}
+
+#header-section {
+    margin: 1em;
+}
+
+#header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#products-section {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-container {
+    width: 20%;
+    background-color: grey;;
+}
