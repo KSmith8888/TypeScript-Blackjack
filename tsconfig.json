@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "ES6",
+    "target": "ES2016",
+    "rootDir": "./src",
+    "outDir": "./dist/Scripts",
+    "strict": true
+  },
+  "files": ["./src/index.ts"]
+}
