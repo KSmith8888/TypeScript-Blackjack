@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+}
+
+#player-section, #dealer-section {
+    display: flex;
+}
+
+.card-container {
+    margin: 1em;
+    padding: .5em;
+    width: 8em;
+    height: 11em;
+    border: 1px solid black;
+    border-radius: 5px;
+}
