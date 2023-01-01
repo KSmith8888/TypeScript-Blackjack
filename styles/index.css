@@ -1,12 +1,24 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
+}
+
+#header-section {
+    padding: 1em;
+}
+
+#main-section {
+    padding: 1em;
 }
 
 #player-section, #dealer-section {
     display: flex;
 }
 
-.card-container {
+.card-container, .blank-card-container {
     margin: 1em;
     padding: .5em;
     width: 8em;
