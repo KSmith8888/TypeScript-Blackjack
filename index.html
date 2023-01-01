@@ -8,14 +8,22 @@
     <title>TypeScript Blackjack</title>
 </head>
 <body>
-    <h1>TypeScript Blackjack</h1>
-    <section id="player-section">
-        <p>Player Score: <span id="player-score"></span></p>
-    </section>
-    <section id="dealer-section">
-        <p>Dealer Score: <span id="dealer-score"></span></p>
-    </section>
-    <button id="hit-button">Hit</button>
-    <button id="stay-button">Stay</button>
+    <header id="header-section">
+        <h1>TypeScript Blackjack</h1>
+    </header>
+    <main id="main-section">
+        <section id="dealer-section">
+            <p>Dealer Score: <span id="dealer-score"></span></p>
+            <div id="dealer-face-down-card" class="blank-card-container"></div>
+        </section>
+        <section id="player-section">
+            <p>Player Score: <span id="player-score"></span></p>
+        </section>
+        <section id="selections-section">
+            <button id="hit-button">Hit</button>
+            <button id="stay-button">Stay</button>
+            <p id="game-result-text"></p>
+        </section>
+    </main>
 </body>
 </html>
