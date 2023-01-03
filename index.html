@@ -13,11 +13,26 @@
     </header>
     <main id="main-section">
         <section id="dealer-section">
-            <p>Dealer Score: <span id="dealer-score"></span></p>
+            <div id="dealer-info-container">
+                <p class="name-text">Dealer Score: 
+                    <span id="dealer-score"></span>
+                </p>
+            </div>
             <div id="dealer-face-down-card" class="blank-card-container"></div>
         </section>
         <section id="player-section">
-            <p>Player Score: <span id="player-score"></span></p>
+            <div id="player-info-container">
+                <p class="name-text">Player Score: 
+                    <span id="player-score"></span>
+                </p>
+                <div id="bet-buttons-container">
+                    <button id="bet-5-button" class="bet-button">$5</button>
+                    <button id="bet-10-button" class="bet-button">$10</button>
+                    <button id="bet-25-button" class="bet-button">$25</button>
+                    <button id="bet-50-button" class="bet-button">$50</button>
+                </div>
+                <p>Total: $<span id="total-money-text"></span></p>
+            </div>
         </section>
         <section id="selections-section">
             <button id="hit-button">Hit</button>
