@@ -2,10 +2,57 @@ class Player {
     hand: Card[];
     total: number;
     cardElements: HTMLElement[];
+    money: number;
+    currentBet: number;
+    bet5Btn: HTMLButtonElement;
+    bet10Btn: HTMLButtonElement;
+    bet25Btn: HTMLButtonElement;
+    bet50Btn: HTMLButtonElement;
+    totalMoneyText: HTMLSpanElement;
     constructor() {
         this.hand = [];
         this.cardElements = [];
         this.total = 0;
+        this.money = 100;
+        this.currentBet = 0;
+        this.totalMoneyText = document.querySelector('#total-money-text') as HTMLSpanElement;
+        this.bet5Btn = document.querySelector('#bet-5-button') as HTMLButtonElement;
+        this.bet10Btn = document.querySelector('#bet-10-button') as HTMLButtonElement;
+        this.bet25Btn = document.querySelector('#bet-25-button') as HTMLButtonElement;
+        this.bet50Btn = document.querySelector('#bet-50-button') as HTMLButtonElement;
+        this.bet5Btn.addEventListener('click', () => {
+            this.currentBet = 5;
+            this.money -= 5;
+            this.disableBets();
+        });
+        this.bet10Btn.addEventListener('click', () => {
+            this.currentBet = 10;
+            this.money -= 10;
+            this.disableBets();
+        });
+        this.bet25Btn.addEventListener('click', () => {
+            this.currentBet = 25;
+            this.money -= 25;
+            this.disableBets();
+        });
+        this.bet50Btn.addEventListener('click', () => {
+            this.currentBet = 50;
+            this.money -= 50;
+            this.disableBets();
+        });
+    }
+    disableBets() {
+        this.bet5Btn.disabled = true;
+        this.bet10Btn.disabled = true;
+        this.bet25Btn.disabled = true;
+        this.bet50Btn.disabled = true;
+        this.totalMoneyText.textContent = this.money.toString();
+    }
+    activateBets() {
+        this.bet5Btn.disabled = false;
+        this.bet10Btn.disabled = false;
+        this.bet25Btn.disabled = false;
+        this.bet50Btn.disabled = false;
     }
 }
 
@@ -59,9 +106,9 @@ class Game {
     deck: Deck;
     player: Player;
     dealer: Dealer;
-    playerScoreText: (HTMLParagraphElement|null);
+    playerScoreText: (HTMLSpanElement|null);
     playerSection: (HTMLElement|null);
-    dealerScoreText: (HTMLParagraphElement|null);
+    dealerScoreText: (HTMLSpanElement|null);
     dealerSection: (HTMLElement|null);
     dealerFaceDownCard: (HTMLDivElement|null);
     selectionsSection: (HTMLElement|null);
@@ -98,12 +145,14 @@ class Game {
         }
         this.player.total = 0;
         this.dealer.total = 0;
+        this.player.currentBet = 0;
         this.player.hand = [];
         this.dealer.hand = [];
         this.deck.generateDeck();
         this.drawPlayerCard();
         this.drawPlayerCard();
         this.drawDealerCard();
+        this.player.activateBets();
     }
     getRankValue(rank: (string|number), currentTurn: (Player|Dealer)) {
         /*
@@ -126,12 +175,14 @@ class Game {
             if (this.playerScoreText !== null) {
                 this.playerScoreText.textContent = this.player.total.toString();
             }
+            if(this.player.total > 21) {
+                this.checkTotals();
+            }
         } else if(currentTurn === this.dealer) {
             if (this.dealerScoreText !== null) {
                 this.dealerScoreText.textContent = this.dealer.total.toString();
             }
         }
-        this.checkTotals(currentTurn);
     }
     initiateDealerTurn() {
         if(this.dealerFaceDownCard !== null) {
@@ -141,9 +192,10 @@ class Game {
             this.hitButton.disabled = true;
             this.stayButton.disabled = true;
         }
-        if(this.dealer.total < 17) {
+        do {
             this.drawDealerCard();
-        }
+        } while(this.dealer.total < 17);
+        this.checkTotals();
     }
     resetBoard(startNewGameBtn: HTMLButtonElement) {
         this.player.cardElements.forEach((card) => {
@@ -201,17 +253,24 @@ class Game {
         }
         this.deck.cards.splice(index, 1);
     }
-    checkTotals(currentTurn: (Player|Dealer)) {
-        if(currentTurn === this.player) {
-            if(this.player.total > 21) {
+    checkTotals() {
+        if(this.player.total > 21) {
+            this.endGame('You lose, better luck next time!');
+        }else if(this.dealer.total > 21) {
+            this.player.money += (this.player.currentBet * 2);
+            this.endGame('You win, well done!');
+        } else {
+            if(this.player.total > this.dealer.total) {
+                this.player.money += (this.player.currentBet * 2);
+                this.endGame('You win, well done!');
+            } else if(this.player.total === this.dealer.total) {
+                this.player.money += (this.player.currentBet);
+                this.endGame('Push. Try again?');
+            } else {
                 this.endGame('You lose, better luck next time!');
             }
         }
-        if(currentTurn === this.dealer) {
-            if(this.dealer.total > 21) {
-                this.endGame('You win, well done!');
-            }
-        }
+        this.player.totalMoneyText.textContent = this.player.money.toString();
     }
     endGame(resultText: string) {
         if(this.hitButton !== null && this.stayButton !== null && this.gameResultText !== null) {
