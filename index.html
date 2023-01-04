@@ -9,7 +9,7 @@
 </head>
 <body>
     <header id="header-section">
-        <h1>TypeScript Blackjack</h1>
+        <h1 id="main-header">TypeScript Blackjack</h1>
     </header>
     <main id="main-section">
         <section id="dealer-section">
@@ -26,17 +26,21 @@
                     <span id="player-score"></span>
                 </p>
                 <div id="bet-buttons-container">
+                    <p id="bet-text">Place your bet:</p>
                     <button id="bet-5-button" class="bet-button">$5</button>
                     <button id="bet-10-button" class="bet-button">$10</button>
                     <button id="bet-25-button" class="bet-button">$25</button>
                     <button id="bet-50-button" class="bet-button">$50</button>
                 </div>
-                <p>Total: $<span id="total-money-text"></span></p>
+                <p>Total: $
+                    <span id="total-money-text">100</span>
+                </p>
             </div>
         </section>
         <section id="selections-section">
             <button id="hit-button">Hit</button>
             <button id="stay-button">Stay</button>
+            <button id="double-down-button">Double Down</button>
             <p id="game-result-text"></p>
         </section>
     </main>
