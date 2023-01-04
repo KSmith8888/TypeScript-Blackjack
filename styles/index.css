@@ -4,15 +4,32 @@
 
 body {
     margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgb(14, 122, 14);
 }
 
 #header-section {
     padding: 1em 0 0 1em;
+    margin: 0;
 }
 
-#player-info-container, #dealer-info-container {
-    width: 8em;
+#main-header {
+    font-size: 2rem;
+    margin: .5em 0 .5em 2em;
+}
+
+#player-info-container {
+    width: 10em;
     text-align: center;
+}
+
+#dealer-info-container {
+    width: 10em;
+    height: 11em;
+    margin: 1em 0 0 0;
+    text-align: center;
+    display: flex;
+    align-items: flex-end;
 }
 
 #main-section {
@@ -23,6 +40,15 @@ body {
     display: flex;
 }
 
+.name-text {
+    font-size: 1.2rem;
+    margin: .5em 0;
+}
+
+#player-score, #dealer-score {
+    font-weight: bold;
+}
+
 .card-container, .blank-card-container {
     margin: 1em;
     padding: .5em;
@@ -30,6 +56,9 @@ body {
     height: 11em;
     border: 1px solid black;
     border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #FFF;
 }
 
 #bet-buttons-container {
@@ -43,4 +72,64 @@ body {
     padding: .5em .1em;
     border-radius: 5px;
     border: 1px solid black;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgb(204, 205, 207);
+}
+
+#bet-text {
+    width: 100%;
+    font-weight: 1.1rem;
+    text-align: center;
+    margin: 1em 0;
+}
+
+.card-suit {
+    width: 52px;
+    height: 70px;
+    margin: 0;
+    justify-self: center;
+    align-self: center;
+}
+
+.card-rank-top {
+    font-size: 1.7rem;
+    margin: 0;
+    justify-self: flex-start;
+    align-self: flex-start;
+}
+
+.card-rank-bottom {
+    font-size: 1.7rem;
+    margin: 0;
+    justify-self: flex-end;
+    align-self: flex-end;
+}
+
+#selections-section {
+    display: flex;
+    align-items: center;
+}
+
+#hit-button, #stay-button {
+    width: 5em;
+    padding: .5em .1em;
+    border-radius: 5px;
+    margin: 0 .5em;
+    border: 1px solid black;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgb(204, 205, 207);
+}
+
+.start-new-game-btn, #double-down-button {
+    width: 10em;
+    padding: .5em .1em;
+    border-radius: 5px;
+    margin: 0 .5em;
+    border: 1px solid black;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgb(204, 205, 207);
+}
+
+#game-result-text {
+    margin: 0 1em;
 }
