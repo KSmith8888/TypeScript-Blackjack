@@ -1,6 +1,6 @@
 "use strict";
 class Player {
-    constructor() {
+    constructor(game) {
         this.hand = [];
         this.cardElements = [];
         this.total = 0;
@@ -11,6 +11,7 @@ class Player {
         this.bet10Btn = document.querySelector('#bet-10-button');
         this.bet25Btn = document.querySelector('#bet-25-button');
         this.bet50Btn = document.querySelector('#bet-50-button');
+        this.game = game;
         this.bet5Btn.addEventListener('click', () => {
             this.currentBet = 5;
             this.money -= 5;
@@ -38,6 +39,7 @@ class Player {
         this.bet25Btn.disabled = true;
         this.bet50Btn.disabled = true;
         this.totalMoneyText.textContent = this.money.toString();
+        this.game.activateSelections();
     }
     activateBets() {
         this.bet5Btn.disabled = false;
@@ -84,7 +86,7 @@ class Deck {
 class Game {
     constructor() {
         this.deck = new Deck();
-        this.player = new Player();
+        this.player = new Player(this);
         this.dealer = new Dealer();
         this.playerScoreText = document.querySelector('#player-score');
         this.playerSection = document.querySelector('#player-section');
@@ -93,16 +95,28 @@ class Game {
         this.selectionsSection = document.querySelector('#selections-section');
         this.hitButton = document.querySelector('#hit-button');
         this.stayButton = document.querySelector('#stay-button');
+        this.doubleDownBtn = document.querySelector('#double-down-button');
         this.gameResultText = document.querySelector('#game-result-text');
         this.dealerFaceDownCard = document.querySelector('#dealer-face-down-card');
-        if (this.hitButton !== null) {
+        if (this.hitButton) {
             this.hitButton.addEventListener('click', () => {
                 this.drawPlayerCard();
             });
         }
-        if (this.stayButton !== null) {
+        if (this.stayButton) {
             this.stayButton.addEventListener('click', () => {
                 this.initiateDealerTurn();
+            });
+        }
+        if (this.doubleDownBtn) {
+            this.doubleDownBtn.addEventListener('click', () => {
+                this.player.money -= this.player.currentBet;
+                this.player.currentBet = (this.player.currentBet * 2);
+                this.player.totalMoneyText.textContent = this.player.money.toString();
+                this.drawPlayerCard();
+                if (this.player.total <= 21) {
+                    this.initiateDealerTurn();
+                }
             });
         }
     }
@@ -120,6 +134,7 @@ class Game {
         this.drawPlayerCard();
         this.drawDealerCard();
         this.player.activateBets();
+        this.disableSelections();
     }
     getRankValue(rank, currentTurn) {
         const numericValueRank = typeof rank === 'number' ? rank : 0;
@@ -153,10 +168,7 @@ class Game {
         if (this.dealerFaceDownCard !== null) {
             this.dealerFaceDownCard.style.display = 'none';
         }
-        if (this.stayButton !== null && this.hitButton !== null) {
-            this.hitButton.disabled = true;
-            this.stayButton.disabled = true;
-        }
+        this.disableSelections();
         do {
             this.drawDealerCard();
         } while (this.dealer.total < 17);
@@ -170,13 +182,28 @@ class Game {
             card.remove();
         });
         startNewGameBtn.remove();
-        if (this.hitButton && this.stayButton && this.gameResultText) {
-            this.hitButton.disabled = false;
-            this.stayButton.disabled = false;
+        if (this.gameResultText) {
             this.gameResultText.textContent = '';
         }
     }
+    activateSelections() {
+        if (this.hitButton && this.stayButton && this.doubleDownBtn) {
+            this.hitButton.disabled = false;
+            this.stayButton.disabled = false;
+            this.doubleDownBtn.disabled = false;
+        }
+    }
+    disableSelections() {
+        if (this.hitButton && this.stayButton && this.doubleDownBtn) {
+            this.hitButton.disabled = true;
+            this.stayButton.disabled = true;
+            this.doubleDownBtn.disabled = true;
+        }
+    }
     drawPlayerCard() {
+        if (this.doubleDownBtn) {
+            this.doubleDownBtn.disabled = true;
+        }
         const index = this.deck.getCardIndex();
         const newCard = this.deck.cards[index];
         this.player.hand.push(newCard);
@@ -186,14 +213,19 @@ class Game {
         if (this.playerSection !== null) {
             this.playerSection.append(cardContainer);
             cardContainer.classList.add('card-container');
-            const cardSuit = document.createElement('p');
-            cardSuit.textContent = newCard.suit;
+            const cardRankTop = document.createElement('p');
+            cardRankTop.textContent = newCard.rank.toString();
+            cardRankTop.classList.add('card-rank-top');
+            const cardSuit = document.createElement('img');
+            cardSuit.src = `./assets/images/${newCard.suit}.png`;
+            cardSuit.alt = newCard.suit;
             cardSuit.classList.add('card-suit');
-            const cardRank = document.createElement('p');
-            cardRank.textContent = newCard.rank.toString();
-            cardRank.classList.add('card-rank');
+            const cardRankBottom = document.createElement('p');
+            cardRankBottom.textContent = newCard.rank.toString();
+            cardRankBottom.classList.add('card-rank-bottom');
+            cardContainer.append(cardRankTop);
             cardContainer.append(cardSuit);
-            cardContainer.append(cardRank);
+            cardContainer.append(cardRankBottom);
         }
         this.deck.cards.splice(index, 1);
     }
@@ -207,14 +239,19 @@ class Game {
         if (this.dealerSection !== null) {
             this.dealerSection.append(cardContainer);
             cardContainer.classList.add('card-container');
-            const cardSuit = document.createElement('p');
-            cardSuit.textContent = newCard.suit;
+            const cardRankTop = document.createElement('p');
+            cardRankTop.textContent = newCard.rank.toString();
+            cardRankTop.classList.add('card-rank-top');
+            const cardSuit = document.createElement('img');
+            cardSuit.src = `./assets/images/${newCard.suit}.png`;
+            cardSuit.alt = newCard.suit;
             cardSuit.classList.add('card-suit');
-            const cardRank = document.createElement('p');
-            cardRank.textContent = newCard.rank.toString();
-            cardRank.classList.add('card-rank');
+            const cardRankBottom = document.createElement('p');
+            cardRankBottom.textContent = newCard.rank.toString();
+            cardRankBottom.classList.add('card-rank-bottom');
+            cardContainer.append(cardRankTop);
             cardContainer.append(cardSuit);
-            cardContainer.append(cardRank);
+            cardContainer.append(cardRankBottom);
         }
         this.deck.cards.splice(index, 1);
     }
@@ -242,13 +279,13 @@ class Game {
         this.player.totalMoneyText.textContent = this.player.money.toString();
     }
     endGame(resultText) {
-        if (this.hitButton !== null && this.stayButton !== null && this.gameResultText !== null) {
-            this.hitButton.disabled = true;
-            this.stayButton.disabled = true;
+        if (this.hitButton && this.stayButton && this.gameResultText && this.doubleDownBtn) {
+            this.disableSelections();
             this.gameResultText.textContent = resultText;
         }
         const startNewGameBtn = document.createElement('button');
         startNewGameBtn.textContent = 'Start New Game';
+        startNewGameBtn.classList.add('start-new-game-btn');
         if (this.selectionsSection !== null) {
             this.selectionsSection.append(startNewGameBtn);
             startNewGameBtn.addEventListener('click', () => {
