@@ -38,6 +38,7 @@ body {
 }
 
 #player-section, #dealer-section {
+    min-height: 13em;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -62,6 +63,10 @@ body {
     display: flex;
     justify-content: space-between;
     background-color: #FFF;
+}
+
+#dealer-face-down-card {
+    display: none;
 }
 
 #bet-buttons-container {
@@ -174,6 +179,9 @@ body {
         margin: 0;
         padding: .5em;
     }
+    #player-section, #dealer-section {
+        min-height: 7em;
+    }
     .card-container, .blank-card-container {
         width: 5em;
         height: 6em;
@@ -184,7 +192,8 @@ body {
         height: 35px;
     }
     .card-rank-top, .card-rank-bottom {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
+        font-weight: 700;
     }
     #scores-container {
         margin: .5em;
@@ -196,9 +205,27 @@ body {
     #bet-text {
         margin: .5em 0;
         font-size: 1rem;
+        font-weight: 700;
     }
     #bet-buttons-container, #selections-container {
         width: 45%;
         text-align: center;
+    }
+    .bet-button {
+        width: 6em;
+        height: 3em;
+    }
+    #hit-button, #stay-button {
+        width: 6em;
+        height: 3em;
+        font-weight: 700;
+    }
+    .start-new-game-btn, #double-down-button {
+        width: 9em;
+        height: 3em;
+        font-weight: 700;
+    }
+    #total-money-text, #selection-text {
+        font-weight: 700;
     }
 }
