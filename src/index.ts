@@ -29,6 +29,8 @@ class Player {
                 this.currentBet = 5;
                 this.money -= 5;
                 this.disableBets();
+                this.game.activateSelections();
+                this.game.startNewGame();
             }
         });
         this.bet10Btn.addEventListener('click', () => {
@@ -36,6 +38,8 @@ class Player {
                 this.currentBet = 10;
                 this.money -= 10;
                 this.disableBets();
+                this.game.activateSelections();
+                this.game.startNewGame();
             }
         });
         this.bet25Btn.addEventListener('click', () => {
@@ -43,6 +47,8 @@ class Player {
                 this.currentBet = 25;
                 this.money -= 25;
                 this.disableBets();
+                this.game.activateSelections();
+                this.game.startNewGame();
             }
         });
         this.bet50Btn.addEventListener('click', () => {
@@ -50,6 +56,8 @@ class Player {
                 this.currentBet = 50;
                 this.money -= 50;
                 this.disableBets();
+                this.game.activateSelections();
+                this.game.startNewGame();
             }
         });
     }
@@ -59,7 +67,6 @@ class Player {
         this.bet25Btn.disabled = true;
         this.bet50Btn.disabled = true;
         this.totalMoneyText.textContent = this.money.toString();
-        this.game.activateSelections();
     }
     activateBets(): void {
         this.bet5Btn.disabled = false;
@@ -146,6 +153,9 @@ class Game {
         this.gameResultText = document.querySelector('#game-result-text');
         this.dealerFaceDownCard = document.querySelector('#dealer-face-down-card');
         this.hitButton?.addEventListener('click', () => {
+            if(this.doubleDownBtn) {
+                this.doubleDownBtn.disabled = true;
+            }
             this.drawCard(this.player, this.playerSection);
         });
         this.stayButton?.addEventListener('click', () => {
@@ -157,9 +167,9 @@ class Game {
                 this.player.currentBet = (this.player.currentBet * 2);
                 this.player.totalMoneyText.textContent = this.player.money.toString();
                 this.drawCard(this.player, this.playerSection);
-            if(this.player.total <= 21) {
-                this.initiateDealerTurn();
-            }
+                if(this.player.total <= 21) {
+                    this.initiateDealerTurn();
+                }
             }
         });
     }
@@ -167,17 +177,9 @@ class Game {
         if(this.dealerFaceDownCard !== null) {
             this.dealerFaceDownCard.style.display = 'block';
         }
-        this.player.total = 0;
-        this.dealer.total = 0;
-        this.player.currentBet = 0;
-        this.player.hand = [];
-        this.dealer.hand = [];
-        this.deck.generateDeck();
         this.drawCard(this.player, this.playerSection);
         this.drawCard(this.player, this.playerSection);
         this.drawCard(this.dealer, this.dealerSection);
-        this.player.activateBets();
-        this.disableSelections();
     }
     getRankValue(rank: (string|number), currentTurn: (Player|Dealer)): void {
         /*
@@ -214,7 +216,7 @@ class Game {
         }
     }
     initiateDealerTurn(): void {
-        if(this.dealerFaceDownCard !== null) {
+        if(this.dealerFaceDownCard) {
             this.dealerFaceDownCard.style.display = 'none';
         }
         this.disableSelections();
@@ -224,6 +226,13 @@ class Game {
         this.checkTotals();
     }
     resetBoard(startNewGameBtn: HTMLButtonElement): void {
+        this.player.total = 0;
+        this.dealer.total = 0;
+        this.player.currentBet = 0;
+        this.player.aceOverage = 0;
+        this.dealer.aceOverage = 0;
+        this.player.hand = [];
+        this.dealer.hand = [];
         this.player.cardElements.forEach((card) => {
             card.remove();
         });
@@ -234,12 +243,19 @@ class Game {
         if(this.gameResultText) {
             this.gameResultText.textContent = '';
         }
+        //Needed in case of bust on double down because dealers turn is never initiated 
+        if(this.dealerFaceDownCard) {
+            this.dealerFaceDownCard.style.display = 'none';
+        }
+        this.player.activateBets();
     }
     activateSelections(): void {
         if(this.hitButton && this.stayButton && this.doubleDownBtn) {
             this.hitButton.disabled = false;
             this.stayButton.disabled = false;
-            this.doubleDownBtn.disabled = false;
+            if(this.player.money >= this.player.currentBet) {
+                this.doubleDownBtn.disabled = false;
+            }
         }
     }
     disableSelections(): void {
@@ -250,9 +266,6 @@ class Game {
         }
     }
     drawCard(currentTurn: Player|Dealer, currentSection: HTMLElement|null): void {
-        if(this.doubleDownBtn) {
-            this.doubleDownBtn.disabled = true;
-        }
         if(this.deck.cards.length < 1) {
             this.deck.generateDeck();
         }
@@ -301,10 +314,11 @@ class Game {
         this.player.totalMoneyText.textContent = this.player.money.toString();
     }
     endGame(resultText: string): void {
-        if(this.hitButton && this.stayButton && this.gameResultText && this.doubleDownBtn) {
-            this.disableSelections();
+        if(this.gameResultText) {
             this.gameResultText.textContent = resultText;
         }
+        this.disableSelections();
+        this.player.disableBets();
         const startNewGameBtn = document.createElement('button');
         startNewGameBtn.textContent = 'Start New Game';
         startNewGameBtn.classList.add('start-new-game-btn');
@@ -312,11 +326,10 @@ class Game {
             this.scoresContainer.append(startNewGameBtn);
             startNewGameBtn.addEventListener('click', () => {
                 this.resetBoard(startNewGameBtn);
-                this.startNewGame();
             });
         }
     }
 }
 
 const game = new Game();
-game.startNewGame();
+game.disableSelections();
