@@ -9,12 +9,16 @@ body {
 }
 
 #header-section {
-    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 4px solid gold;
+    background-color: rgb(60, 228, 69);
 }
 
 #main-header {
     font-size: 2rem;
     margin: .5em 0;
+    justify-self: center;
 }
 
 #main-section {
@@ -81,6 +85,7 @@ body {
     margin: .5em;
     padding: .5em .1em;
     border-radius: 5px;
+    font-weight: 700;
     border: 1px solid black;
     font-family: 'Courier New', Courier, monospace;
     background-color: rgb(204, 205, 207);
@@ -167,8 +172,47 @@ body {
     align-items: center;
 }
 
+#total-money-text {
+    font-weight: 700;
+}
+
 #selection-text {
     margin: .5em 0;
+}
+
+#rules-modal[open] {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(170, 177, 166);
+}
+
+#rule-heading {
+    margin-bottom: .5em;
+}
+
+.rule-text {
+    margin-bottom: .5em;
+}
+
+#close-rules-button, #open-rules-button {
+    width: 5em;
+    border: 1px solid black;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgb(204, 205, 207);
+    cursor: pointer;
+    padding: .2em .5em;
+    margin: 1em .5em;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+#close-rules-button:hover, #open-rules-button:hover, #open-rules-button:focus,
+.start-new-game-btn:hover, #double-down-button:hover, .start-new-game-btn:focus, #double-down-button:focus, .bet-button:hover, .bet-button:focus,
+#hit-button:hover, #stay-button:hover, #hit-button:focus, #stay-button:focus {
+    background-color: rgb(140, 145, 137);
 }
 
 @media (max-width: 850px) {
@@ -205,14 +249,13 @@ body {
     #bet-text {
         margin: .5em 0;
         font-size: 1rem;
-        font-weight: 700;
     }
     #bet-buttons-container, #selections-container {
         width: 45%;
         text-align: center;
     }
     .bet-button {
-        width: 6em;
+        width: 5em;
         height: 3em;
     }
     #hit-button, #stay-button {
@@ -225,7 +268,7 @@ body {
         height: 3em;
         font-weight: 700;
     }
-    #total-money-text, #selection-text {
+    #selection-text {
         font-weight: 700;
     }
 }
