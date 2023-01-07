@@ -102,7 +102,7 @@ class Deck {
 }
 class Game {
     constructor() {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e;
         this.deck = new Deck();
         this.player = new Player(this);
         this.dealer = new Dealer();
@@ -116,6 +116,9 @@ class Game {
         this.doubleDownBtn = document.querySelector('#double-down-button');
         this.gameResultText = document.querySelector('#game-result-text');
         this.dealerFaceDownCard = document.querySelector('#dealer-face-down-card');
+        this.rulesModal = document.querySelector('#rules-modal');
+        this.openRulesBtn = document.querySelector('#open-rules-button');
+        this.closeRulesBtn = document.querySelector('#close-rules-button');
         (_a = this.hitButton) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
             if (this.doubleDownBtn) {
                 this.doubleDownBtn.disabled = true;
@@ -134,6 +137,16 @@ class Game {
                 if (this.player.total <= 21) {
                     this.initiateDealerTurn();
                 }
+            }
+        });
+        (_d = this.openRulesBtn) === null || _d === void 0 ? void 0 : _d.addEventListener('click', () => {
+            if (this.rulesModal) {
+                this.rulesModal.showModal();
+            }
+        });
+        (_e = this.closeRulesBtn) === null || _e === void 0 ? void 0 : _e.addEventListener('click', () => {
+            if (this.rulesModal) {
+                this.rulesModal.close();
             }
         });
     }
@@ -206,6 +219,12 @@ class Game {
         if (this.gameResultText) {
             this.gameResultText.textContent = '';
         }
+        if (this.playerScoreText) {
+            this.playerScoreText.textContent = '0';
+        }
+        if (this.dealerScoreText) {
+            this.dealerScoreText.textContent = '0';
+        }
         if (this.dealerFaceDownCard) {
             this.dealerFaceDownCard.style.display = 'none';
         }
@@ -258,7 +277,13 @@ class Game {
     }
     checkTotals() {
         if (this.player.total > 21) {
-            this.endGame('You lose, better luck next time!');
+            if (this.player.money > 0) {
+                this.endGame('You lose, better luck next time!');
+            }
+            else {
+                this.player.money = 100;
+                this.endGame('Game over, you ran out of money! Restart with $100?');
+            }
         }
         else if (this.dealer.total > 21) {
             this.player.money += (this.player.currentBet * 2);
@@ -273,8 +298,12 @@ class Game {
                 this.player.money += (this.player.currentBet);
                 this.endGame('Push. Try again?');
             }
-            else {
+            else if (this.player.total < this.dealer.total && this.player.money > 0) {
                 this.endGame('You lose, better luck next time!');
+            }
+            else {
+                this.player.money = 100;
+                this.endGame('Game over, you ran out of money! Restart with $100?');
             }
         }
         this.player.totalMoneyText.textContent = this.player.money.toString();
