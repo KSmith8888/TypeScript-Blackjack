@@ -138,6 +138,9 @@ class Game {
     stayButton: (HTMLButtonElement|null);
     doubleDownBtn: (HTMLButtonElement|null);
     gameResultText: (HTMLParagraphElement|null);
+    rulesModal: (HTMLDialogElement|null);
+    openRulesBtn: (HTMLButtonElement|null);
+    closeRulesBtn: (HTMLButtonElement|null);
     constructor() {
         this.deck = new Deck();
         this.player = new Player(this);
@@ -152,6 +155,9 @@ class Game {
         this.doubleDownBtn = document.querySelector('#double-down-button');
         this.gameResultText = document.querySelector('#game-result-text');
         this.dealerFaceDownCard = document.querySelector('#dealer-face-down-card');
+        this.rulesModal = document.querySelector('#rules-modal');
+        this.openRulesBtn = document.querySelector('#open-rules-button');
+        this.closeRulesBtn = document.querySelector('#close-rules-button');
         this.hitButton?.addEventListener('click', () => {
             if(this.doubleDownBtn) {
                 this.doubleDownBtn.disabled = true;
@@ -170,6 +176,16 @@ class Game {
                 if(this.player.total <= 21) {
                     this.initiateDealerTurn();
                 }
+            }
+        });
+        this.openRulesBtn?.addEventListener('click', () => {
+            if(this.rulesModal) {
+                this.rulesModal.showModal();
+            }
+        });
+        this.closeRulesBtn?.addEventListener('click', () => {
+            if(this.rulesModal) {
+                this.rulesModal.close();
             }
         });
     }
@@ -243,6 +259,12 @@ class Game {
         if(this.gameResultText) {
             this.gameResultText.textContent = '';
         }
+        if (this.playerScoreText) {
+            this.playerScoreText.textContent = '0';
+        } 
+        if(this.dealerScoreText) {
+            this.dealerScoreText.textContent = '0';
+        }
         //Needed in case of bust on double down because dealers turn is never initiated 
         if(this.dealerFaceDownCard) {
             this.dealerFaceDownCard.style.display = 'none';
@@ -296,7 +318,12 @@ class Game {
     }
     checkTotals(): void {
         if(this.player.total > 21) {
-            this.endGame('You lose, better luck next time!');
+            if(this.player.money > 0) {
+                this.endGame('You lose, better luck next time!');
+            } else {
+                this.player.money = 100;
+                this.endGame('Game over, you ran out of money! Restart with $100?');
+            }
         }else if(this.dealer.total > 21) {
             this.player.money += (this.player.currentBet * 2);
             this.endGame('You win, well done!');
@@ -307,8 +334,11 @@ class Game {
             } else if(this.player.total === this.dealer.total) {
                 this.player.money += (this.player.currentBet);
                 this.endGame('Push. Try again?');
-            } else {
+            } else if(this.player.total < this.dealer.total && this.player.money > 0){
                 this.endGame('You lose, better luck next time!');
+            } else {
+                this.player.money = 100;
+                this.endGame('Game over, you ran out of money! Restart with $100?');
             }
         }
         this.player.totalMoneyText.textContent = this.player.money.toString();
