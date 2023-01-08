@@ -5,20 +5,30 @@
 body {
     margin: 0;
     font-family: 'Courier New', Courier, monospace;
-    background-color: rgb(14, 122, 14);
+    background: radial-gradient(rgb(56, 202, 64), rgb(14, 122, 14));
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #header-section {
     display: flex;
-    justify-content: flex-start;
-    border-bottom: 4px solid gold;
-    background-color: rgb(60, 228, 69);
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1em;
+    border-bottom: 4px solid rgb(63, 32, 4);
+    color: gold;
+    background-color: rgb(14, 122, 14);
+}
+
+#logo-image {
+    width: 32px;
+    height: 32px;
 }
 
 #main-header {
     font-size: 2rem;
     margin: .5em 0;
-    justify-self: center;
+    text-align: center;
 }
 
 #main-section {
@@ -131,8 +141,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    border: 4px solid gold;
-    background-color: rgb(59, 221, 59);
+    border: 4px solid rgb(63, 32, 4);
+    background-color: rgb(14, 122, 14);
+    color: #FFF;
 }
 
 #hit-button, #stay-button {
@@ -185,7 +196,7 @@ body {
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: rgb(170, 177, 166);
+    background-color: rgb(187, 196, 183);
 }
 
 #rule-heading {
@@ -221,7 +232,7 @@ body {
         flex-wrap: wrap;
         justify-content: center;
         margin: 0;
-        padding: .5em;
+        padding: .5em 0;
     }
     #player-section, #dealer-section {
         min-height: 7em;
@@ -251,7 +262,7 @@ body {
         font-size: 1rem;
     }
     #bet-buttons-container, #selections-container {
-        width: 45%;
+        width: 50%;
         text-align: center;
     }
     .bet-button {
@@ -270,5 +281,8 @@ body {
     }
     #selection-text {
         font-weight: 700;
+    }
+    #rules-modal[open] {
+        width: 95%;
     }
 }
