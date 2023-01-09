@@ -3,6 +3,7 @@
 }
 
 body {
+    min-height: 100vh;
     margin: 0;
     font-family: 'Courier New', Courier, monospace;
     background: radial-gradient(rgb(56, 202, 64), rgb(14, 122, 14));
@@ -60,7 +61,16 @@ body {
 
 .name-text {
     font-size: 1.2rem;
-    margin: 1.5em 0;
+    margin: .5em 0;
+}
+
+#scores-container {
+    padding-top: .5em;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #player-score, #dealer-score {
@@ -84,6 +94,7 @@ body {
 }
 
 #bet-buttons-container {
+    width: 35%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -102,15 +113,12 @@ body {
     cursor: pointer;
 }
 
-.bet-button:disabled {
-    cursor: not-allowed;
-}
-
 #bet-text {
     width: 100%;
     font-size: 1.1rem;
     text-align: center;
     margin: 1em 0;
+    font-weight: 700;
 }
 
 .card-suit {
@@ -168,16 +176,18 @@ body {
     cursor: pointer;
 }
 
-#hit-button:disabled, #stay-button:disabled, 
+#hit-button:disabled, #stay-button:disabled, .bet-button:disabled, 
 .start-new-game-btn:disabled, #double-down-button:disabled {
     cursor: not-allowed;
 }
 
 #game-result-text {
     margin: 0 1em;
+    text-align: center;
 }
 
 #selections-container {
+    width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -189,6 +199,7 @@ body {
 
 #selection-text {
     margin: .5em 0;
+    font-weight: 700;
 }
 
 #rules-modal[open] {
@@ -277,9 +288,6 @@ body {
     .start-new-game-btn, #double-down-button {
         width: 9em;
         height: 3em;
-        font-weight: 700;
-    }
-    #selection-text {
         font-weight: 700;
     }
     #rules-modal[open] {
