@@ -132,7 +132,7 @@ class Game {
     playerSection: (HTMLElement|null);
     dealerScoreText: (HTMLSpanElement|null);
     dealerSection: (HTMLElement|null);
-    dealerFaceDownCard: (HTMLDivElement|null);
+    dealerFaceDownCard: HTMLDivElement;
     scoresContainer: (HTMLElement|null);
     hitButton: (HTMLButtonElement|null);
     stayButton: (HTMLButtonElement|null);
@@ -141,6 +141,7 @@ class Game {
     rulesModal: (HTMLDialogElement|null);
     openRulesBtn: (HTMLButtonElement|null);
     closeRulesBtn: (HTMLButtonElement|null);
+    dealCardSound: HTMLAudioElement;
     constructor() {
         this.deck = new Deck();
         this.player = new Player(this);
@@ -154,29 +155,43 @@ class Game {
         this.stayButton = document.querySelector('#stay-button');
         this.doubleDownBtn = document.querySelector('#double-down-button');
         this.gameResultText = document.querySelector('#game-result-text');
-        this.dealerFaceDownCard = document.querySelector('#dealer-face-down-card');
+        this.dealerFaceDownCard = document.createElement('div');
+        this.dealerFaceDownCard.id = 'dealer-face-down-card';
+        this.dealerFaceDownCard.classList.add('blank-card-container');
         this.rulesModal = document.querySelector('#rules-modal');
         this.openRulesBtn = document.querySelector('#open-rules-button');
         this.closeRulesBtn = document.querySelector('#close-rules-button');
+        this.dealCardSound = new Audio('./assets/audio/deal-card-sound.wav');
+        this.dealCardSound.volume = .5;
         this.hitButton?.addEventListener('click', () => {
-            if(this.doubleDownBtn) {
-                this.doubleDownBtn.disabled = true;
-            }
-            this.drawCard(this.player, this.playerSection);
+            this.disableSelections();
+            setTimeout(() => {
+                this.dealCardSound.play().catch((err) => {console.error(err)});
+                this.drawCard(this.player, this.playerSection);
+                if(this.player.total <= 21 && this.hitButton && this.stayButton) {
+                    this.hitButton.disabled = false;
+                    this.stayButton.disabled = false;
+                }
+            }, 750);
         });
         this.stayButton?.addEventListener('click', () => {
+            this.disableSelections();
             this.initiateDealerTurn();
         });
         this.doubleDownBtn?.addEventListener('click', () => {
-            if(this.player.money >= this.player.currentBet) {
-                this.player.money -= this.player.currentBet;
-                this.player.currentBet = (this.player.currentBet * 2);
-                this.player.totalMoneyText.textContent = this.player.money.toString();
-                this.drawCard(this.player, this.playerSection);
-                if(this.player.total <= 21) {
-                    this.initiateDealerTurn();
+            this.disableSelections();
+            setTimeout(() => {
+                if(this.player.money >= this.player.currentBet) {
+                    this.dealCardSound.play().catch((err) => {console.error(err)});
+                    this.player.money -= this.player.currentBet;
+                    this.player.currentBet = (this.player.currentBet * 2);
+                    this.player.totalMoneyText.textContent = this.player.money.toString();
+                    this.drawCard(this.player, this.playerSection);
+                    if(this.player.total <= 21) {
+                        this.initiateDealerTurn();
+                    }
                 }
-            }
+            }, 750);
         });
         this.openRulesBtn?.addEventListener('click', () => {
             if(this.rulesModal) {
@@ -190,12 +205,14 @@ class Game {
         });
     }
     startNewGame(): void {
-        if(this.dealerFaceDownCard !== null) {
+        setTimeout(() => {
+            this.dealCardSound.play().catch((err) => {console.error(err)});
+            this.drawCard(this.player, this.playerSection);
+            this.drawCard(this.player, this.playerSection);
+            this.drawCard(this.dealer, this.dealerSection);
+            this.dealerSection?.append(this.dealerFaceDownCard);
             this.dealerFaceDownCard.style.display = 'block';
-        }
-        this.drawCard(this.player, this.playerSection);
-        this.drawCard(this.player, this.playerSection);
-        this.drawCard(this.dealer, this.dealerSection);
+        }, 750);
     }
     getRankValue(rank: (string|number), currentTurn: (Player|Dealer)): void {
         /*
@@ -232,14 +249,16 @@ class Game {
         }
     }
     initiateDealerTurn(): void {
-        if(this.dealerFaceDownCard) {
-            this.dealerFaceDownCard.style.display = 'none';
-        }
-        this.disableSelections();
-        do {
-            this.drawCard(this.dealer, this.dealerSection);
-        } while(this.dealer.total < 17);
-        this.checkTotals();
+        this.dealerFaceDownCard.style.display = 'none';
+        const continueDrawing = setInterval(() => {
+            if(this.dealer.total < 17) {
+                this.dealCardSound.play().catch((err) => {console.error(err)});
+                this.drawCard(this.dealer, this.dealerSection);
+            } else {
+                clearInterval(continueDrawing);
+                this.checkTotals();
+            }
+        }, 1000);
     }
     resetBoard(startNewGameBtn: HTMLButtonElement): void {
         this.player.total = 0;
@@ -266,9 +285,7 @@ class Game {
             this.dealerScoreText.textContent = '0';
         }
         //Needed in case of bust on double down because dealers turn is never initiated 
-        if(this.dealerFaceDownCard) {
-            this.dealerFaceDownCard.style.display = 'none';
-        }
+        this.dealerFaceDownCard.style.display = 'none';
         this.player.activateBets();
     }
     activateSelections(): void {
