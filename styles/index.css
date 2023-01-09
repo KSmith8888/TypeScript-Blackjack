@@ -249,9 +249,10 @@ body {
         min-height: 7em;
     }
     .card-container, .blank-card-container {
-        width: 4em;
+        width: 4.5em;
         height: 6em;
         margin: .5em;
+        padding: .2em;
     }
     .card-suit {
         width: 26px;
