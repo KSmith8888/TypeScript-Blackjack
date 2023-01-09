@@ -115,29 +115,44 @@ class Game {
         this.stayButton = document.querySelector('#stay-button');
         this.doubleDownBtn = document.querySelector('#double-down-button');
         this.gameResultText = document.querySelector('#game-result-text');
-        this.dealerFaceDownCard = document.querySelector('#dealer-face-down-card');
+        this.dealerFaceDownCard = document.createElement('div');
+        this.dealerFaceDownCard.id = 'dealer-face-down-card';
+        this.dealerFaceDownCard.classList.add('blank-card-container');
         this.rulesModal = document.querySelector('#rules-modal');
         this.openRulesBtn = document.querySelector('#open-rules-button');
         this.closeRulesBtn = document.querySelector('#close-rules-button');
+        this.dealCardSound = new Audio('./assets/audio/deal-card-sound.wav');
+        this.shuffleCardsSound = new Audio('./assets/audio/shuffle-cards-sound.wav');
+        this.dealCardSound.volume = .5;
         (_a = this.hitButton) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
-            if (this.doubleDownBtn) {
-                this.doubleDownBtn.disabled = true;
-            }
-            this.drawCard(this.player, this.playerSection);
+            this.disableSelections();
+            setTimeout(() => {
+                this.dealCardSound.play().catch((err) => { console.error(err); });
+                this.drawCard(this.player, this.playerSection);
+                if (this.player.total <= 21 && this.hitButton && this.stayButton) {
+                    this.hitButton.disabled = false;
+                    this.stayButton.disabled = false;
+                }
+            }, 750);
         });
         (_b = this.stayButton) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
+            this.disableSelections();
             this.initiateDealerTurn();
         });
         (_c = this.doubleDownBtn) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
-            if (this.player.money >= this.player.currentBet) {
-                this.player.money -= this.player.currentBet;
-                this.player.currentBet = (this.player.currentBet * 2);
-                this.player.totalMoneyText.textContent = this.player.money.toString();
-                this.drawCard(this.player, this.playerSection);
-                if (this.player.total <= 21) {
-                    this.initiateDealerTurn();
+            this.disableSelections();
+            setTimeout(() => {
+                if (this.player.money >= this.player.currentBet) {
+                    this.dealCardSound.play().catch((err) => { console.error(err); });
+                    this.player.money -= this.player.currentBet;
+                    this.player.currentBet = (this.player.currentBet * 2);
+                    this.player.totalMoneyText.textContent = this.player.money.toString();
+                    this.drawCard(this.player, this.playerSection);
+                    if (this.player.total <= 21) {
+                        this.initiateDealerTurn();
+                    }
                 }
-            }
+            }, 750);
         });
         (_d = this.openRulesBtn) === null || _d === void 0 ? void 0 : _d.addEventListener('click', () => {
             if (this.rulesModal) {
@@ -151,12 +166,15 @@ class Game {
         });
     }
     startNewGame() {
-        if (this.dealerFaceDownCard !== null) {
+        setTimeout(() => {
+            var _a;
+            this.dealCardSound.play().catch((err) => { console.error(err); });
+            this.drawCard(this.player, this.playerSection);
+            this.drawCard(this.player, this.playerSection);
+            this.drawCard(this.dealer, this.dealerSection);
+            (_a = this.dealerSection) === null || _a === void 0 ? void 0 : _a.append(this.dealerFaceDownCard);
             this.dealerFaceDownCard.style.display = 'block';
-        }
-        this.drawCard(this.player, this.playerSection);
-        this.drawCard(this.player, this.playerSection);
-        this.drawCard(this.dealer, this.dealerSection);
+        }, 750);
     }
     getRankValue(rank, currentTurn) {
         const numericValueRank = typeof rank === 'number' ? rank : 0;
@@ -192,14 +210,17 @@ class Game {
         }
     }
     initiateDealerTurn() {
-        if (this.dealerFaceDownCard) {
-            this.dealerFaceDownCard.style.display = 'none';
-        }
-        this.disableSelections();
-        do {
-            this.drawCard(this.dealer, this.dealerSection);
-        } while (this.dealer.total < 17);
-        this.checkTotals();
+        this.dealerFaceDownCard.style.display = 'none';
+        const continueDrawing = setInterval(() => {
+            if (this.dealer.total < 17) {
+                this.dealCardSound.play().catch((err) => { console.error(err); });
+                this.drawCard(this.dealer, this.dealerSection);
+            }
+            else {
+                clearInterval(continueDrawing);
+                this.checkTotals();
+            }
+        }, 1000);
     }
     resetBoard(startNewGameBtn) {
         this.player.total = 0;
@@ -225,9 +246,7 @@ class Game {
         if (this.dealerScoreText) {
             this.dealerScoreText.textContent = '0';
         }
-        if (this.dealerFaceDownCard) {
-            this.dealerFaceDownCard.style.display = 'none';
-        }
+        this.dealerFaceDownCard.style.display = 'none';
         this.player.activateBets();
     }
     activateSelections() {
