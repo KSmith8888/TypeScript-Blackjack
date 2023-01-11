@@ -133,7 +133,7 @@ class Game {
     dealerScoreText: (HTMLSpanElement|null);
     dealerSection: (HTMLElement|null);
     dealerFaceDownCard: HTMLDivElement;
-    scoresContainer: (HTMLElement|null);
+    resetSection: (HTMLElement|null);
     hitButton: (HTMLButtonElement|null);
     stayButton: (HTMLButtonElement|null);
     doubleDownBtn: (HTMLButtonElement|null);
@@ -142,6 +142,7 @@ class Game {
     openRulesBtn: (HTMLButtonElement|null);
     closeRulesBtn: (HTMLButtonElement|null);
     dealCardSound: HTMLAudioElement;
+    topPayout: HTMLSpanElement;
     constructor() {
         this.deck = new Deck();
         this.player = new Player(this);
@@ -150,7 +151,7 @@ class Game {
         this.playerSection = document.querySelector('#player-section');
         this.dealerScoreText = document.querySelector('#dealer-score');
         this.dealerSection = document.querySelector('#dealer-section');
-        this.scoresContainer = document.querySelector('#scores-container');
+        this.resetSection = document.querySelector('#reset-section');
         this.hitButton = document.querySelector('#hit-button');
         this.stayButton = document.querySelector('#stay-button');
         this.doubleDownBtn = document.querySelector('#double-down-button');
@@ -163,6 +164,7 @@ class Game {
         this.closeRulesBtn = document.querySelector('#close-rules-button');
         this.dealCardSound = new Audio('./assets/audio/deal-card-sound.wav');
         this.dealCardSound.volume = .5;
+        this.topPayout = document.querySelector('#top-payout') as HTMLSpanElement;
         this.hitButton?.addEventListener('click', () => {
             this.disableSelections();
             setTimeout(() => {
@@ -336,44 +338,63 @@ class Game {
     checkTotals(): void {
         if(this.player.total > 21) {
             if(this.player.money > 0) {
-                this.endGame('You lose, better luck next time!');
+                this.endGame('You lose, better luck next time!', false);
             } else {
                 this.player.money = 100;
-                this.endGame('Game over, you ran out of money! Restart with $100?');
+                this.endGame('Game over, you ran out of money! Restart with $100?', true);
             }
         }else if(this.dealer.total > 21) {
             this.player.money += (this.player.currentBet * 2);
-            this.endGame('You win, well done!');
+            this.endGame('You win, well done!', false);
         } else {
             if(this.player.total > this.dealer.total) {
                 this.player.money += (this.player.currentBet * 2);
-                this.endGame('You win, well done!');
+                this.endGame('You win, well done!', false);
             } else if(this.player.total === this.dealer.total) {
                 this.player.money += (this.player.currentBet);
-                this.endGame('Push. Try again?');
+                this.endGame('Push. Try again?', false);
             } else if(this.player.total < this.dealer.total && this.player.money > 0){
-                this.endGame('You lose, better luck next time!');
+                this.endGame('You lose, better luck next time!', false);
             } else {
                 this.player.money = 100;
-                this.endGame('Game over, you ran out of money! Restart with $100?');
+                this.endGame('Game over, you ran out of money! Restart with $100?', true);
             }
         }
         this.player.totalMoneyText.textContent = this.player.money.toString();
     }
-    endGame(resultText: string): void {
+    endGame(resultText: string, isGameOver: boolean): void {
         if(this.gameResultText) {
             this.gameResultText.textContent = resultText;
         }
         this.disableSelections();
         this.player.disableBets();
         const startNewGameBtn = document.createElement('button');
-        startNewGameBtn.textContent = 'Start New Game';
+        if(!isGameOver) {
+            startNewGameBtn.textContent = 'New Hand';
+        } else {
+            startNewGameBtn.textContent = 'Start New Game';
+        }
         startNewGameBtn.classList.add('start-new-game-btn');
-        if(this.scoresContainer) {
-            this.scoresContainer.append(startNewGameBtn);
+        if(this.resetSection) {
+            this.resetSection.append(startNewGameBtn);
             startNewGameBtn.addEventListener('click', () => {
                 this.resetBoard(startNewGameBtn);
             });
+        }
+        if(localStorage.getItem('high-score') !== null) {
+            const highScore = localStorage.getItem('high-score');
+            if(typeof highScore === 'string' && this.player.money > parseInt(JSON.parse(highScore))) {
+                localStorage.setItem('high-score', JSON.stringify(this.player.money));
+                this.topPayout.textContent = this.player.money.toString();
+            }
+        } else {
+            console.log('second')
+            if(this.player.money > 100) {
+                localStorage.setItem('high-score', JSON.stringify(this.player.money));
+                this.topPayout.textContent = this.player.money.toString();
+            } else {
+                localStorage.setItem('high-score', JSON.stringify(100));
+            }
         }
     }
 }
