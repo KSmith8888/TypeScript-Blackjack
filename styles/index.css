@@ -184,6 +184,9 @@ body {
 #game-result-text {
     margin: 0 1em;
     text-align: center;
+    font-size: 1.3rem;
+    color: black;
+    font-weight: 700;
 }
 
 #selections-container {
@@ -200,6 +203,7 @@ body {
 #selection-text {
     margin: .5em 0;
     font-weight: 700;
+    font-size: 1.1rem;
 }
 
 #rules-modal[open] {
@@ -237,6 +241,16 @@ body {
     background-color: rgb(140, 145, 137);
 }
 
+#reset-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#top-payout-text {
+    text-align: center;
+}
+
 @media (max-width: 850px) {
     #selections-section {
         width: 100%;
@@ -263,7 +277,8 @@ body {
         font-weight: 700;
     }
     #scores-container {
-        margin: .5em;
+        margin: 0 .5em;
+        padding-top: 0;
     }
     .name-text {
         font-size: 1rem;
@@ -271,7 +286,6 @@ body {
     }
     #bet-text {
         margin: .5em 0;
-        font-size: 1rem;
     }
     #bet-buttons-container, #selections-container {
         width: 50%;
