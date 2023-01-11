@@ -381,23 +381,23 @@ class Game {
                 this.resetBoard(startNewGameBtn);
             });
         }
+        this.determineHighScore();
+    }
+    determineHighScore() {
         if(localStorage.getItem('high-score') !== null) {
             const highScore = localStorage.getItem('high-score');
-            if(typeof highScore === 'string' && this.player.money > parseInt(JSON.parse(highScore))) {
+            if(highScore !== null && this.player.money > parseInt(JSON.parse(highScore))) {
                 localStorage.setItem('high-score', JSON.stringify(this.player.money));
                 this.topPayout.textContent = this.player.money.toString();
+            } else if(highScore !== null && this.player.money < parseInt(JSON.parse(highScore))) {
+                this.topPayout.textContent = JSON.parse(highScore);
             }
         } else {
-            console.log('second')
-            if(this.player.money > 100) {
-                localStorage.setItem('high-score', JSON.stringify(this.player.money));
-                this.topPayout.textContent = this.player.money.toString();
-            } else {
-                localStorage.setItem('high-score', JSON.stringify(100));
-            }
+            localStorage.setItem('high-score', JSON.stringify(100));
         }
     }
 }
 
 const game = new Game();
 game.disableSelections();
+game.determineHighScore();
