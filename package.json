@@ -1,0 +1,13 @@
+{
+  "name": "typescript-blackjack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A classic Blackjack game made with TypeScript",
+  "homepage": "https://ksmith8888.github.io/TypeScript-Blackjack/",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
+}
