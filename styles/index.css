@@ -5,7 +5,7 @@
 body {
     min-height: 100vh;
     margin: 0;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     background: radial-gradient(rgb(56, 202, 64), rgb(14, 122, 14));
     background-repeat: no-repeat;
     background-size: cover;
@@ -28,7 +28,7 @@ body {
 
 #main-header {
     font-size: 2rem;
-    margin: .5em 0;
+    margin: 0.5em 0;
     text-align: center;
 }
 
@@ -52,7 +52,8 @@ body {
     align-items: flex-end;
 }
 
-#player-section, #dealer-section {
+#player-section,
+#dealer-section {
     min-height: 13em;
     display: flex;
     justify-content: center;
@@ -61,11 +62,11 @@ body {
 
 .name-text {
     font-size: 1.2rem;
-    margin: .5em 0;
+    margin: 0.5em 0;
 }
 
 #scores-container {
-    padding-top: .5em;
+    padding-top: 0.5em;
     width: 35%;
     display: flex;
     flex-direction: column;
@@ -73,20 +74,22 @@ body {
     justify-content: center;
 }
 
-#player-score, #dealer-score {
+#player-score,
+#dealer-score {
     font-weight: bold;
 }
 
-.card-container, .blank-card-container {
+.card-container,
+.blank-card-container {
     margin: 1em;
-    padding: .5em;
+    padding: 0.5em;
     width: 8em;
     height: 11em;
     border: 1px solid black;
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
-    background-color: #FFF;
+    background-color: #fff;
 }
 
 #dealer-face-down-card {
@@ -103,12 +106,12 @@ body {
 
 .bet-button {
     width: 4em;
-    margin: .5em;
-    padding: .5em .1em;
+    margin: 0.5em;
+    padding: 0.5em 0.1em;
     border-radius: 5px;
     font-weight: 700;
     border: 1px solid black;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     background-color: rgb(204, 205, 207);
     cursor: pointer;
 }
@@ -145,39 +148,44 @@ body {
 
 #selections-section {
     width: 60%;
-    padding: .5em 2.5em;
+    padding: 0.5em 2.5em;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     border: 4px solid rgb(63, 32, 4);
     background-color: rgb(14, 122, 14);
-    color: #FFF;
+    color: #fff;
 }
 
-#hit-button, #stay-button {
+#hit-button,
+#stay-button {
     width: 5em;
-    padding: .5em .1em;
+    padding: 0.5em 0.1em;
     border-radius: 5px;
-    margin: .25em;
+    margin: 0.25em;
     border: 1px solid black;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     background-color: rgb(204, 205, 207);
     cursor: pointer;
 }
 
-.start-new-game-btn, #double-down-button {
+.start-new-game-btn,
+#double-down-button {
     width: 10em;
-    padding: .5em .1em;
+    padding: 0.5em 0.1em;
     border-radius: 5px;
-    margin: .5em;
+    margin: 0.5em;
     border: 1px solid black;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     background-color: rgb(204, 205, 207);
     cursor: pointer;
 }
 
-#hit-button:disabled, #stay-button:disabled, .bet-button:disabled, 
-.start-new-game-btn:disabled, #double-down-button:disabled {
+#hit-button:disabled,
+#stay-button:disabled,
+.bet-button:disabled,
+.start-new-game-btn:disabled,
+#double-down-button:disabled {
     cursor: not-allowed;
 }
 
@@ -201,7 +209,7 @@ body {
 }
 
 #selection-text {
-    margin: .5em 0;
+    margin: 0.5em 0;
     font-weight: 700;
     font-size: 1.1rem;
 }
@@ -215,29 +223,40 @@ body {
 }
 
 #rule-heading {
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 }
 
 .rule-text {
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 }
 
-#close-rules-button, #open-rules-button {
+#close-rules-button,
+#open-rules-button {
     width: 5em;
     border: 1px solid black;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     background-color: rgb(204, 205, 207);
     cursor: pointer;
-    padding: .2em .5em;
-    margin: 1em .5em;
+    padding: 0.2em 0.5em;
+    margin: 1em 0.5em;
     font-weight: 700;
     font-size: 1rem;
     border-radius: 5px;
 }
 
-#close-rules-button:hover, #open-rules-button:hover, #open-rules-button:focus,
-.start-new-game-btn:hover, #double-down-button:hover, .start-new-game-btn:focus, #double-down-button:focus, .bet-button:hover, .bet-button:focus,
-#hit-button:hover, #stay-button:hover, #hit-button:focus, #stay-button:focus {
+#close-rules-button:hover,
+#open-rules-button:hover,
+#open-rules-button:focus,
+.start-new-game-btn:hover,
+#double-down-button:hover,
+.start-new-game-btn:focus,
+#double-down-button:focus,
+.bet-button:hover,
+.bet-button:focus,
+#hit-button:hover,
+#stay-button:hover,
+#hit-button:focus,
+#stay-button:focus {
     background-color: rgb(140, 145, 137);
 }
 
@@ -257,37 +276,41 @@ body {
         flex-wrap: wrap;
         justify-content: center;
         margin: 0;
-        padding: .5em 0;
+        padding: 0.5em 0;
     }
-    #player-section, #dealer-section {
+    #player-section,
+    #dealer-section {
         min-height: 7em;
     }
-    .card-container, .blank-card-container {
+    .card-container,
+    .blank-card-container {
         width: 4.5em;
         height: 6em;
-        margin: .5em;
-        padding: .2em;
+        margin: 0.5em;
+        padding: 0.2em;
     }
     .card-suit {
         width: 26px;
         height: 35px;
     }
-    .card-rank-top, .card-rank-bottom {
+    .card-rank-top,
+    .card-rank-bottom {
         font-size: 1.1rem;
         font-weight: 700;
     }
     #scores-container {
-        margin: 0 .5em;
+        margin: 0 0.5em;
         padding-top: 0;
     }
     .name-text {
         font-size: 1rem;
-        margin: .5em 0;
+        margin: 0.5em 0;
     }
     #bet-text {
-        margin: .5em 0;
+        margin: 0.5em 0;
     }
-    #bet-buttons-container, #selections-container {
+    #bet-buttons-container,
+    #selections-container {
         width: 50%;
         text-align: center;
     }
@@ -295,12 +318,14 @@ body {
         width: 5em;
         height: 3em;
     }
-    #hit-button, #stay-button {
+    #hit-button,
+    #stay-button {
         width: 6em;
         height: 3em;
         font-weight: 700;
     }
-    .start-new-game-btn, #double-down-button {
+    .start-new-game-btn,
+    #double-down-button {
         width: 9em;
         height: 3em;
         font-weight: 700;
