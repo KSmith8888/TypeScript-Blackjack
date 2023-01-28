@@ -1,74 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles/index.css">
-    <link href="./favicon.ico" rel="icon" type="image/png">
-    <script src="./dist/index.js" type="module"></script>
-    <title>TypeScript Blackjack</title>
-</head>
-<body>
-    <dialog id="rules-modal">
-        <h2 id="rule-heading">Game Rules</h2>
-        <ul>
-            <li class="rule-text">The goal is to get the total value of your hand as close to 21 as possible, without going over.</li>
-            <li class="rule-text">If at the end of each round, the total of your hand is higher than the total of the dealer's hand without having gone over 21, you win that round.</li>
-            <li class="rule-text">If the total of your hand goes above 21, you bust and lose that round.</li>
-            <li class="rule-text">If the total of the dealer's hand goes above 21, you win that round.</li>
-            <li>If the total of your hand ties the total of the dealer's hand, you push and get your wager amount back.</li>
-            <li class="rule-text">You must select an amount to wager before the round begins.</li>
-            <li class="rule-text">After the initial cards are shown, you have a chance to double down. By doubling down, your wager amount for that round is doubled, and you draw exactly one additional card.</li>
-            <li class="rule-text">The dealer is required to hit when the dealer's hand totals 16 or less.</li>
-            <li class="rule-text">The high score is equal to the highest total amount of money reached.</li>
-            <li>The game is played with a single deck.</li>
-        </ul>
-        <button id="close-rules-button">Close</button>
-    </dialog>
-    <header id="header-section">
-        <button id="open-rules-button">Game Rules</button>
-        <h1 id="main-header">TypeScript Blackjack</h1>
-        <img src="./assets/images/favicon.png" alt="Two playing cards with one diagonally crossed over the other" id="logo-image">
-    </header>
-    <main id="main-section">
-        <section id="dealer-section"></section>
-        <section id="player-section"></section>
-        <section id="reset-section">
-            <p id="game-result-text"></p>
-        </section>
-        <section id="selections-section">
-            <div id="bet-buttons-container">
-                <p id="bet-text">Place your bet:</p>
-                <div>
-                    <button id="bet-5-button" class="bet-button">$5</button>
-                    <button id="bet-10-button" class="bet-button">$10</button>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./styles/index.css" />
+        <link href="./favicon.ico" rel="icon" type="image/png" />
+        <script src="./dist/index.js" type="module"></script>
+        <title>TypeScript Blackjack</title>
+    </head>
+    <body>
+        <dialog id="rules-modal">
+            <h2 id="rule-heading">Game Rules</h2>
+            <ul>
+                <li class="rule-text">
+                    The goal is to get the total value of your hand as close to
+                    21 as possible, without going over.
+                </li>
+                <li class="rule-text">
+                    If at the end of each round, the total of your hand is
+                    higher than the total of the dealer's hand without having
+                    gone over 21, you win that round.
+                </li>
+                <li class="rule-text">
+                    If the total of your hand goes above 21, you bust and lose
+                    that round.
+                </li>
+                <li class="rule-text">
+                    If the total of the dealer's hand goes above 21, you win
+                    that round.
+                </li>
+                <li>
+                    If the total of your hand ties the total of the dealer's
+                    hand, you push and get your wager amount back.
+                </li>
+                <li class="rule-text">
+                    You must select an amount to wager before the round begins.
+                </li>
+                <li class="rule-text">
+                    After the initial cards are shown, you have a chance to
+                    double down. By doubling down, your wager amount for that
+                    round is doubled, and you draw exactly one additional card.
+                </li>
+                <li class="rule-text">
+                    The dealer is required to hit when the dealer's hand totals
+                    16 or less.
+                </li>
+                <li class="rule-text">
+                    The high score is equal to the highest total amount of money
+                    reached.
+                </li>
+                <li>The game is played with a single deck.</li>
+            </ul>
+            <button id="close-rules-button">Close</button>
+        </dialog>
+        <header id="header-section">
+            <button id="open-rules-button">Game Rules</button>
+            <h1 id="main-header">TypeScript Blackjack</h1>
+            <img
+                src="./assets/images/favicon.png"
+                alt="Two playing cards with one diagonally crossed over the other"
+                id="logo-image"
+            />
+        </header>
+        <main id="main-section">
+            <section id="dealer-section"></section>
+            <section id="player-section"></section>
+            <section id="reset-section">
+                <p id="game-result-text"></p>
+            </section>
+            <section id="selections-section">
+                <div id="bet-buttons-container">
+                    <p id="bet-text">Place your bet:</p>
+                    <div>
+                        <button id="bet-5-button" class="bet-button">$5</button>
+                        <button id="bet-10-button" class="bet-button">
+                            $10
+                        </button>
+                    </div>
+                    <div>
+                        <button id="bet-25-button" class="bet-button">
+                            $25
+                        </button>
+                        <button id="bet-50-button" class="bet-button">
+                            $50
+                        </button>
+                    </div>
+                    <p>
+                        Current Total: $
+                        <span id="total-money-text">100</span>
+                    </p>
                 </div>
-                <div>
-                    <button id="bet-25-button" class="bet-button">$25</button>
-                    <button id="bet-50-button" class="bet-button">$50</button>
+                <div id="selections-container">
+                    <p id="selection-text">Choose your move:</p>
+                    <button id="hit-button">Hit</button>
+                    <button id="stay-button">Stay</button>
+                    <button id="double-down-button">Double Down</button>
                 </div>
-                <p>Current Total: $
-                    <span id="total-money-text">100</span>
-                </p>
-            </div>
-            <div id="selections-container">
-                <p id="selection-text">Choose your move:</p>
-                <button id="hit-button">Hit</button>
-                <button id="stay-button">Stay</button>
-                <button id="double-down-button">Double Down</button>
-            </div>
-            <div id="scores-container">
-                <p class="name-text">Dealer Score: 
-                    <span id="dealer-score">0</span>
-                </p>
-                <p class="name-text">Player Score: 
-                    <span id="player-score">0</span>
-                </p>
-                <p id="top-payout-text">All-time high score:
-                    <span id="top-payout">100</span>
-                </p>
-            </div>
-        </section>
-    </main>
-</body>
+                <div id="scores-container">
+                    <p class="name-text">
+                        Dealer Score:
+                        <span id="dealer-score">0</span>
+                    </p>
+                    <p class="name-text">
+                        Player Score:
+                        <span id="player-score">0</span>
+                    </p>
+                    <p id="top-payout-text">
+                        All-time high score:
+                        <span id="top-payout">100</span>
+                    </p>
+                </div>
+            </section>
+        </main>
+    </body>
 </html>
