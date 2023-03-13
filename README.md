@@ -2,7 +2,7 @@
 
 https://ksmith8888.github.io/TypeScript-Blackjack/
 
-A classic blackjack game made with TypeScript 
+A classic blackjack game made with TypeScript.
 
 Attribution:
 
