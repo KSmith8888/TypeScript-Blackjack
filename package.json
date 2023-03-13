@@ -5,7 +5,8 @@
   "description": "A classic Blackjack game made with TypeScript",
   "homepage": "https://ksmith8888.github.io/TypeScript-Blackjack/",
   "scripts": {
-    "test": "node --test ./unit-tests"
+    "test": "node --test ./unit-tests",
+    "build": "npx tsc"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.49.0",
