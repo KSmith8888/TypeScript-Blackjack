@@ -2,6 +2,7 @@
   "name": "typescript-blackjack",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "A classic Blackjack game made with TypeScript",
   "homepage": "https://ksmith8888.github.io/TypeScript-Blackjack/",
   "scripts": {
