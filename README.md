@@ -1,7 +1,5 @@
 # TypeScript-Blackjack
 
-https://ksmith8888.github.io/TypeScript-Blackjack/
-
 A classic BlackJack game, playable in the browser. The player and dealer receive cards that have been randomly selected from a generated deck and whoever gets closest to twenty-one without going over wins. Current scores and total money remaining each hand are displayed on the board. On subsequent hands, the all time high score is shown, which is stored in localStorage.
 
 Made with TypeScript. HTML and CSS.
