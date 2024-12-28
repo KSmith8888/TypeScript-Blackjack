@@ -2,6 +2,13 @@ import { Player } from "./player.js";
 import { Dealer } from "./dealer.js";
 import { Deck } from "./deck.js";
 
+import clubsImage from "../assets/images/Clubs.png";
+import diamondsImage from "../assets/images/Diamonds.png";
+import heartsImage from "../assets/images/Hearts.png";
+import spadesImage from "../assets/images/Spades.png";
+import cardAudioSrc from "../assets/audio/deal-card-sound.wav";
+import "../assets/styles/index.css";
+
 class Game {
     deck: Deck;
     player: Player;
@@ -64,7 +71,7 @@ class Game {
         this.closeRulesBtn = <HTMLButtonElement>(
             document.querySelector("#close-rules-button")
         );
-        this.dealCardSound = new Audio("./assets/audio/deal-card-sound.wav");
+        this.dealCardSound = new Audio(cardAudioSrc);
         this.dealCardSound.volume = 0.5;
         this.topPayout = document.querySelector(
             "#top-payout"
@@ -230,7 +237,17 @@ class Game {
         cardRankTop.textContent = newCard.rank.toString();
         cardRankTop.classList.add("card-rank-top");
         const cardSuit = document.createElement("img");
-        cardSuit.src = `./assets/images/${newCard.suit}.png`;
+        let suitImgSrc = "";
+        if (newCard.suit === "Clubs") {
+            suitImgSrc = clubsImage;
+        } else if (newCard.suit === "Diamonds") {
+            suitImgSrc = diamondsImage;
+        } else if (newCard.suit === "Spades") {
+            suitImgSrc = spadesImage;
+        } else {
+            suitImgSrc = heartsImage;
+        }
+        cardSuit.src = suitImgSrc;
         cardSuit.alt = newCard.suit;
         cardSuit.classList.add("card-suit");
         const cardRankBottom = document.createElement("p");

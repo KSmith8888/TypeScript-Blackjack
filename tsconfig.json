@@ -17,6 +17,7 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "allowUnreachableCode": false,
+        "types": ["vite/client"],
         "allowImportingTsExtensions": true
     },
     "include": ["src", "assets"]
