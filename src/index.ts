@@ -24,6 +24,7 @@ class Game {
     doubleDownBtn: HTMLButtonElement;
     gameResultText: HTMLParagraphElement;
     rulesModal: HTMLDialogElement;
+    resetModal: HTMLDialogElement;
     openRulesBtn: HTMLButtonElement;
     closeRulesBtn: HTMLButtonElement;
     dealCardSound: HTMLAudioElement;
@@ -64,6 +65,9 @@ class Game {
         this.dealerFaceDownCard.classList.add("blank-card-container");
         this.rulesModal = <HTMLDialogElement>(
             document.querySelector("#rules-modal")
+        );
+        this.resetModal = <HTMLDialogElement>(
+            document.querySelector("#game-reset-modal")
         );
         this.openRulesBtn = <HTMLButtonElement>(
             document.querySelector("#open-rules-button")
@@ -207,6 +211,7 @@ class Game {
         this.dealerScoreText.textContent = "0";
         //Needed in case of bust on double down because dealers turn is never initiated
         this.dealerFaceDownCard.style.display = "none";
+        this.resetModal.close();
         this.player.activateBets();
     }
     activateSelections(): void {
@@ -304,12 +309,13 @@ class Game {
         } else {
             startNewGameBtn.textContent = "Start New Game";
         }
-        startNewGameBtn.classList.add("start-new-game-btn");
+        startNewGameBtn.classList.add("button");
         this.resetSection.append(startNewGameBtn);
         startNewGameBtn.addEventListener("click", () => {
             this.resetBoard(startNewGameBtn);
         });
         this.determineHighScore();
+        this.resetModal.showModal();
     }
     determineHighScore() {
         if (localStorage.getItem("high-score") !== null) {

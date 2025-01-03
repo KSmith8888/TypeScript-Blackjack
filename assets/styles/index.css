@@ -3,32 +3,58 @@
 }
 
 body {
-    min-height: 100vh;
     margin: 0;
-    font-family: "Courier New", Courier, monospace;
-    background: radial-gradient(rgb(56, 202, 64), rgb(14, 122, 14));
-    background-repeat: no-repeat;
-    background-size: cover;
+    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    background-color: rgb(5, 5, 5);
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.button {
+    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    cursor: pointer;
+    border: 1px solid black;
+    color: #1c1c1c;
+    background-color: rgb(218, 214, 214);
+    margin: 0.5em;
+    font-size: 1rem;
+    padding: 0.2em 0.5em;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.button:hover,
+.button:focus {
+    background-color: rgb(199, 192, 192);
 }
 
 #header-section {
+    width: 90%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     padding: 0 1em;
-    border-bottom: 4px solid rgb(63, 32, 4);
-    color: gold;
-    background-color: rgb(14, 122, 14);
 }
 
-#logo-image {
-    width: 32px;
-    height: 32px;
+.name-text {
+    color: white;
+    font-size: 1.2rem;
+    margin: 0.5em;
+}
+
+#player-score,
+#dealer-score {
+    font-weight: bold;
 }
 
 #main-header {
     font-size: 2rem;
-    margin: 0.5em 0;
+    margin: 0.5em 2em;
     text-align: center;
 }
 
@@ -39,6 +65,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#gameplay-area {
+    min-width: 70%;
+    max-width: 90%;
+    background: radial-gradient(rgb(14, 122, 14), rgb(12, 110, 17));
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 6px ridge rgb(63, 32, 4);
 }
 
 #player-info-container {
@@ -60,23 +95,8 @@ body {
     width: 100%;
 }
 
-.name-text {
-    font-size: 1.2rem;
-    margin: 0.5em 0;
-}
-
-#scores-container {
-    padding-top: 0.5em;
-    width: 35%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#player-score,
-#dealer-score {
-    font-weight: bold;
+#total-money {
+    margin: 0.5em;
 }
 
 .card-container,
@@ -96,32 +116,30 @@ body {
     display: none;
 }
 
-#bet-buttons-container {
-    width: 35%;
+#bet-buttons-container,
+#selections-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
-.bet-button {
-    width: 4em;
-    margin: 0.5em;
-    padding: 0.5em 0.1em;
-    border-radius: 5px;
-    font-weight: 700;
-    border: 1px solid black;
-    font-family: "Courier New", Courier, monospace;
-    background-color: rgb(204, 205, 207);
-    cursor: pointer;
+.button-row-container {
+    display: flex;
 }
 
-#bet-text {
-    width: 100%;
-    font-size: 1.1rem;
+#money-score-container {
+    color: white;
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#bet-text,
+#selection-text {
     text-align: center;
-    margin: 1em 0;
-    font-weight: 700;
+    margin: 0.5em;
+    font-weight: 600;
 }
 
 .card-suit {
@@ -147,120 +165,62 @@ body {
 }
 
 #selections-section {
-    width: 60%;
-    padding: 0.5em 2.5em;
+    width: 70%;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border: 4px solid rgb(63, 32, 4);
-    background-color: rgb(14, 122, 14);
+    justify-content: space-around;
     color: #fff;
 }
 
-#hit-button,
-#stay-button {
-    width: 5em;
-    padding: 0.5em 0.1em;
-    border-radius: 5px;
-    margin: 0.25em;
-    border: 1px solid black;
-    font-family: "Courier New", Courier, monospace;
-    background-color: rgb(204, 205, 207);
-    cursor: pointer;
-}
-
-.start-new-game-btn,
-#double-down-button {
-    width: 10em;
-    padding: 0.5em 0.1em;
-    border-radius: 5px;
-    margin: 0.5em;
-    border: 1px solid black;
-    font-family: "Courier New", Courier, monospace;
-    background-color: rgb(204, 205, 207);
-    cursor: pointer;
-}
-
-#hit-button:disabled,
-#stay-button:disabled,
-.bet-button:disabled,
-.start-new-game-btn:disabled,
-#double-down-button:disabled {
+button:disabled {
     cursor: not-allowed;
 }
 
 #game-result-text {
-    margin: 0 1em;
+    margin: 1em;
     text-align: center;
     font-size: 1.3rem;
     color: black;
     font-weight: 700;
 }
 
-#selections-container {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#total-money-text {
-    font-weight: 700;
-}
-
-#selection-text {
-    margin: 0.5em 0;
-    font-weight: 700;
-    font-size: 1.1rem;
-}
-
-#rules-modal[open] {
-    width: 45%;
+#rules-modal[open],
+#game-reset-modal[open] {
+    padding: 1em 1.5em;
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: rgb(187, 196, 183);
+    background-color: rgb(218, 214, 214);
+    border: 2px solid black;
 }
 
 #rule-heading {
-    margin-bottom: 0.5em;
+    margin: 0.5em 0;
 }
 
 .rule-text {
     margin-bottom: 0.5em;
 }
 
-#close-rules-button,
-#open-rules-button {
-    width: 5em;
-    border: 1px solid black;
-    font-family: "Courier New", Courier, monospace;
-    background-color: rgb(204, 205, 207);
+#close-rules-button {
+    padding: 0.25em 0.5em;
+    margin: 0 0.25em;
+    align-self: flex-end;
     cursor: pointer;
-    padding: 0.2em 0.5em;
-    margin: 1em 0.5em;
-    font-weight: 700;
-    font-size: 1rem;
+    background-color: rgb(224, 19, 19);
+    color: #f3f3f3;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 1px solid #575454;
     border-radius: 5px;
 }
 
 #close-rules-button:hover,
-#open-rules-button:hover,
-#open-rules-button:focus,
-.start-new-game-btn:hover,
-#double-down-button:hover,
-.start-new-game-btn:focus,
-#double-down-button:focus,
-.bet-button:hover,
-.bet-button:focus,
-#hit-button:hover,
-#stay-button:hover,
-#hit-button:focus,
-#stay-button:focus {
-    background-color: rgb(140, 145, 137);
+#close-rules-button:focus {
+    background-color: rgb(173, 17, 17);
 }
 
 #reset-section {
+    min-height: 5em;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -268,15 +228,14 @@ body {
 
 #top-payout-text {
     text-align: center;
+    margin: 0.5em;
 }
 
 @media (max-width: 850px) {
     #selections-section {
-        width: 100%;
-        flex-wrap: wrap;
-        justify-content: center;
+        width: 95%;
+        flex-direction: column;
         margin: 0;
-        padding: 0.5em 0;
     }
     #player-section,
     #dealer-section {
@@ -298,39 +257,12 @@ body {
         font-size: 1.1rem;
         font-weight: 700;
     }
-    #scores-container {
-        margin: 0 0.5em;
-        padding-top: 0;
-    }
     .name-text {
         font-size: 1rem;
         margin: 0.5em 0;
     }
-    #bet-text {
-        margin: 0.5em 0;
-    }
-    #bet-buttons-container,
-    #selections-container {
-        width: 50%;
-        text-align: center;
-    }
-    .bet-button {
-        width: 5em;
-        height: 3em;
-    }
-    #hit-button,
-    #stay-button {
-        width: 6em;
-        height: 3em;
-        font-weight: 700;
-    }
-    .start-new-game-btn,
-    #double-down-button {
-        width: 9em;
-        height: 3em;
-        font-weight: 700;
-    }
-    #rules-modal[open] {
+    #rules-modal[open],
+    #game-reset-modal[open] {
         width: 95%;
     }
 }
