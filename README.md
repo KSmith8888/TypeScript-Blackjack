@@ -36,7 +36,7 @@ Run the development server with:
 npm run dev
 ```
 
-Finally, navigate to http://localhost:5173/ in your browser to view the project. Changes will be reflected automatically.
+Finally, navigate to http://localhost:5173/ in your browser to view the project. Changes will be reflected automatically whenever you save.
 
 ## Attribution
 
