@@ -4,7 +4,7 @@ A classic BlackJack game, playable in the browser. The player and dealer receive
 
 Play the game at https://ksmith8888.github.io/TypeScript-Blackjack/
 
-Made with TypeScript. HTML and CSS.
+![Playing cards on a green background resembling a casino table, above a series of red buttons providing gameplay options](/public/blackjack-screenshot-desktop.png)
 
 ## Running locally
 
@@ -48,11 +48,14 @@ https://github.com/Microsoft/TypeScript
 vite:  
 https://github.com/vitejs/vite
 
-eslint:  
+eslint and @eslint/js:  
 https://github.com/eslint/eslint
 
-@typescript-eslint/eslint-plugin and @typescript-eslint/parser:  
+typescript-eslint:  
 https://github.com/typescript-eslint/typescript-eslint
+
+globals:  
+https://github.com/sindresorhus/globals
 
 ### Assets
 

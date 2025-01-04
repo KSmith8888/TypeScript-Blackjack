@@ -2,7 +2,7 @@
     "name": "typescript-blackjack",
     "version": "1.0.0",
     "type": "module",
-    "description": "A classic Blackjack game made with TypeScript",
+    "description": "A classic Blackjack game, playable in the browser",
     "license": "MIT",
     "author": "Kevyn Smith",
     "homepage": "https://ksmith8888.github.io/TypeScript-Blackjack/",

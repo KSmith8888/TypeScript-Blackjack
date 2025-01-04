@@ -4,23 +4,21 @@
 
 body {
     margin: 0;
+    height: 100dvh;
     font-family: "Segoe UI", "Helvetica Neue", sans-serif;
     background-color: rgb(5, 5, 5);
 }
 
-#main-container {
+.button-row-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
 }
 
 .button {
     font-family: "Segoe UI", "Helvetica Neue", sans-serif;
     cursor: pointer;
-    border: 1px solid black;
-    color: #1c1c1c;
-    background-color: rgb(218, 214, 214);
+    border: 1px solid rgb(161, 153, 153);
+    color: rgb(223, 215, 215);
+    background-color: rgb(177, 8, 8);
     margin: 0.5em;
     font-size: 1rem;
     padding: 0.2em 0.5em;
@@ -30,19 +28,51 @@ body {
 
 .button:hover,
 .button:focus {
-    background-color: rgb(199, 192, 192);
+    background-color: rgb(107, 10, 10);
 }
 
-#header-section {
-    width: 90%;
+button:disabled {
+    cursor: not-allowed;
+    color: #776f6f;
+}
+
+#main-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#main-section {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#gameplay-area {
+    min-width: 70%;
+    max-width: 90%;
+    background: radial-gradient(rgb(19, 141, 19), rgb(12, 110, 17));
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 8px ridge rgb(63, 32, 4);
+}
+
+#scores-container {
+    width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 0 1em;
+    padding: 0 0.5em;
 }
 
 .name-text {
-    color: white;
+    color: rgb(224, 217, 217);
     font-size: 1.2rem;
     margin: 0.5em;
 }
@@ -52,56 +82,18 @@ body {
     font-weight: bold;
 }
 
-#main-header {
-    font-size: 2rem;
-    margin: 0.5em 2em;
-    text-align: center;
-}
-
-#main-section {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#gameplay-area {
-    min-width: 70%;
-    max-width: 90%;
-    background: radial-gradient(rgb(14, 122, 14), rgb(12, 110, 17));
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 6px ridge rgb(63, 32, 4);
-}
-
-#player-info-container {
-    text-align: center;
-}
-
-#dealer-info-container {
-    margin: 1em 0 0 0;
-    text-align: center;
-    display: flex;
-    align-items: flex-end;
-}
-
 #player-section,
 #dealer-section {
     min-height: 13em;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     width: 100%;
-}
-
-#total-money {
-    margin: 0.5em;
 }
 
 .card-container,
 .blank-card-container {
-    margin: 1em;
+    margin: 0.5em;
     padding: 0.5em;
     width: 8em;
     height: 11em;
@@ -114,32 +106,6 @@ body {
 
 #dealer-face-down-card {
     display: none;
-}
-
-#bet-buttons-container,
-#selections-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.button-row-container {
-    display: flex;
-}
-
-#money-score-container {
-    color: white;
-    width: 70%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#bet-text,
-#selection-text {
-    text-align: center;
-    margin: 0.5em;
-    font-weight: 600;
 }
 
 .card-suit {
@@ -164,15 +130,84 @@ body {
     align-self: flex-end;
 }
 
+#money-score-container {
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.5em;
+}
+
+#top-payout-text,
+#total-money {
+    margin: 0.5em;
+}
+
 #selections-section {
-    width: 70%;
+    width: 50%;
     display: flex;
     justify-content: space-around;
     color: #fff;
 }
 
-button:disabled {
-    cursor: not-allowed;
+#bet-buttons-container,
+#selections-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#bet-text,
+#selection-text {
+    color: rgb(224, 217, 217);
+    text-align: center;
+    margin: 0.5em 0 0 0;
+    font-weight: 600;
+}
+
+#rules-modal[open],
+#game-reset-modal[open] {
+    max-width: 50%;
+    padding: 1em 1.5em;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(218, 214, 214);
+    border: 2px solid black;
+}
+
+#rule-heading {
+    margin: 0 0 0.5em 0;
+}
+
+.rule-text {
+    margin-bottom: 0.5em;
+}
+
+#close-rules-button {
+    padding: 0.25em 0.5em 0 0.5em;
+    margin: 0 0.25em;
+    align-self: flex-end;
+    cursor: pointer;
+    background-color: rgb(177, 8, 8);
+    color: #f3f3f3;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 1px solid #575454;
+    border-radius: 5px;
+}
+
+#close-rules-button:hover,
+#close-rules-button:focus {
+    background-color: rgb(107, 10, 10);
+}
+
+#reset-section {
+    min-height: 5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #game-result-text {
@@ -183,59 +218,18 @@ button:disabled {
     font-weight: 700;
 }
 
-#rules-modal[open],
-#game-reset-modal[open] {
-    padding: 1em 1.5em;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    background-color: rgb(218, 214, 214);
-    border: 2px solid black;
-}
-
-#rule-heading {
-    margin: 0.5em 0;
-}
-
-.rule-text {
-    margin-bottom: 0.5em;
-}
-
-#close-rules-button {
-    padding: 0.25em 0.5em;
-    margin: 0 0.25em;
-    align-self: flex-end;
-    cursor: pointer;
-    background-color: rgb(224, 19, 19);
-    color: #f3f3f3;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border: 1px solid #575454;
-    border-radius: 5px;
-}
-
-#close-rules-button:hover,
-#close-rules-button:focus {
-    background-color: rgb(173, 17, 17);
-}
-
-#reset-section {
-    min-height: 5em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#top-payout-text {
-    text-align: center;
-    margin: 0.5em;
-}
-
 @media (max-width: 850px) {
+    #main-section {
+        justify-content: center;
+    }
+    #gameplay-area {
+        width: 100%;
+        max-width: 100%;
+    }
     #selections-section {
         width: 95%;
         flex-direction: column;
-        margin: 0;
+        margin: 1em 0 0 0;
     }
     #player-section,
     #dealer-section {
@@ -245,7 +239,7 @@ button:disabled {
     .blank-card-container {
         width: 4.5em;
         height: 6em;
-        margin: 0.5em;
+        margin: 0.25em;
         padding: 0.2em;
     }
     .card-suit {
@@ -257,12 +251,9 @@ button:disabled {
         font-size: 1.1rem;
         font-weight: 700;
     }
-    .name-text {
-        font-size: 1rem;
-        margin: 0.5em 0;
-    }
     #rules-modal[open],
     #game-reset-modal[open] {
+        max-width: 95%;
         width: 95%;
     }
 }
