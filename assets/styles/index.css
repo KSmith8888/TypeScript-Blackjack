@@ -4,7 +4,9 @@
 
 body {
     margin: 0;
+    width: 100vw;
     height: 100dvh;
+    max-height: 900px;
     font-family: "Segoe UI", "Helvetica Neue", sans-serif;
     background-color: rgb(5, 5, 5);
 }
@@ -160,7 +162,7 @@ button:disabled {
 
 #bet-text,
 #selection-text {
-    color: rgb(224, 217, 217);
+    color: rgb(207, 207, 207);
     text-align: center;
     margin: 0.5em 0 0 0;
     font-weight: 600;
@@ -251,9 +253,13 @@ button:disabled {
         font-size: 1.1rem;
         font-weight: 700;
     }
-    #rules-modal[open],
+    #rules-modal[open] {
+        max-width: 95%;
+        width: 95%;
+    }
     #game-reset-modal[open] {
         max-width: 95%;
         width: 95%;
+        margin: auto auto 5em auto;
     }
 }

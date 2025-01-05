@@ -4,6 +4,10 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Kevyn Smith" />
+        <meta
+            name="description"
+            content="A classic BlackJack game, playable in the browser"
+        />
         <link href="./favicon.ico" rel="icon" type="image/png" />
         <title>TS Blackjack</title>
     </head>
@@ -40,6 +44,9 @@
                         <h2 id="rule-heading">Game Rules</h2>
                         <ul>
                             <li class="rule-text">
+                                The game is played with a single deck.
+                            </li>
+                            <li class="rule-text">
                                 The goal is to get the total value of your hand
                                 as close to 21 as possible, without going over.
                             </li>
@@ -54,6 +61,10 @@
                                 bust and lose that round.
                             </li>
                             <li class="rule-text">
+                                The dealer is required to hit when their hand
+                                totals 16 or less.
+                            </li>
+                            <li class="rule-text">
                                 If the total of the dealer's hand goes above 21,
                                 you win that round.
                             </li>
@@ -63,24 +74,15 @@
                                 amount back.
                             </li>
                             <li class="rule-text">
-                                You must select an amount to wager before the
-                                round begins.
-                            </li>
-                            <li class="rule-text">
-                                After the initial cards are shown, you have a
-                                chance to double down. By doubling down, your
-                                wager amount for that round is doubled, and you
-                                draw exactly one additional card.
-                            </li>
-                            <li class="rule-text">
-                                The dealer is required to hit when the dealer's
-                                hand totals 16 or less.
+                                After the initial cards are shown, you have one
+                                chance to double down. If you do, your wager
+                                amount for that round is doubled, and you draw
+                                exactly one additional card.
                             </li>
                             <li class="rule-text">
                                 The high score is equal to the highest total
                                 amount of money reached.
                             </li>
-                            <li>The game is played with a single deck.</li>
                         </ul>
                     </dialog>
                     <section id="dealer-section"></section>

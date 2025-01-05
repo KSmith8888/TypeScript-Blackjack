@@ -136,7 +136,7 @@ class Game {
             this.drawCard(this.dealer, this.dealerSection);
             this.dealerSection?.append(this.dealerFaceDownCard);
             this.dealerFaceDownCard.style.display = "block";
-        }, 750);
+        }, 500);
     }
     getRankValue(rank: string | number, currentTurn: Player | Dealer): void {
         /*

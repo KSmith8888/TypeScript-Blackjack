@@ -67,10 +67,10 @@ class Player {
         this.totalMoneyText.textContent = this.money.toString();
     }
     activateBets(): void {
-        this.bet5Btn.disabled = false;
-        this.bet10Btn.disabled = false;
-        this.bet25Btn.disabled = false;
-        this.bet50Btn.disabled = false;
+        if (this.money >= 5) this.bet5Btn.disabled = false;
+        if (this.money >= 10) this.bet10Btn.disabled = false;
+        if (this.money >= 25) this.bet25Btn.disabled = false;
+        if (this.money >= 50) this.bet50Btn.disabled = false;
     }
 }
 
