@@ -213,6 +213,7 @@ class Game {
         this.dealerFaceDownCard.style.display = "none";
         this.resetModal.close();
         this.player.activateBets();
+        this.player.bet5Btn.focus();
     }
     activateSelections(): void {
         this.hitButton.disabled = false;
@@ -220,6 +221,7 @@ class Game {
         if (this.player.money >= this.player.currentBet) {
             this.doubleDownBtn.disabled = false;
         }
+        this.hitButton.focus();
     }
     disableSelections(): void {
         this.hitButton.disabled = true;
