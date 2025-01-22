@@ -1,108 +1,47 @@
-import { Player } from "./player.js";
-import { Dealer } from "./dealer.js";
+import Player from "./player.js";
+import Dealer from "./dealer.js";
 import { Deck } from "./deck.js";
+import Table from "./table.js";
 
-import clubsImage from "../assets/images/Clubs.png";
-import diamondsImage from "../assets/images/Diamonds.png";
-import heartsImage from "../assets/images/Hearts.png";
-import spadesImage from "../assets/images/Spades.png";
 import cardAudioSrc from "../assets/audio/deal-card-sound.wav";
 import "../assets/styles/index.css";
 
-class Game {
+export default class Game {
     deck: Deck;
     player: Player;
     dealer: Dealer;
-    playerScoreText: HTMLSpanElement;
-    playerSection: HTMLElement;
-    dealerScoreText: HTMLSpanElement;
-    dealerSection: HTMLElement;
-    dealerFaceDownCard: HTMLDivElement;
-    resetSection: HTMLElement;
-    hitButton: HTMLButtonElement;
-    stayButton: HTMLButtonElement;
-    doubleDownBtn: HTMLButtonElement;
-    gameResultText: HTMLParagraphElement;
-    rulesModal: HTMLDialogElement;
-    resetModal: HTMLDialogElement;
-    openRulesBtn: HTMLButtonElement;
-    closeRulesBtn: HTMLButtonElement;
+    table: Table;
     dealCardSound: HTMLAudioElement;
-    topPayout: HTMLSpanElement;
     constructor() {
         this.deck = new Deck();
         this.player = new Player(this);
         this.dealer = new Dealer();
-        this.playerScoreText = <HTMLSpanElement>(
-            document.querySelector("#player-score")
-        );
-        this.playerSection = <HTMLElement>(
-            document.querySelector("#player-section")
-        );
-        this.dealerScoreText = <HTMLSpanElement>(
-            document.querySelector("#dealer-score")
-        );
-        this.dealerSection = <HTMLElement>(
-            document.querySelector("#dealer-section")
-        );
-        this.resetSection = <HTMLElement>(
-            document.querySelector("#reset-section")
-        );
-        this.hitButton = <HTMLButtonElement>(
-            document.querySelector("#hit-button")
-        );
-        this.stayButton = <HTMLButtonElement>(
-            document.querySelector("#stay-button")
-        );
-        this.doubleDownBtn = <HTMLButtonElement>(
-            document.querySelector("#double-down-button")
-        );
-        this.gameResultText = <HTMLParagraphElement>(
-            document.querySelector("#game-result-text")
-        );
-        this.dealerFaceDownCard = document.createElement("div");
-        this.dealerFaceDownCard.id = "dealer-face-down-card";
-        this.dealerFaceDownCard.classList.add("blank-card-container");
-        this.rulesModal = <HTMLDialogElement>(
-            document.querySelector("#rules-modal")
-        );
-        this.resetModal = <HTMLDialogElement>(
-            document.querySelector("#game-reset-modal")
-        );
-        this.openRulesBtn = <HTMLButtonElement>(
-            document.querySelector("#open-rules-button")
-        );
-        this.closeRulesBtn = <HTMLButtonElement>(
-            document.querySelector("#close-rules-button")
-        );
+        this.table = new Table(this);
         this.dealCardSound = new Audio(cardAudioSrc);
         this.dealCardSound.volume = 0.5;
-        this.topPayout = document.querySelector(
-            "#top-payout"
-        ) as HTMLSpanElement;
-        this.hitButton?.addEventListener("click", () => {
-            this.disableSelections();
+        this.table.hitButton.addEventListener("click", () => {
+            this.table.disableSelections();
             setTimeout(() => {
                 this.dealCardSound.play().catch((err) => {
                     console.error(err);
                 });
-                this.drawCard(this.player, this.playerSection);
+                this.drawCard("Player");
                 if (
                     this.player.total <= 21 &&
-                    this.hitButton &&
-                    this.stayButton
+                    this.table.hitButton &&
+                    this.table.stayButton
                 ) {
-                    this.hitButton.disabled = false;
-                    this.stayButton.disabled = false;
+                    this.table.hitButton.disabled = false;
+                    this.table.stayButton.disabled = false;
                 }
             }, 750);
         });
-        this.stayButton.addEventListener("click", () => {
-            this.disableSelections();
+        this.table.stayButton.addEventListener("click", () => {
+            this.table.disableSelections();
             this.initiateDealerTurn();
         });
-        this.doubleDownBtn.addEventListener("click", () => {
-            this.disableSelections();
+        this.table.doubleDownBtn.addEventListener("click", () => {
+            this.table.disableSelections();
             setTimeout(() => {
                 if (this.player.money >= this.player.currentBet) {
                     this.dealCardSound.play().catch((err) => {
@@ -110,20 +49,17 @@ class Game {
                     });
                     this.player.money -= this.player.currentBet;
                     this.player.currentBet = this.player.currentBet * 2;
-                    this.player.totalMoneyText.textContent =
+                    this.table.totalMoneyText.textContent =
                         this.player.money.toString();
-                    this.drawCard(this.player, this.playerSection);
+                    this.drawCard("Player");
                     if (this.player.total <= 21) {
                         this.initiateDealerTurn();
                     }
                 }
             }, 750);
         });
-        this.openRulesBtn.addEventListener("click", () => {
-            this.rulesModal.showModal();
-        });
-        this.closeRulesBtn.addEventListener("click", () => {
-            this.rulesModal.close();
+        this.table.splitButton.addEventListener("click", () => {
+            console.log("Split");
         });
     }
     startNewGame(): void {
@@ -131,11 +67,14 @@ class Game {
             this.dealCardSound.play().catch((err) => {
                 console.error(err);
             });
-            this.drawCard(this.player, this.playerSection);
-            this.drawCard(this.player, this.playerSection);
-            this.drawCard(this.dealer, this.dealerSection);
-            this.dealerSection?.append(this.dealerFaceDownCard);
-            this.dealerFaceDownCard.style.display = "block";
+            this.drawCard("Player");
+            this.drawCard("Player");
+            this.drawCard("Dealer");
+            if (this.player.hand[0].rank === this.player.hand[1].rank) {
+                this.table.splitButton.disabled = false;
+            }
+            this.table.dealerSection.append(this.table.dealerFaceDownCard);
+            this.table.dealerFaceDownCard.style.display = "block";
         }, 500);
     }
     getRankValue(rank: string | number, currentTurn: Player | Dealer): void {
@@ -171,27 +110,29 @@ class Game {
             currentTurn.aceOverage -= 10;
         }
         if (currentTurn === this.player) {
-            this.playerScoreText.textContent = this.player.total.toString();
+            this.table.playerScoreText.textContent =
+                this.player.total.toString();
         }
         if (currentTurn === this.dealer) {
-            this.dealerScoreText.textContent = this.dealer.total.toString();
+            this.table.dealerScoreText.textContent =
+                this.dealer.total.toString();
         }
     }
     initiateDealerTurn(): void {
-        this.dealerFaceDownCard.style.display = "none";
+        this.table.dealerFaceDownCard.style.display = "none";
         const continueDrawing = setInterval(() => {
             if (this.dealer.total < 17) {
                 this.dealCardSound.play().catch((err) => {
                     console.error(err);
                 });
-                this.drawCard(this.dealer, this.dealerSection);
+                this.drawCard("Dealer");
             } else {
                 clearInterval(continueDrawing);
                 this.checkTotals();
             }
         }, 1000);
     }
-    resetBoard(startNewGameBtn: HTMLButtonElement): void {
+    resetBoard(): void {
         this.player.total = 0;
         this.dealer.total = 0;
         this.player.currentBet = 0;
@@ -199,70 +140,32 @@ class Game {
         this.dealer.aceOverage = 0;
         this.player.hand = [];
         this.dealer.hand = [];
-        this.player.cardElements.forEach((card) => {
-            card.remove();
-        });
-        this.dealer.cardElements.forEach((card) => {
-            card.remove();
-        });
-        startNewGameBtn.remove();
-        this.gameResultText.textContent = "";
-        this.playerScoreText.textContent = "0";
-        this.dealerScoreText.textContent = "0";
+        this.table.dealerSection.replaceChildren();
+        this.table.playerSection.replaceChildren();
+        this.table.gameResultText.textContent = "";
+        this.table.playerScoreText.textContent = "0";
+        this.table.dealerScoreText.textContent = "0";
         //Needed in case of bust on double down because dealers turn is never initiated
-        this.dealerFaceDownCard.style.display = "none";
-        this.resetModal.close();
-        this.player.activateBets();
-        this.player.bet5Btn.focus();
+        this.table.dealerFaceDownCard.style.display = "none";
+        this.table.resetModal.close();
+        this.table.activateBets(this.player.money);
+        this.table.bet5Btn.focus();
     }
-    activateSelections(): void {
-        this.hitButton.disabled = false;
-        this.stayButton.disabled = false;
-        if (this.player.money >= this.player.currentBet) {
-            this.doubleDownBtn.disabled = false;
-        }
-        this.hitButton.focus();
-    }
-    disableSelections(): void {
-        this.hitButton.disabled = true;
-        this.stayButton.disabled = true;
-        this.doubleDownBtn.disabled = true;
-    }
-    drawCard(currentTurn: Player | Dealer, currentSection: HTMLElement): void {
+
+    drawCard(currentTurn: string): void {
         if (this.deck.cards.length < 1) {
             this.deck.generateDeck();
         }
         const index = this.deck.getCardIndex();
         const newCard = this.deck.cards[index];
-        currentTurn.hand.push(newCard);
-        this.getRankValue(newCard.rank, currentTurn);
-        const cardContainer = document.createElement("div");
-        currentTurn.cardElements.push(cardContainer);
-        currentSection.append(cardContainer);
-        cardContainer.classList.add("card-container");
-        const cardRankTop = document.createElement("p");
-        cardRankTop.textContent = newCard.rank.toString();
-        cardRankTop.classList.add("card-rank-top");
-        const cardSuit = document.createElement("img");
-        let suitImgSrc = "";
-        if (newCard.suit === "Clubs") {
-            suitImgSrc = clubsImage;
-        } else if (newCard.suit === "Diamonds") {
-            suitImgSrc = diamondsImage;
-        } else if (newCard.suit === "Spades") {
-            suitImgSrc = spadesImage;
+        if (currentTurn === "Player") {
+            this.player.hand.push(newCard);
+            this.getRankValue(newCard.rank, this.player);
         } else {
-            suitImgSrc = heartsImage;
+            this.dealer.hand.push(newCard);
+            this.getRankValue(newCard.rank, this.dealer);
         }
-        cardSuit.src = suitImgSrc;
-        cardSuit.alt = newCard.suit;
-        cardSuit.classList.add("card-suit");
-        const cardRankBottom = document.createElement("p");
-        cardRankBottom.textContent = newCard.rank.toString();
-        cardRankBottom.classList.add("card-rank-bottom");
-        cardContainer.append(cardRankTop);
-        cardContainer.append(cardSuit);
-        cardContainer.append(cardRankBottom);
+        this.table.renderCard(currentTurn, newCard.rank, newCard.suit);
         this.deck.cards.splice(index, 1);
     }
     checkTotals(): void {
@@ -299,25 +202,19 @@ class Game {
                 );
             }
         }
-        this.player.totalMoneyText.textContent = this.player.money.toString();
+        this.table.totalMoneyText.textContent = this.player.money.toString();
     }
     endGame(resultText: string, isGameOver: boolean): void {
-        this.gameResultText.textContent = resultText;
-        this.disableSelections();
-        this.player.disableBets();
-        const startNewGameBtn = document.createElement("button");
+        this.table.gameResultText.textContent = resultText;
+        this.table.disableSelections();
+        this.table.disableBets(this.player.money);
         if (!isGameOver) {
-            startNewGameBtn.textContent = "New Hand";
+            this.table.newGameButton.textContent = "New Hand";
         } else {
-            startNewGameBtn.textContent = "Start New Game";
+            this.table.newGameButton.textContent = "Start New Game";
         }
-        startNewGameBtn.classList.add("button");
-        this.resetSection.append(startNewGameBtn);
-        startNewGameBtn.addEventListener("click", () => {
-            this.resetBoard(startNewGameBtn);
-        });
         this.determineHighScore();
-        this.resetModal.showModal();
+        this.table.resetModal.showModal();
     }
     determineHighScore() {
         if (localStorage.getItem("high-score") !== null) {
@@ -330,12 +227,12 @@ class Game {
                     "high-score",
                     JSON.stringify(this.player.money)
                 );
-                this.topPayout.textContent = this.player.money.toString();
+                this.table.topPayout.textContent = this.player.money.toString();
             } else if (
                 highScore !== null &&
                 this.player.money < parseInt(JSON.parse(highScore), 10)
             ) {
-                this.topPayout.textContent = JSON.parse(highScore);
+                this.table.topPayout.textContent = JSON.parse(highScore);
             }
         } else {
             localStorage.setItem("high-score", JSON.stringify(100));
@@ -344,7 +241,5 @@ class Game {
 }
 
 const game = new Game();
-game.disableSelections();
+game.table.disableSelections();
 game.determineHighScore();
-
-export { Game };
