@@ -1,6 +1,6 @@
-import { Card } from "./card.js";
+import Card from "./card.js";
 
-class Deck {
+export default class Deck {
     cards: Card[];
     suits: string[];
     ranks: (number | string)[];
@@ -27,5 +27,3 @@ class Deck {
         return randomNumber;
     }
 }
-
-export { Deck };

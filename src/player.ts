@@ -1,5 +1,5 @@
 import Game from "./index.js";
-import { Card } from "./card.js";
+import Card from "./card.js";
 
 export default class Player {
     hand: Card[];
@@ -20,7 +20,8 @@ export default class Player {
         if (this.money >= amount) {
             this.currentBet = amount;
             this.money -= amount;
-            this.game.table.disableBets(this.money);
+            this.game.table.disableBets();
+            this.game.table.totalMoneyText.textContent = this.money.toString();
             this.game.table.activateSelections(this.money, this.currentBet);
             this.game.startNewGame();
         }

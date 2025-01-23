@@ -1,4 +1,4 @@
-import { Card } from "./card.js";
+import Card from "./card.js";
 
 export default class Dealer {
     hand: Card[];

@@ -52,15 +52,30 @@ export default class Table {
         this.hitButton = <HTMLButtonElement>(
             document.getElementById("hit-button")
         );
+        this.hitButton.addEventListener("click", () => {
+            this.disableSelections();
+            this.game.playerHit();
+        });
         this.stayButton = <HTMLButtonElement>(
             document.getElementById("stay-button")
         );
+        this.stayButton.addEventListener("click", () => {
+            this.disableSelections();
+            this.game.initiateDealerTurn();
+        });
         this.doubleDownBtn = <HTMLButtonElement>(
             document.getElementById("double-down-button")
         );
+        this.doubleDownBtn.addEventListener("click", () => {
+            this.disableSelections();
+            this.game.playerDouble();
+        });
         this.splitButton = <HTMLButtonElement>(
             document.getElementById("split-button")
         );
+        this.splitButton.addEventListener("click", () => {
+            this.game.playerSplit();
+        });
         this.gameResultText = <HTMLParagraphElement>(
             document.getElementById("game-result-text")
         );
@@ -136,7 +151,7 @@ export default class Table {
             this.game.player.bet(50);
         });
     }
-    activateSelections(money: number, currentBet: number): void {
+    activateSelections(money: number, currentBet: number) {
         this.hitButton.disabled = false;
         this.stayButton.disabled = false;
         if (money >= currentBet) {
@@ -144,20 +159,19 @@ export default class Table {
         }
         this.hitButton.focus();
     }
-    disableSelections(): void {
+    disableSelections() {
         this.hitButton.disabled = true;
         this.stayButton.disabled = true;
         this.doubleDownBtn.disabled = true;
         this.splitButton.disabled = true;
     }
-    disableBets(money: number): void {
+    disableBets() {
         this.bet5Btn.disabled = true;
         this.bet10Btn.disabled = true;
         this.bet25Btn.disabled = true;
         this.bet50Btn.disabled = true;
-        this.totalMoneyText.textContent = money.toString();
     }
-    activateBets(money: number): void {
+    activateBets(money: number) {
         if (money >= 5) this.bet5Btn.disabled = false;
         if (money >= 10) this.bet10Btn.disabled = false;
         if (money >= 25) this.bet25Btn.disabled = false;

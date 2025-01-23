@@ -1,4 +1,4 @@
-class Card {
+export default class Card {
     suit: string;
     rank: string | number;
     constructor(suit: string, rank: string | number) {
@@ -6,5 +6,3 @@ class Card {
         this.rank = rank;
     }
 }
-
-export { Card };

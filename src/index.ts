@@ -1,6 +1,6 @@
 import Player from "./player.js";
 import Dealer from "./dealer.js";
-import { Deck } from "./deck.js";
+import Deck from "./deck.js";
 import Table from "./table.js";
 
 import cardAudioSrc from "../assets/audio/deal-card-sound.wav";
@@ -11,58 +11,50 @@ export default class Game {
     player: Player;
     dealer: Dealer;
     table: Table;
+    highScore: number;
     dealCardSound: HTMLAudioElement;
     constructor() {
         this.deck = new Deck();
         this.player = new Player(this);
         this.dealer = new Dealer();
         this.table = new Table(this);
+        this.highScore = 100;
         this.dealCardSound = new Audio(cardAudioSrc);
         this.dealCardSound.volume = 0.5;
-        this.table.hitButton.addEventListener("click", () => {
-            this.table.disableSelections();
-            setTimeout(() => {
+    }
+    playerHit() {
+        setTimeout(() => {
+            this.dealCardSound.play().catch((err) => {
+                console.error(err);
+            });
+            this.drawCard("Player");
+            if (this.player.total <= 21) {
+                this.table.hitButton.disabled = false;
+                this.table.stayButton.disabled = false;
+            }
+        }, 750);
+    }
+    playerDouble() {
+        setTimeout(() => {
+            if (this.player.money >= this.player.currentBet) {
                 this.dealCardSound.play().catch((err) => {
                     console.error(err);
                 });
+                this.player.money -= this.player.currentBet;
+                this.player.currentBet = this.player.currentBet * 2;
+                this.table.totalMoneyText.textContent =
+                    this.player.money.toString();
                 this.drawCard("Player");
-                if (
-                    this.player.total <= 21 &&
-                    this.table.hitButton &&
-                    this.table.stayButton
-                ) {
-                    this.table.hitButton.disabled = false;
-                    this.table.stayButton.disabled = false;
+                if (this.player.total <= 21) {
+                    this.initiateDealerTurn();
                 }
-            }, 750);
-        });
-        this.table.stayButton.addEventListener("click", () => {
-            this.table.disableSelections();
-            this.initiateDealerTurn();
-        });
-        this.table.doubleDownBtn.addEventListener("click", () => {
-            this.table.disableSelections();
-            setTimeout(() => {
-                if (this.player.money >= this.player.currentBet) {
-                    this.dealCardSound.play().catch((err) => {
-                        console.error(err);
-                    });
-                    this.player.money -= this.player.currentBet;
-                    this.player.currentBet = this.player.currentBet * 2;
-                    this.table.totalMoneyText.textContent =
-                        this.player.money.toString();
-                    this.drawCard("Player");
-                    if (this.player.total <= 21) {
-                        this.initiateDealerTurn();
-                    }
-                }
-            }, 750);
-        });
-        this.table.splitButton.addEventListener("click", () => {
-            console.log("Split");
-        });
+            }
+        }, 750);
     }
-    startNewGame(): void {
+    playerSplit() {
+        console.log("Split");
+    }
+    startNewGame() {
         setTimeout(() => {
             this.dealCardSound.play().catch((err) => {
                 console.error(err);
@@ -77,11 +69,11 @@ export default class Game {
             this.table.dealerFaceDownCard.style.display = "block";
         }, 500);
     }
-    getRankValue(rank: string | number, currentTurn: Player | Dealer): void {
+    getRankValue(rank: string | number, currentTurn: Player | Dealer) {
         /*
         If the rank is 2-10, add the rank to the total. If the rank is Jack, Queen, or King add 10. If the rank is Ace and adding 11 would bust, then add 1, otherwise add 11
         */
-        const numericValueRank: number = typeof rank === "number" ? rank : 0;
+        const numericValueRank = typeof rank === "number" ? rank : 0;
         switch (rank) {
             case "A":
                 if (currentTurn.total + 11 > 21) {
@@ -109,16 +101,9 @@ export default class Game {
             currentTurn.total -= 10;
             currentTurn.aceOverage -= 10;
         }
-        if (currentTurn === this.player) {
-            this.table.playerScoreText.textContent =
-                this.player.total.toString();
-        }
-        if (currentTurn === this.dealer) {
-            this.table.dealerScoreText.textContent =
-                this.dealer.total.toString();
-        }
     }
-    initiateDealerTurn(): void {
+
+    initiateDealerTurn() {
         this.table.dealerFaceDownCard.style.display = "none";
         const continueDrawing = setInterval(() => {
             if (this.dealer.total < 17) {
@@ -132,7 +117,7 @@ export default class Game {
             }
         }, 1000);
     }
-    resetBoard(): void {
+    resetBoard() {
         this.player.total = 0;
         this.dealer.total = 0;
         this.player.currentBet = 0;
@@ -152,7 +137,7 @@ export default class Game {
         this.table.bet5Btn.focus();
     }
 
-    drawCard(currentTurn: string): void {
+    drawCard(currentTurn: string) {
         if (this.deck.cards.length < 1) {
             this.deck.generateDeck();
         }
@@ -161,14 +146,18 @@ export default class Game {
         if (currentTurn === "Player") {
             this.player.hand.push(newCard);
             this.getRankValue(newCard.rank, this.player);
+            this.table.playerScoreText.textContent =
+                this.player.total.toString();
         } else {
             this.dealer.hand.push(newCard);
             this.getRankValue(newCard.rank, this.dealer);
+            this.table.dealerScoreText.textContent =
+                this.dealer.total.toString();
         }
         this.table.renderCard(currentTurn, newCard.rank, newCard.suit);
         this.deck.cards.splice(index, 1);
     }
-    checkTotals(): void {
+    checkTotals() {
         if (this.player.total > 21) {
             if (this.player.money > 0) {
                 this.endGame("You lose, better luck next time!", false);
@@ -204,10 +193,11 @@ export default class Game {
         }
         this.table.totalMoneyText.textContent = this.player.money.toString();
     }
-    endGame(resultText: string, isGameOver: boolean): void {
+    endGame(resultText: string, isGameOver: boolean) {
         this.table.gameResultText.textContent = resultText;
         this.table.disableSelections();
-        this.table.disableBets(this.player.money);
+        this.table.disableBets();
+        this.table.totalMoneyText.textContent = this.player.money.toString();
         if (!isGameOver) {
             this.table.newGameButton.textContent = "New Hand";
         } else {
@@ -216,30 +206,27 @@ export default class Game {
         this.determineHighScore();
         this.table.resetModal.showModal();
     }
+    checkSavedHighScore() {
+        const savedScore = localStorage.getItem("high-score");
+        if (
+            savedScore &&
+            typeof parseInt(savedScore, 10) === "number" &&
+            parseInt(savedScore, 10) > this.highScore
+        ) {
+            this.highScore = parseInt(savedScore, 10);
+            localStorage.setItem("high-score", this.highScore.toString(10));
+            this.table.topPayout.textContent = this.highScore.toString(10);
+        }
+    }
     determineHighScore() {
-        if (localStorage.getItem("high-score") !== null) {
-            const highScore = localStorage.getItem("high-score");
-            if (
-                highScore !== null &&
-                this.player.money > parseInt(JSON.parse(highScore), 10)
-            ) {
-                localStorage.setItem(
-                    "high-score",
-                    JSON.stringify(this.player.money)
-                );
-                this.table.topPayout.textContent = this.player.money.toString();
-            } else if (
-                highScore !== null &&
-                this.player.money < parseInt(JSON.parse(highScore), 10)
-            ) {
-                this.table.topPayout.textContent = JSON.parse(highScore);
-            }
-        } else {
-            localStorage.setItem("high-score", JSON.stringify(100));
+        if (this.player.money > this.highScore) {
+            this.highScore = this.player.money;
+            localStorage.setItem("high-score", this.player.money.toString(10));
+            this.table.topPayout.textContent = this.player.money.toString(10);
         }
     }
 }
 
 const game = new Game();
 game.table.disableSelections();
-game.determineHighScore();
+game.checkSavedHighScore();
