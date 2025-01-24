@@ -11,6 +11,8 @@ export default class Table {
     playerSection: HTMLElement;
     dealerScoreText: HTMLSpanElement;
     dealerSection: HTMLElement;
+    splitSection: HTMLElement;
+    completeSplitBtn: HTMLButtonElement;
     dealerFaceDownCard: HTMLDivElement;
     resetSection: HTMLElement;
     hitButton: HTMLButtonElement;
@@ -43,6 +45,28 @@ export default class Table {
         this.dealerSection = <HTMLElement>(
             document.getElementById("dealer-section")
         );
+        this.splitSection = <HTMLElement>(
+            document.getElementById("split-section")
+        );
+        this.completeSplitBtn = <HTMLButtonElement>(
+            document.getElementById("complete-split-button")
+        );
+        this.completeSplitBtn.addEventListener("click", () => {
+            this.resetModal.close();
+            this.game.isHandSplit = false;
+            setTimeout(() => {
+                this.game.dealCardSound.play().catch((err) => {
+                    console.error(err);
+                });
+                this.game.drawCard("Player");
+            }, 500);
+            this.activateSelections(
+                this.game.player.money,
+                this.game.player.currentBet
+            );
+            this.newGameButton.style.display = "inline-block";
+            this.completeSplitBtn.style.display = "none";
+        });
         this.resetSection = <HTMLElement>(
             document.getElementById("reset-section")
         );
@@ -61,7 +85,11 @@ export default class Table {
         );
         this.stayButton.addEventListener("click", () => {
             this.disableSelections();
-            this.game.initiateDealerTurn();
+            if (!this.game.isHandSplit) {
+                this.game.initiateDealerTurn();
+            } else {
+                this.game.resetSplit();
+            }
         });
         this.doubleDownBtn = <HTMLButtonElement>(
             document.getElementById("double-down-button")
@@ -181,8 +209,11 @@ export default class Table {
         const cardContainer = document.createElement("div");
         if (currentTurn === "Player") {
             this.playerSection.append(cardContainer);
-        } else {
+            this.game.player.cardElements.push(cardContainer);
+        } else if (currentTurn === "Dealer") {
             this.dealerSection.append(cardContainer);
+        } else {
+            this.splitSection.append(cardContainer);
         }
         cardContainer.classList.add("card-container");
         const cardRankTop = document.createElement("p");

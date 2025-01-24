@@ -106,6 +106,18 @@ button:disabled {
     width: 100%;
 }
 
+#split-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    border-top: 2px solid gold;
+}
+
+#complete-split-button {
+    display: none;
+}
+
 .card-container,
 .blank-card-container {
     margin: 0.5em;

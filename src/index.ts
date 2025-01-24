@@ -12,6 +12,8 @@ export default class Game {
     dealer: Dealer;
     table: Table;
     highScore: number;
+    isHandSplit: boolean;
+    splitBet: number;
     dealCardSound: HTMLAudioElement;
     constructor() {
         this.deck = new Deck();
@@ -20,6 +22,8 @@ export default class Game {
         this.table = new Table(this);
         this.highScore = 100;
         this.dealCardSound = new Audio(cardAudioSrc);
+        this.isHandSplit = false;
+        this.splitBet = 0;
         this.dealCardSound.volume = 0.5;
     }
     playerHit() {
@@ -52,7 +56,38 @@ export default class Game {
         }, 750);
     }
     playerSplit() {
-        console.log("Split");
+        const splitCard = this.player.hand.pop();
+        if (this.player.money >= this.player.currentBet && splitCard) {
+            this.isHandSplit = true;
+            this.splitBet = this.player.currentBet;
+            this.table.splitSection.append(this.player.cardElements[1]);
+            this.player.splitHand.push(splitCard);
+            if (typeof splitCard.rank === "string") {
+                if (splitCard.rank === "A") {
+                    this.player.total -= 1;
+                } else {
+                    this.player.total -= 10;
+                }
+            } else {
+                this.player.total -= splitCard.rank;
+            }
+            this.player.money -= this.player.currentBet;
+            this.table.playerScoreText.textContent =
+                this.player.total.toString();
+            this.table.totalMoneyText.textContent =
+                this.player.money.toString();
+            this.table.disableBets();
+            setTimeout(() => {
+                this.dealCardSound.play().catch((err) => {
+                    console.error(err);
+                });
+                this.drawCard("Player");
+            }, 500);
+            this.table.activateSelections(
+                this.player.money,
+                this.player.currentBet
+            );
+        }
     }
     startNewGame() {
         setTimeout(() => {
@@ -102,7 +137,6 @@ export default class Game {
             currentTurn.aceOverage -= 10;
         }
     }
-
     initiateDealerTurn() {
         this.table.dealerFaceDownCard.style.display = "none";
         const continueDrawing = setInterval(() => {
@@ -125,18 +159,42 @@ export default class Game {
         this.dealer.aceOverage = 0;
         this.player.hand = [];
         this.dealer.hand = [];
+        this.player.cardElements = [];
+        this.player.splitHand = [];
+        this.isHandSplit = false;
         this.table.dealerSection.replaceChildren();
         this.table.playerSection.replaceChildren();
+        this.table.splitSection.replaceChildren();
         this.table.gameResultText.textContent = "";
         this.table.playerScoreText.textContent = "0";
         this.table.dealerScoreText.textContent = "0";
-        //Needed in case of bust on double down because dealers turn is never initiated
         this.table.dealerFaceDownCard.style.display = "none";
         this.table.resetModal.close();
         this.table.activateBets(this.player.money);
         this.table.bet5Btn.focus();
     }
-
+    resetSplit() {
+        this.table.playerSection.replaceChildren();
+        this.table.splitSection.replaceChildren();
+        const splitCard = this.player.splitHand[0];
+        if (splitCard)
+            this.table.renderCard("Player", splitCard.rank, splitCard.suit);
+        this.player.currentBet = this.splitBet;
+        if (typeof splitCard.rank === "string") {
+            if (splitCard.rank === "A") {
+                this.player.total = 11;
+                this.player.aceOverage = 10;
+            } else {
+                this.player.total = 10;
+            }
+        } else {
+            this.player.total = splitCard.rank;
+        }
+        this.table.playerScoreText.textContent = this.player.total.toString();
+        this.table.newGameButton.style.display = "none";
+        this.table.completeSplitBtn.style.display = "inline-block";
+        this.table.resetModal.showModal();
+    }
     drawCard(currentTurn: string) {
         if (this.deck.cards.length < 1) {
             this.deck.generateDeck();
@@ -198,13 +256,17 @@ export default class Game {
         this.table.disableSelections();
         this.table.disableBets();
         this.table.totalMoneyText.textContent = this.player.money.toString();
-        if (!isGameOver) {
-            this.table.newGameButton.textContent = "New Hand";
-        } else {
-            this.table.newGameButton.textContent = "Start New Game";
-        }
         this.determineHighScore();
-        this.table.resetModal.showModal();
+        if (!this.isHandSplit) {
+            if (!isGameOver) {
+                this.table.newGameButton.textContent = "New Hand";
+            } else {
+                this.table.newGameButton.textContent = "Start New Game";
+            }
+            this.table.resetModal.showModal();
+        } else {
+            this.resetSplit();
+        }
     }
     checkSavedHighScore() {
         const savedScore = localStorage.getItem("high-score");
