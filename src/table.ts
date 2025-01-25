@@ -54,15 +54,18 @@ export default class Table {
         this.completeSplitBtn.addEventListener("click", () => {
             this.resetModal.close();
             this.game.isHandSplit = false;
+            this.game.player.firstSplitHand = false;
+            this.game.player.secondSplitHand = true;
             setTimeout(() => {
                 this.game.dealCardSound.play().catch((err) => {
                     console.error(err);
                 });
-                this.game.drawCard("Player");
+                this.game.drawCard("Player", false);
             }, 500);
             this.activateSelections(
                 this.game.player.money,
-                this.game.player.currentBet
+                this.game.player.currentBet,
+                false
             );
             this.newGameButton.style.display = "inline-block";
             this.completeSplitBtn.style.display = "none";
@@ -86,9 +89,23 @@ export default class Table {
         this.stayButton.addEventListener("click", () => {
             this.disableSelections();
             if (!this.game.isHandSplit) {
-                this.game.initiateDealerTurn();
+                const hiddenDealerCard = this.game.dealer.hand[1];
+                setTimeout(() => {
+                    if (hiddenDealerCard) {
+                        this.game.dealCardSound.play();
+                        this.renderCard(
+                            "Dealer",
+                            hiddenDealerCard.rank,
+                            hiddenDealerCard.suit
+                        );
+                    }
+                    this.game.initiateDealerTurn();
+                }, 500);
             } else {
-                this.game.resetSplit();
+                this.game.player.firstSplitTotal = this.game.player.total;
+                this.game.endGame(
+                    `First hand total: ${this.game.player.total.toString(10)}`
+                );
             }
         });
         this.doubleDownBtn = <HTMLButtonElement>(
@@ -179,11 +196,14 @@ export default class Table {
             this.game.player.bet(50);
         });
     }
-    activateSelections(money: number, currentBet: number) {
+    activateSelections(money: number, currentBet: number, canSplit: boolean) {
         this.hitButton.disabled = false;
         this.stayButton.disabled = false;
         if (money >= currentBet) {
             this.doubleDownBtn.disabled = false;
+        }
+        if (canSplit) {
+            this.splitButton.disabled = false;
         }
         this.hitButton.focus();
     }
@@ -208,12 +228,14 @@ export default class Table {
     renderCard(currentTurn: string, rank: string | number, suit: string) {
         const cardContainer = document.createElement("div");
         if (currentTurn === "Player") {
-            this.playerSection.append(cardContainer);
+            if (!this.game.player.secondSplitHand) {
+                this.playerSection.append(cardContainer);
+            } else {
+                this.splitSection.append(cardContainer);
+            }
             this.game.player.cardElements.push(cardContainer);
         } else if (currentTurn === "Dealer") {
             this.dealerSection.append(cardContainer);
-        } else {
-            this.splitSection.append(cardContainer);
         }
         cardContainer.classList.add("card-container");
         const cardRankTop = document.createElement("p");
