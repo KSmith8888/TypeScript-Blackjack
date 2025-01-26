@@ -13,7 +13,6 @@ export default class Deck {
         return new Card(suit, rank);
     }
     generateDeck(): void {
-        this.cards = [];
         for (const suit of this.suits) {
             for (const rank of this.ranks) {
                 this.cards.push(this.createCard(suit, rank));

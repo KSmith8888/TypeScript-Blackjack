@@ -31,6 +31,8 @@ export default class Table {
     bet25Btn: HTMLButtonElement;
     bet50Btn: HTMLButtonElement;
     totalMoneyText: HTMLSpanElement;
+    shoeMeter: HTMLMeterElement;
+    cardsRemaining: HTMLSpanElement;
     constructor(game: Game) {
         this.game = game;
         this.playerScoreText = <HTMLSpanElement>(
@@ -98,6 +100,8 @@ export default class Table {
                             hiddenDealerCard.rank,
                             hiddenDealerCard.suit
                         );
+                        this.dealerScoreText.textContent =
+                            this.game.dealer.total.toString();
                     }
                     this.game.initiateDealerTurn();
                 }, 500);
@@ -171,6 +175,12 @@ export default class Table {
         this.totalMoneyText = <HTMLSpanElement>(
             document.getElementById("total-money-text")
         );
+        this.shoeMeter = <HTMLMeterElement>(
+            document.getElementById("shoe-meter")
+        );
+        this.cardsRemaining = <HTMLSpanElement>(
+            document.getElementById("cards-remaining")
+        );
         this.bet5Btn = <HTMLButtonElement>(
             document.getElementById("bet-5-button")
         );
@@ -202,7 +212,7 @@ export default class Table {
         if (money >= currentBet) {
             this.doubleDownBtn.disabled = false;
         }
-        if (canSplit) {
+        if (canSplit && money >= currentBet) {
             this.splitButton.disabled = false;
         }
         this.hitButton.focus();

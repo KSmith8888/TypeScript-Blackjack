@@ -29,6 +29,8 @@ export default class Player {
     bet(amount: number): void {
         this.currentBet = amount;
         this.money -= amount;
+        this.game.payouts.push(amount);
+        this.game.payouts.push(amount);
         this.game.table.disableBets();
         this.game.table.totalMoneyText.textContent = this.money.toString();
         this.game.startNewGame();

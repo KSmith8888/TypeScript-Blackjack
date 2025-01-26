@@ -69,6 +69,19 @@ button:disabled {
     align-items: center;
 }
 
+#shoe-meter {
+    margin: 0.5em 0;
+    width: 80%;
+}
+
+#shoe-label {
+    color: var(--off-white);
+}
+
+#cards-remaining {
+    font-weight: 600;
+}
+
 #gameplay-area {
     min-width: 70%;
     max-width: 90%;
