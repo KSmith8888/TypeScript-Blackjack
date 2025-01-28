@@ -59,14 +59,13 @@ export default class Table {
             this.game.player.firstSplitHand = false;
             this.game.player.secondSplitHand = true;
             setTimeout(() => {
-                this.game.dealCardSound.play().catch((err) => {
-                    console.error(err);
-                });
+                this.game.playCardSound();
                 this.game.drawCard("Player", false);
             }, 500);
             this.activateSelections(
                 this.game.player.money,
                 this.game.player.currentBet,
+                true,
                 false
             );
             this.newGameButton.style.display = "inline-block";
@@ -91,20 +90,9 @@ export default class Table {
         this.stayButton.addEventListener("click", () => {
             this.disableSelections();
             if (!this.game.isHandSplit) {
-                const hiddenDealerCard = this.game.dealer.hand[1];
                 setTimeout(() => {
-                    if (hiddenDealerCard) {
-                        this.game.dealCardSound.play();
-                        this.renderCard(
-                            "Dealer",
-                            hiddenDealerCard.rank,
-                            hiddenDealerCard.suit
-                        );
-                        this.dealerScoreText.textContent =
-                            this.game.dealer.total.toString();
-                    }
-                    this.game.initiateDealerTurn();
-                }, 500);
+                    this.game.revealHoleCard();
+                }, 750);
             } else {
                 this.game.player.firstSplitTotal = this.game.player.total;
                 this.game.endGame(
@@ -140,38 +128,19 @@ export default class Table {
         this.newGameButton.addEventListener("click", () => {
             this.game.resetBoard();
         });
+        this.topPayout = <HTMLSpanElement>document.getElementById("top-payout");
         this.openRulesBtn = <HTMLButtonElement>(
             document.getElementById("open-rules-button")
-        );
-        this.closeRulesBtn = <HTMLButtonElement>(
-            document.getElementById("close-rules-button")
-        );
-        this.topPayout = <HTMLSpanElement>document.getElementById("top-payout");
-        this.gameResultText = <HTMLParagraphElement>(
-            document.getElementById("game-result-text")
-        );
-        this.dealerFaceDownCard = document.createElement("div");
-        this.dealerFaceDownCard.id = "dealer-face-down-card";
-        this.dealerFaceDownCard.classList.add("blank-card-container");
-        this.rulesModal = <HTMLDialogElement>(
-            document.getElementById("rules-modal")
-        );
-        this.resetModal = <HTMLDialogElement>(
-            document.getElementById("game-reset-modal")
         );
         this.openRulesBtn.addEventListener("click", () => {
             this.rulesModal.showModal();
         });
-        this.closeRulesBtn.addEventListener("click", () => {
-            this.rulesModal.close();
-        });
-        this.openRulesBtn = <HTMLButtonElement>(
-            document.getElementById("open-rules-button")
-        );
         this.closeRulesBtn = <HTMLButtonElement>(
             document.getElementById("close-rules-button")
         );
-        this.topPayout = <HTMLSpanElement>document.getElementById("top-payout");
+        this.closeRulesBtn.addEventListener("click", () => {
+            this.rulesModal.close();
+        });
         this.totalMoneyText = <HTMLSpanElement>(
             document.getElementById("total-money-text")
         );
@@ -206,10 +175,17 @@ export default class Table {
             this.game.player.bet(50);
         });
     }
-    activateSelections(money: number, currentBet: number, canSplit: boolean) {
-        this.hitButton.disabled = false;
+    activateSelections(
+        money: number,
+        currentBet: number,
+        canDouble: boolean,
+        canSplit: boolean
+    ) {
+        if (this.game.player.total < 21) {
+            this.hitButton.disabled = false;
+        }
         this.stayButton.disabled = false;
-        if (money >= currentBet) {
+        if (canDouble && money >= currentBet) {
             this.doubleDownBtn.disabled = false;
         }
         if (canSplit && money >= currentBet) {

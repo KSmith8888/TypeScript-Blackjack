@@ -15,6 +15,9 @@ export default class Game {
     isHandSplit: boolean;
     splitBet: number;
     payouts: number[];
+    numberOfDecks: number;
+    initGameOver: boolean;
+    isSoundMuted: boolean;
     dealCardSound: HTMLAudioElement;
     constructor() {
         this.deck = new Deck();
@@ -22,17 +25,18 @@ export default class Game {
         this.dealer = new Dealer();
         this.table = new Table(this);
         this.highScore = 100;
-        this.dealCardSound = new Audio(cardAudioSrc);
         this.isHandSplit = false;
         this.splitBet = 0;
         this.payouts = [];
+        this.numberOfDecks = 4;
+        this.initGameOver = false;
+        this.isSoundMuted = false;
+        this.dealCardSound = new Audio(cardAudioSrc);
         this.dealCardSound.volume = 0.5;
     }
     startNewGame() {
+        this.playCardSound();
         setTimeout(() => {
-            this.dealCardSound.play().catch((err) => {
-                console.error(err);
-            });
             this.drawCard("Player", false);
             this.drawCard("Player", false);
             this.drawCard("Dealer", false);
@@ -45,23 +49,36 @@ export default class Game {
             this.initHandCheck();
         }, 500);
     }
+    playCardSound() {
+        if (!this.isSoundMuted) {
+            this.dealCardSound.play().catch((err) => {
+                console.error(err);
+            });
+        }
+    }
     initHandCheck() {
         if (this.player.total === 21) {
             if (this.dealer.total !== 21) {
+                this.initGameOver = true;
                 this.payouts.push(this.player.currentBet);
                 this.payout();
                 this.endGame("BlackJack, well done!");
             } else {
+                this.initGameOver = true;
+                this.revealHoleCard();
                 this.payout();
                 this.endGame("Push. Try again?");
             }
         } else if (this.dealer.total === 21) {
+            this.initGameOver = true;
+            this.revealHoleCard();
             this.endGame("Dealer got BlackJack, better luck next time!");
         }
         const canSplit = this.player.hand[0].rank === this.player.hand[1].rank;
         this.table.activateSelections(
             this.player.money,
             this.player.currentBet,
+            true,
             canSplit
         );
     }
@@ -71,23 +88,20 @@ export default class Game {
         });
     }
     playerHit() {
+        this.playCardSound();
         setTimeout(() => {
-            this.dealCardSound.play().catch((err) => {
-                console.error(err);
-            });
             this.drawCard("Player", false);
-            //test remove
-            if (this.player.total <= 21) {
-                this.table.hitButton.disabled = false;
-                this.table.stayButton.disabled = false;
-            }
+            this.table.activateSelections(
+                this.player.money,
+                this.player.currentBet,
+                false,
+                false
+            );
         }, 750);
     }
     playerDouble() {
+        this.playCardSound();
         setTimeout(() => {
-            this.dealCardSound.play().catch((err) => {
-                console.error(err);
-            });
             this.player.money -= this.player.currentBet;
             this.payouts.push(this.player.currentBet);
             this.payouts.push(this.player.currentBet);
@@ -95,7 +109,7 @@ export default class Game {
                 this.player.money.toString();
             this.drawCard("Player", false);
             if (this.player.total <= 21) {
-                this.initiateDealerTurn();
+                this.revealHoleCard();
             }
         }, 750);
     }
@@ -124,15 +138,14 @@ export default class Game {
             this.table.totalMoneyText.textContent =
                 this.player.money.toString();
             this.table.disableBets();
+            this.playCardSound();
             setTimeout(() => {
-                this.dealCardSound.play().catch((err) => {
-                    console.error(err);
-                });
                 this.drawCard("Player", false);
             }, 500);
             this.table.activateSelections(
                 this.player.money,
                 this.player.currentBet,
+                true,
                 false
             );
         }
@@ -155,13 +168,31 @@ export default class Game {
             return { value: numbericValue, aceOverage: false };
         }
     }
+    revealHoleCard() {
+        this.playCardSound();
+        setTimeout(() => {
+            this.table.dealerFaceDownCard.style.display = "none";
+            const hiddenDealerCard = this.dealer.hand[1];
+            if (hiddenDealerCard) {
+                this.table.renderCard(
+                    "Dealer",
+                    hiddenDealerCard.rank,
+                    hiddenDealerCard.suit
+                );
+                this.table.dealerScoreText.textContent =
+                    this.dealer.total.toString();
+            }
+        }, 500);
+        if (!this.initGameOver) {
+            setTimeout(() => {
+                this.initiateDealerTurn();
+            }, 750);
+        }
+    }
     initiateDealerTurn() {
-        this.table.dealerFaceDownCard.style.display = "none";
         const continueDrawing = setInterval(() => {
             if (this.dealer.total < 17) {
-                this.dealCardSound.play().catch((err) => {
-                    console.error(err);
-                });
+                this.playCardSound();
                 this.drawCard("Dealer", false);
             } else {
                 clearInterval(continueDrawing);
@@ -185,6 +216,7 @@ export default class Game {
         this.player.splitHand = [];
         this.payouts = [];
         this.isHandSplit = false;
+        this.initGameOver = false;
         this.player.firstSplitHand = false;
         this.player.secondSplitHand = false;
         this.player.firstSplitTotal = 0;
@@ -218,6 +250,16 @@ export default class Game {
         this.table.playerScoreText.textContent = this.player.total.toString();
         this.table.resetModal.showModal();
     }
+    fillShoe() {
+        if (this.numberOfDecks >= 1 && this.numberOfDecks < 9) {
+            for (let i = 0; i < this.numberOfDecks; i++) {
+                this.deck.generateDeck();
+            }
+        } else {
+            this.numberOfDecks = 1;
+            this.deck.generateDeck();
+        }
+    }
     updateShoe() {
         this.table.shoeMeter.value = this.deck.cards.length;
         this.table.shoeMeter.textContent = this.deck.cards.length.toString(10);
@@ -226,10 +268,7 @@ export default class Game {
     }
     drawCard(currentTurn: string, hidden: boolean) {
         if (this.deck.cards.length < 1) {
-            this.deck.generateDeck();
-            this.deck.generateDeck();
-            this.deck.generateDeck();
-            this.deck.generateDeck();
+            this.fillShoe();
         }
         const index = this.deck.getCardIndex();
         const newCard = this.deck.cards[index];
