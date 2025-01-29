@@ -1,6 +1,7 @@
 import Player from "./player.js";
 import Dealer from "./dealer.js";
 import Deck from "./deck.js";
+import Hand from "./hand.js";
 import Table from "./table.js";
 
 import cardAudioSrc from "../assets/audio/deal-card-sound.wav";
@@ -13,8 +14,6 @@ export default class Game {
     table: Table;
     highScore: number;
     isHandSplit: boolean;
-    splitBet: number;
-    payouts: number[];
     numberOfDecks: number;
     initGameOver: boolean;
     isSoundMuted: boolean;
@@ -26,8 +25,6 @@ export default class Game {
         this.table = new Table(this);
         this.highScore = 100;
         this.isHandSplit = false;
-        this.splitBet = 0;
-        this.payouts = [];
         this.numberOfDecks = 4;
         this.initGameOver = false;
         this.isSoundMuted = false;
@@ -37,10 +34,12 @@ export default class Game {
     startNewGame() {
         this.playCardSound();
         setTimeout(() => {
-            this.drawCard("Player", false);
-            this.drawCard("Player", false);
-            this.drawCard("Dealer", false);
-            this.drawCard("Dealer", true);
+            const initHand = new Hand(this.player.currentBet);
+            this.player.hands.push(initHand);
+            this.drawPlayer();
+            this.drawPlayer();
+            this.drawDealer(false);
+            this.drawDealer(true);
             this.table.dealerSection.append(this.table.dealerFaceDownCard);
             this.table.dealerFaceDownCard.style.display = "block";
             this.table.dealerScoreText.textContent = "??";
@@ -60,21 +59,21 @@ export default class Game {
         if (this.player.total === 21) {
             if (this.dealer.total !== 21) {
                 this.initGameOver = true;
-                this.payouts.push(this.player.currentBet);
-                this.payout();
                 this.endGame("BlackJack, well done!");
             } else {
+                this.player.hands[this.player.currentHand].result = "Push";
                 this.initGameOver = true;
                 this.revealHoleCard();
-                this.payout();
                 this.endGame("Push. Try again?");
             }
         } else if (this.dealer.total === 21) {
+            this.player.hands[this.player.currentHand].result = "Lost";
             this.initGameOver = true;
             this.revealHoleCard();
             this.endGame("Dealer got BlackJack, better luck next time!");
         }
-        const canSplit = this.player.hand[0].rank === this.player.hand[1].rank;
+        const initHand = this.player.hands[0];
+        const canSplit = initHand.cards[0].rank === initHand.cards[1].rank;
         this.table.activateSelections(
             this.player.money,
             this.player.currentBet,
@@ -83,81 +82,18 @@ export default class Game {
         );
     }
     payout() {
-        this.payouts.forEach((amount) => {
-            this.player.money += amount;
+        this.player.hands.forEach((hand) => {
+            if (hand.result === "Won") {
+                if (hand.hasBeenDoubled) this.player.money += hand.bet * 4;
+                else this.player.money += hand.bet * 2;
+            } else if (hand.result === "Push") this.player.money += hand.bet;
         });
     }
-    playerHit() {
-        this.playCardSound();
-        setTimeout(() => {
-            this.drawCard("Player", false);
-            this.table.activateSelections(
-                this.player.money,
-                this.player.currentBet,
-                false,
-                false
-            );
-        }, 750);
-    }
-    playerDouble() {
-        this.playCardSound();
-        setTimeout(() => {
-            this.player.money -= this.player.currentBet;
-            this.payouts.push(this.player.currentBet);
-            this.payouts.push(this.player.currentBet);
-            this.table.totalMoneyText.textContent =
-                this.player.money.toString();
-            this.drawCard("Player", false);
-            if (this.player.total <= 21) {
-                this.revealHoleCard();
-            }
-        }, 750);
-    }
-    playerSplit() {
-        const splitCard = this.player.hand.pop();
-        if (splitCard) {
-            this.isHandSplit = true;
-            this.player.firstSplitHand = true;
-            this.splitBet = this.player.currentBet;
-            this.table.splitSection.append(this.player.cardElements[1]);
-            this.player.splitHand.push(splitCard);
-            if (typeof splitCard.rank === "string") {
-                if (splitCard.rank === "A") {
-                    this.player.total -= 1;
-                } else {
-                    this.player.total -= 10;
-                }
-            } else {
-                this.player.total -= splitCard.rank;
-            }
-            this.player.money -= this.player.currentBet;
-            this.payouts.push(this.player.currentBet);
-            this.payouts.push(this.player.currentBet);
-            this.table.playerScoreText.textContent =
-                this.player.total.toString();
-            this.table.totalMoneyText.textContent =
-                this.player.money.toString();
-            this.table.disableBets();
-            this.playCardSound();
-            setTimeout(() => {
-                this.drawCard("Player", false);
-            }, 500);
-            this.table.activateSelections(
-                this.player.money,
-                this.player.currentBet,
-                true,
-                false
-            );
-        }
-    }
 
-    getRankValue(rank: string | number, currentTurn: Player | Dealer) {
-        /*
-        If the rank is 2-10, add the rank to the total. If the rank is Jack, Queen, or King add 10. If the rank is Ace and adding 11 would bust, then add 1, otherwise add 11
-        */
+    getRankValue(rank: string | number, total: number) {
         const numbericValue = typeof rank === "number" ? rank : 0;
         if (rank === "A") {
-            if (currentTurn.total + 11 > 21) {
+            if (total + 11 > 21) {
                 return { value: 1, aceOverage: false };
             } else {
                 return { value: 11, aceOverage: true };
@@ -193,14 +129,10 @@ export default class Game {
         const continueDrawing = setInterval(() => {
             if (this.dealer.total < 17) {
                 this.playCardSound();
-                this.drawCard("Dealer", false);
+                this.drawDealer(false);
             } else {
                 clearInterval(continueDrawing);
-                if (!this.player.secondSplitHand) {
-                    this.checkTotals();
-                } else {
-                    this.completeSecondSplit();
-                }
+                this.checkTotals();
             }
         }, 1000);
     }
@@ -210,16 +142,12 @@ export default class Game {
         this.player.currentBet = 0;
         this.player.aceOverage = 0;
         this.dealer.aceOverage = 0;
-        this.player.hand = [];
+        this.player.currentHand = 0;
+        this.player.hands = [];
         this.dealer.hand = [];
         this.player.cardElements = [];
-        this.player.splitHand = [];
-        this.payouts = [];
         this.isHandSplit = false;
         this.initGameOver = false;
-        this.player.firstSplitHand = false;
-        this.player.secondSplitHand = false;
-        this.player.firstSplitTotal = 0;
         this.table.dealerSection.replaceChildren();
         this.table.playerSection.replaceChildren();
         this.table.splitSection.replaceChildren();
@@ -232,9 +160,7 @@ export default class Game {
         this.table.bet5Btn.focus();
     }
     resetSplit() {
-        this.player.firstSplitTotal = this.player.total;
-        const splitCard = this.player.splitHand[0];
-        this.player.currentBet = this.splitBet;
+        const splitCard = this.player.hands[this.player.currentHand].cards[0];
         if (typeof splitCard.rank === "string") {
             if (splitCard.rank === "A") {
                 this.player.total = 11;
@@ -266,143 +192,104 @@ export default class Game {
         this.table.cardsRemaining.textContent =
             this.deck.cards.length.toString(10);
     }
-    drawCard(currentTurn: string, hidden: boolean) {
-        if (this.deck.cards.length < 1) {
+    drawDealer(hidden: boolean) {
+        if (this.deck.cards.length < 10) {
             this.fillShoe();
         }
         const index = this.deck.getCardIndex();
         const newCard = this.deck.cards[index];
-        if (currentTurn === "Player") {
-            this.player.hand.push(newCard);
-            const result = this.getRankValue(newCard.rank, this.player);
-            this.player.total += result.value;
-            if (result.aceOverage) this.player.aceOverage += 10;
-            if (this.player.total > 21) {
-                if (this.player.aceOverage > 0) {
-                    this.player.total -= 10;
-                    this.player.aceOverage -= 10;
-                } else if (!this.player.secondSplitHand) {
-                    this.checkTotals();
-                } else {
-                    this.completeSecondSplit();
-                }
-            }
-            this.table.playerScoreText.textContent =
-                this.player.total.toString();
-        } else {
-            this.dealer.hand.push(newCard);
-            const result = this.getRankValue(newCard.rank, this.dealer);
-            this.dealer.total += result.value;
-            if (result.aceOverage) this.dealer.aceOverage += 10;
-            if (this.dealer.total > 21) {
-                if (this.dealer.aceOverage > 0) {
-                    this.dealer.total -= 10;
-                    this.dealer.aceOverage -= 10;
-                } else if (this.player.secondSplitHand) {
-                    this.completeSecondSplit();
-                }
-            }
-            if (this.dealer.hand.length >= 3) {
-                this.table.dealerScoreText.textContent =
-                    this.dealer.total.toString();
+        this.dealer.hand.push(newCard);
+        const result = this.getRankValue(newCard.rank, this.dealer.total);
+        this.dealer.total += result.value;
+        if (result.aceOverage) this.dealer.aceOverage += 10;
+        if (this.dealer.total > 21) {
+            if (this.dealer.aceOverage > 0) {
+                this.dealer.total -= 10;
+                this.dealer.aceOverage -= 10;
             }
         }
+        if (this.dealer.hand.length >= 3) {
+            this.table.dealerScoreText.textContent =
+                this.dealer.total.toString();
+        }
         if (!hidden)
-            this.table.renderCard(currentTurn, newCard.rank, newCard.suit);
+            this.table.renderCard("Dealer", newCard.rank, newCard.suit);
         this.deck.cards.splice(index, 1);
         this.updateShoe();
     }
-    completeSecondSplit() {
-        const firstResult = this.whoWonHand(
-            this.player.firstSplitTotal,
-            this.dealer.total
-        );
-        const secondResult = this.whoWonHand(
-            this.player.total,
-            this.dealer.total
-        );
-        if (firstResult + secondResult === 10) {
-            this.payout();
-            this.endGame("You won both hands, well done!");
-        } else if (firstResult + secondResult === 0) {
-            this.endGame("Sorry, you lost both hands, better luck next time!");
-        } else if (firstResult + secondResult === 2) {
-            this.payouts.pop();
-            this.payouts.pop();
-            this.payout();
-            this.endGame("Both hands were a push. Try again?");
-        } else if (firstResult + secondResult === 6) {
-            this.payouts.pop();
-            this.payout();
-            this.endGame("Pushed one hand and won the other. Try again?");
-        } else if (firstResult + secondResult === 5) {
-            this.payout();
-            this.endGame("Won a hand and lost a hand. Try again?");
-        } else {
-            this.payouts.pop();
-            this.payouts.pop();
-            this.payouts.pop();
-            this.payout();
-            this.endGame("Pushed one hand and lost the other. Try again?");
+    drawPlayer() {
+        if (this.deck.cards.length < 10) {
+            this.fillShoe();
         }
-    }
-    whoWonHand(playerTotal: number, dealerTotal: number) {
-        if (playerTotal > 21) {
-            return 0;
-        } else if (dealerTotal > 21) {
-            return 5;
-        } else {
-            if (playerTotal > dealerTotal) {
-                return 5;
-            } else if (playerTotal === dealerTotal) {
-                return 1;
+        const index = this.deck.getCardIndex();
+        const newCard = this.deck.cards[index];
+        this.player.hands[this.player.currentHand].cards.push(newCard);
+        const result = this.getRankValue(newCard.rank, this.player.total);
+        this.player.total += result.value;
+        this.player.hands[this.player.currentHand].total += result.value;
+        if (result.aceOverage) {
+            this.player.aceOverage += 10;
+            this.player.hands[this.player.currentHand].aceOverage += 10;
+        }
+        if (this.player.total > 21) {
+            if (this.player.aceOverage > 0) {
+                this.player.total -= 10;
+                this.player.aceOverage -= 10;
+                this.player.hands[this.player.currentHand].total -= 10;
+                this.player.hands[this.player.currentHand].aceOverage -= 10;
             } else {
-                return 0;
+                this.checkTotals();
             }
         }
+        this.table.playerScoreText.textContent = this.player.total.toString();
+        this.table.renderCard("Player", newCard.rank, newCard.suit);
+        this.deck.cards.splice(index, 1);
+        this.updateShoe();
     }
     checkTotals() {
         if (this.player.total > 21) {
+            this.player.hands[this.player.currentHand].result = "Lost";
             if (this.player.money > 0) {
                 this.endGame("You lose, better luck next time!");
             } else {
-                this.player.money = 100;
                 this.endGame(
                     "Game over, you ran out of money! Restart with $100?"
                 );
             }
         } else if (this.dealer.total > 21) {
-            this.payout();
+            this.player.hands[this.player.currentHand].result = "Won";
             this.endGame("You win, well done!");
         } else {
             if (this.player.total > this.dealer.total) {
-                this.payout();
+                this.player.hands[this.player.currentHand].result = "Won";
                 this.endGame("You win, well done!");
             } else if (this.player.total === this.dealer.total) {
-                this.payouts.pop();
-                this.payout();
+                this.player.hands[this.player.currentHand].result = "Push";
                 this.endGame("Push. Try again?");
             } else if (
                 this.player.total < this.dealer.total &&
                 this.player.money > 0
             ) {
+                this.player.hands[this.player.currentHand].result = "Lost";
                 this.endGame("You lose, better luck next time!");
             } else {
+                this.player.hands[this.player.currentHand].result = "Lost";
                 this.endGame(
                     "Game over, you ran out of money! Restart with $100?"
                 );
             }
         }
-        this.table.totalMoneyText.textContent = this.player.money.toString();
     }
     endGame(resultText: string) {
-        this.table.totalMoneyText.textContent = this.player.money.toString();
         this.table.gameResultText.textContent = resultText;
         this.table.disableSelections();
         this.table.disableBets();
-        this.table.totalMoneyText.textContent = this.player.money.toString();
         this.determineHighScore();
-        if (!this.player.firstSplitHand) {
+        if (
+            this.player.hands.length === 1 ||
+            this.player.hands.length === this.player.currentHand + 1
+        ) {
+            this.payout();
             if (this.player.money > 0) {
                 this.table.newGameButton.textContent = "Start New Game";
             } else {
@@ -414,6 +301,7 @@ export default class Game {
             this.table.completeSplitBtn.style.display = "inline-block";
             this.resetSplit();
         }
+        this.table.totalMoneyText.textContent = this.player.money.toString();
         this.table.resetModal.showModal();
     }
     checkSavedHighScore() {

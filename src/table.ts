@@ -56,11 +56,10 @@ export default class Table {
         this.completeSplitBtn.addEventListener("click", () => {
             this.resetModal.close();
             this.game.isHandSplit = false;
-            this.game.player.firstSplitHand = false;
-            this.game.player.secondSplitHand = true;
+            this.game.player.currentHand += 1;
             setTimeout(() => {
                 this.game.playCardSound();
-                this.game.drawCard("Player", false);
+                this.game.drawPlayer();
             }, 500);
             this.activateSelections(
                 this.game.player.money,
@@ -82,36 +81,28 @@ export default class Table {
         );
         this.hitButton.addEventListener("click", () => {
             this.disableSelections();
-            this.game.playerHit();
+            this.game.player.hit();
         });
         this.stayButton = <HTMLButtonElement>(
             document.getElementById("stay-button")
         );
         this.stayButton.addEventListener("click", () => {
             this.disableSelections();
-            if (!this.game.isHandSplit) {
-                setTimeout(() => {
-                    this.game.revealHoleCard();
-                }, 750);
-            } else {
-                this.game.player.firstSplitTotal = this.game.player.total;
-                this.game.endGame(
-                    `First hand total: ${this.game.player.total.toString(10)}`
-                );
-            }
+            this.game.player.stay();
         });
         this.doubleDownBtn = <HTMLButtonElement>(
             document.getElementById("double-down-button")
         );
         this.doubleDownBtn.addEventListener("click", () => {
             this.disableSelections();
-            this.game.playerDouble();
+            this.game.player.double();
         });
         this.splitButton = <HTMLButtonElement>(
             document.getElementById("split-button")
         );
         this.splitButton.addEventListener("click", () => {
-            this.game.playerSplit();
+            this.disableSelections();
+            this.game.player.split();
         });
         this.gameResultText = <HTMLParagraphElement>(
             document.getElementById("game-result-text")
@@ -183,6 +174,9 @@ export default class Table {
     ) {
         if (this.game.player.total < 21) {
             this.hitButton.disabled = false;
+            this.hitButton.focus();
+        } else {
+            this.stayButton.focus();
         }
         this.stayButton.disabled = false;
         if (canDouble && money >= currentBet) {
@@ -191,7 +185,6 @@ export default class Table {
         if (canSplit && money >= currentBet) {
             this.splitButton.disabled = false;
         }
-        this.hitButton.focus();
     }
     disableSelections() {
         this.hitButton.disabled = true;
@@ -214,7 +207,7 @@ export default class Table {
     renderCard(currentTurn: string, rank: string | number, suit: string) {
         const cardContainer = document.createElement("div");
         if (currentTurn === "Player") {
-            if (!this.game.player.secondSplitHand) {
+            if (this.game.player.currentHand === 0) {
                 this.playerSection.append(cardContainer);
             } else {
                 this.splitSection.append(cardContainer);
