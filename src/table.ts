@@ -55,20 +55,7 @@ export default class Table {
         );
         this.completeSplitBtn.addEventListener("click", () => {
             this.resetModal.close();
-            this.game.isHandSplit = false;
-            this.game.player.currentHand += 1;
-            setTimeout(() => {
-                this.game.playCardSound();
-                this.game.drawPlayer();
-            }, 500);
-            this.activateSelections(
-                this.game.player.money,
-                this.game.player.currentBet,
-                true,
-                false
-            );
-            this.newGameButton.style.display = "inline-block";
-            this.completeSplitBtn.style.display = "none";
+            this.game.resetSplit();
         });
         this.resetSection = <HTMLElement>(
             document.getElementById("reset-section")
@@ -167,12 +154,13 @@ export default class Table {
         });
     }
     activateSelections(
+        playerTotal: number,
         money: number,
         currentBet: number,
         canDouble: boolean,
         canSplit: boolean
     ) {
-        if (this.game.player.total < 21) {
+        if (playerTotal < 21) {
             this.hitButton.disabled = false;
             this.hitButton.focus();
         } else {
