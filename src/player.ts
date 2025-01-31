@@ -38,7 +38,6 @@ export default class Player {
         currentHand.total += result.value;
         if (result.aceOverage) {
             currentHand.aceOverage += 10;
-            currentHand.aceOverage += 10;
         }
         let didBust = false;
         if (currentHand.total > 21) {
@@ -53,11 +52,8 @@ export default class Player {
             this.hands[this.currentHand].result = "Lost";
             this.game.table.playerScoreText.textContent =
                 currentHand.total.toString();
-            const isRoundComplete =
-                this.hands.length === 1 ||
-                this.hands.length === this.currentHand + 1;
             this.game.showResultText("Lost");
-            if (isRoundComplete) {
+            if (this.game.isFinalHand) {
                 this.game.endGame();
             }
         }
@@ -76,12 +72,10 @@ export default class Player {
         }, 750);
     }
     stay() {
-        if (
-            this.hands.length === 1 ||
-            this.hands.length === this.currentHand + 1
-        ) {
+        if (this.game.isFinalHand) {
             setTimeout(() => {
                 this.game.dealer.revealHoleCard();
+                this.game.dealer.startTurn();
             }, 750);
         } else {
             this.game.resetSplit();
@@ -94,15 +88,19 @@ export default class Player {
             this.hands[this.currentHand].hasBeenDoubled = true;
             this.game.table.totalMoneyText.textContent = this.money.toString();
             this.drawCard();
-            if (this.hands[this.currentHand].total <= 21) {
+            if (this.game.isFinalHand) {
                 this.game.dealer.revealHoleCard();
+                this.game.dealer.startTurn();
             }
         }, 750);
     }
     split() {
-        const splitCard = this.hands[0].cards.pop();
+        this.game.isFinalHand = false;
+        const splitCard = this.hands[this.currentHand].cards.pop();
         if (splitCard) {
-            this.game.table.splitSection.append(this.cardElements[1]);
+            this.game.table.splitSection.append(
+                this.cardElements[this.currentHand + 1]
+            );
             const splitHand = new Hand();
             this.hands.push(splitHand);
             splitHand.cards.push(splitCard);

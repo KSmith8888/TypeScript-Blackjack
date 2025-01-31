@@ -104,6 +104,7 @@ export default class Table {
             document.getElementById("game-reset-modal")
         );
         this.newGameButton.addEventListener("click", () => {
+            this.resetModal.close();
             this.game.resetBoard();
         });
         this.topPayout = <HTMLSpanElement>document.getElementById("top-payout");

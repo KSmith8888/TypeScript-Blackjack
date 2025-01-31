@@ -13,6 +13,7 @@ export default class Game {
     player: Player;
     dealer: Dealer;
     table: Table;
+    isFinalHand: boolean;
     highScore: number;
     numberOfDecks: number;
     isSoundMuted: boolean;
@@ -23,9 +24,10 @@ export default class Game {
         this.player = new Player(this);
         this.dealer = new Dealer(this);
         this.table = new Table(this);
+        this.isFinalHand = true;
         this.highScore = 100;
         this.numberOfDecks = 4;
-        this.isSoundMuted = false;
+        this.isSoundMuted = true;
         this.dealCardSound = new Audio(cardAudioSrc);
         this.dealCardSound.volume = 0.5;
         this.shuffleSound = new Audio(shuffleAudioSrc);
@@ -50,7 +52,7 @@ export default class Game {
     }
     playCardSound() {
         if (!this.isSoundMuted) {
-            this.dealCardSound.play().catch((err) => {
+            this.dealCardSound.play().catch((err: unknown) => {
                 if (err instanceof Error) {
                     console.error(err.message);
                 }
@@ -59,7 +61,7 @@ export default class Game {
     }
     playShuffleSound() {
         if (!this.isSoundMuted) {
-            this.shuffleSound.play().catch((err) => {
+            this.shuffleSound.play().catch((err: unknown) => {
                 if (err instanceof Error) {
                     console.error(err.message);
                 }
@@ -121,6 +123,7 @@ export default class Game {
         }
     }
     resetBoard() {
+        this.isFinalHand = true;
         this.dealer.total = 0;
         this.player.currentBet = 0;
         this.dealer.aceOverage = 0;
@@ -135,12 +138,13 @@ export default class Game {
         this.table.playerScoreText.textContent = "0";
         this.table.dealerScoreText.textContent = "0";
         this.table.dealerFaceDownCard.style.display = "none";
-        this.table.resetModal.close();
         this.table.activateBets(this.player.money);
         this.table.bet5Btn.focus();
     }
     resetSplit() {
         this.player.currentHand += 1;
+        this.isFinalHand =
+            this.player.hands.length === this.player.currentHand + 1;
         setTimeout(() => {
             this.playCardSound();
             this.player.drawCard();
@@ -193,16 +197,30 @@ export default class Game {
             }
         }
     }
+    multiHandResultText() {
+        let won = 0;
+        let lost = 0;
+        let push = 0;
+        this.player.hands.forEach((hand) => {
+            if (hand.result === "Won") {
+                won += 1;
+            } else if (hand.result === "Lost") {
+                lost += 1;
+            } else {
+                push += 1;
+            }
+        });
+        return `Result: Won: ${won.toString(10)} Lost: ${lost.toString(
+            10
+        )} Push: ${push.toString()}`;
+    }
     showResultText(result: string) {
         if (result === "Won") {
             this.table.gameResultText.textContent = "You win, well done!";
         } else if (result === "Push") {
             this.table.gameResultText.textContent = "Push. Try again?";
         } else if (result === "Lost") {
-            const isRoundComplete =
-                this.player.hands.length === 1 ||
-                this.player.hands.length === this.player.currentHand + 1;
-            if (this.player.money <= 0 && isRoundComplete) {
+            if (this.player.money <= 0 && this.isFinalHand) {
                 this.table.gameResultText.textContent =
                     "Game over, you ran out of money! Restart with $100?";
             } else {
@@ -214,7 +232,18 @@ export default class Game {
         }
         this.table.resetModal.showModal();
     }
+    showRoundResult() {
+        const result =
+            this.player.hands.length === 1
+                ? this.getResult(this.player.hands[0].total, this.dealer.total)
+                : this.multiHandResultText();
+        this.table.gameResultText.textContent = result;
+        this.table.resetModal.showModal();
+    }
     endGame() {
+        if (!this.dealer.holeCardRevealed) {
+            this.dealer.revealHoleCard();
+        }
         this.table.disableSelections();
         this.table.disableBets();
         this.determineHighScore();

@@ -6,11 +6,13 @@ export default class Dealer {
     hand: Card[];
     total: number;
     aceOverage: number;
+    holeCardRevealed: boolean;
     constructor(game: Game) {
         this.game = game;
         this.hand = [];
         this.total = 0;
         this.aceOverage = 0;
+        this.holeCardRevealed = false;
     }
     drawCard(hidden: boolean) {
         if (this.game.deck.cards.length < 10) {
@@ -37,6 +39,7 @@ export default class Dealer {
         this.game.updateShoe();
     }
     revealHoleCard() {
+        this.holeCardRevealed = true;
         this.game.playCardSound();
         setTimeout(() => {
             this.game.table.dealerFaceDownCard.style.display = "none";
@@ -48,11 +51,6 @@ export default class Dealer {
             );
             this.game.table.dealerScoreText.textContent = this.total.toString();
         }, 500);
-        if (!this.game.player.hands[this.game.player.currentHand].result) {
-            setTimeout(() => {
-                this.startTurn();
-            }, 750);
-        }
     }
     startTurn() {
         const continueDrawing = setInterval(() => {
