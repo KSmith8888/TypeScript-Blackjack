@@ -63,8 +63,16 @@ export default class Dealer {
                     this.game.player.hands[this.game.player.currentHand].total,
                     this.total
                 );
-                this.game.showResultText(result);
-                this.game.endGame();
+                this.game.player.hands[this.game.player.currentHand].result =
+                    result;
+                let resultText = "You win, well done!";
+                if (result === "Lost")
+                    resultText = "You lose, better luck next time!";
+                else if (result === "Push") resultText = "Push. Try again?";
+                this.game.player.hands[
+                    this.game.player.currentHand
+                ].resultText = resultText;
+                this.game.endRound();
             }
         }, 1000);
     }

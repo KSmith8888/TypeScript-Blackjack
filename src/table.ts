@@ -12,7 +12,7 @@ export default class Table {
     dealerScoreText: HTMLSpanElement;
     dealerSection: HTMLElement;
     splitSection: HTMLElement;
-    completeSplitBtn: HTMLButtonElement;
+    nextHandBtn: HTMLButtonElement;
     dealerFaceDownCard: HTMLDivElement;
     resetSection: HTMLElement;
     hitButton: HTMLButtonElement;
@@ -50,12 +50,12 @@ export default class Table {
         this.splitSection = <HTMLElement>(
             document.getElementById("split-section")
         );
-        this.completeSplitBtn = <HTMLButtonElement>(
-            document.getElementById("complete-split-button")
+        this.nextHandBtn = <HTMLButtonElement>(
+            document.getElementById("next-hand-button")
         );
-        this.completeSplitBtn.addEventListener("click", () => {
+        this.nextHandBtn.addEventListener("click", () => {
             this.resetModal.close();
-            this.game.resetSplit();
+            this.game.nextHand();
         });
         this.resetSection = <HTMLElement>(
             document.getElementById("reset-section")
@@ -154,26 +154,16 @@ export default class Table {
             this.game.player.bet(50);
         });
     }
-    activateSelections(
-        playerTotal: number,
-        money: number,
-        currentBet: number,
-        canDouble: boolean,
-        canSplit: boolean
-    ) {
-        if (playerTotal < 21) {
+    activateSelections(canHit: boolean, canDouble: boolean, canSplit: boolean) {
+        if (canHit) {
             this.hitButton.disabled = false;
             this.hitButton.focus();
         } else {
             this.stayButton.focus();
         }
         this.stayButton.disabled = false;
-        if (canDouble && money >= currentBet) {
-            this.doubleDownBtn.disabled = false;
-        }
-        if (canSplit && money >= currentBet) {
-            this.splitButton.disabled = false;
-        }
+        if (canDouble) this.doubleDownBtn.disabled = false;
+        if (canSplit) this.splitButton.disabled = false;
     }
     disableSelections() {
         this.hitButton.disabled = true;

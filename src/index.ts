@@ -33,7 +33,7 @@ export default class Game {
         this.shuffleSound = new Audio(shuffleAudioSrc);
         this.shuffleSound.volume = 0.5;
     }
-    startNewGame() {
+    startRound() {
         this.playCardSound();
         setTimeout(() => {
             const initHand = new Hand();
@@ -72,29 +72,27 @@ export default class Game {
         if (this.player.hands[this.player.currentHand].total === 21) {
             if (this.dealer.total !== 21) {
                 this.player.hands[this.player.currentHand].result = "Won";
-                this.showResultText("BlackJack, well done!");
-                this.endGame();
+                this.player.hands[this.player.currentHand].resultText =
+                    "BlackJack, well done!";
+                this.endRound();
             } else {
                 this.player.hands[this.player.currentHand].result = "Push";
-                this.dealer.revealHoleCard();
-                this.showResultText("Push. Try again?");
-                this.endGame();
+                this.player.hands[this.player.currentHand].resultText =
+                    "Push. Try again?";
+                this.endRound();
             }
         } else if (this.dealer.total === 21) {
             this.player.hands[this.player.currentHand].result = "Lost";
-            this.dealer.revealHoleCard();
-            this.showResultText("Dealer got BlackJack, better luck next time!");
-            this.endGame();
+            this.player.hands[this.player.currentHand].resultText =
+                "Dealer got BlackJack, better luck next time!";
+            this.endRound();
         } else {
             const initHand = this.player.hands[0];
+            const canHit =
+                this.player.hands[this.player.currentHand].total < 21;
+            const canDouble = this.player.money >= this.player.currentBet;
             const canSplit = initHand.cards[0].rank === initHand.cards[1].rank;
-            this.table.activateSelections(
-                this.player.hands[this.player.currentHand].total,
-                this.player.money,
-                this.player.currentBet,
-                true,
-                canSplit
-            );
+            this.table.activateSelections(canHit, canDouble, canSplit);
         }
     }
     payout() {
@@ -125,11 +123,12 @@ export default class Game {
     resetBoard() {
         this.isFinalHand = true;
         this.dealer.total = 0;
+        this.dealer.holeCardRevealed = false;
+        this.dealer.hand = [];
         this.player.currentBet = 0;
         this.dealer.aceOverage = 0;
         this.player.currentHand = 0;
         this.player.hands = [];
-        this.dealer.hand = [];
         this.player.cardElements = [];
         this.table.dealerSection.replaceChildren();
         this.table.playerSection.replaceChildren();
@@ -141,28 +140,25 @@ export default class Game {
         this.table.activateBets(this.player.money);
         this.table.bet5Btn.focus();
     }
-    resetSplit() {
+    nextHand() {
         this.player.currentHand += 1;
         this.isFinalHand =
             this.player.hands.length === this.player.currentHand + 1;
+        this.playCardSound();
         setTimeout(() => {
-            this.playCardSound();
             this.player.drawCard();
+            const canHit =
+                this.player.hands[this.player.currentHand].total < 21;
+            const canDouble = this.player.money >= this.player.currentBet;
+            this.table.activateSelections(canHit, canDouble, false);
         }, 500);
-        this.table.activateSelections(
-            this.player.hands[this.player.currentHand].total,
-            this.player.money,
-            this.player.currentBet,
-            true,
-            false
-        );
-        this.table.newGameButton.style.display = "inline-block";
-        this.table.completeSplitBtn.style.display = "none";
         const currentHand = this.player.hands[this.player.currentHand];
         const splitCard = currentHand.cards[0];
         const rankResult = this.getRankValue(splitCard.rank, currentHand.total);
         currentHand.total += rankResult.value;
         this.table.playerScoreText.textContent = currentHand.total.toString();
+        this.table.newGameButton.style.display = "inline-block";
+        this.table.nextHandBtn.style.display = "none";
     }
     shuffleCards() {
         this.deck.cards = [];
@@ -197,50 +193,26 @@ export default class Game {
             }
         }
     }
-    multiHandResultText() {
-        let won = 0;
-        let lost = 0;
-        let push = 0;
-        this.player.hands.forEach((hand) => {
-            if (hand.result === "Won") {
-                won += 1;
-            } else if (hand.result === "Lost") {
-                lost += 1;
-            } else {
-                push += 1;
-            }
-        });
-        return `Result: Won: ${won.toString(10)} Lost: ${lost.toString(
-            10
-        )} Push: ${push.toString()}`;
-    }
-    showResultText(result: string) {
-        if (result === "Won") {
-            this.table.gameResultText.textContent = "You win, well done!";
-        } else if (result === "Push") {
-            this.table.gameResultText.textContent = "Push. Try again?";
-        } else if (result === "Lost") {
-            if (this.player.money <= 0 && this.isFinalHand) {
-                this.table.gameResultText.textContent =
-                    "Game over, you ran out of money! Restart with $100?";
-            } else {
-                this.table.gameResultText.textContent =
-                    "You lose, better luck next time!";
-            }
+    showResultText() {
+        if (this.player.hands.length === 1 || !this.isFinalHand) {
+            this.table.gameResultText.textContent =
+                this.player.hands[this.player.currentHand].resultText;
         } else {
-            this.table.gameResultText.textContent = result;
+            let won = 0;
+            let lost = 0;
+            let push = 0;
+            this.player.hands.forEach((hand) => {
+                if (hand.result === "Won") won += 1;
+                else if (hand.result === "Lost") lost += 1;
+                else push += 1;
+            });
+            this.table.gameResultText.textContent = `Result: Won: ${won.toString(
+                10
+            )} Lost: ${lost.toString(10)} Push: ${push.toString(10)}`;
         }
         this.table.resetModal.showModal();
     }
-    showRoundResult() {
-        const result =
-            this.player.hands.length === 1
-                ? this.getResult(this.player.hands[0].total, this.dealer.total)
-                : this.multiHandResultText();
-        this.table.gameResultText.textContent = result;
-        this.table.resetModal.showModal();
-    }
-    endGame() {
+    endRound() {
         if (!this.dealer.holeCardRevealed) {
             this.dealer.revealHoleCard();
         }
@@ -255,6 +227,7 @@ export default class Game {
             this.player.money = 100;
         }
         this.table.totalMoneyText.textContent = this.player.money.toString();
+        this.showResultText();
     }
     checkSavedHighScore() {
         const savedScore = localStorage.getItem("high-score");
