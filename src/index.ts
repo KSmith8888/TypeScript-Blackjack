@@ -16,6 +16,7 @@ export default class Game {
     isFinalHand: boolean;
     highScore: number;
     numberOfDecks: number;
+    shoePenetration: number;
     isSoundMuted: boolean;
     dealCardSound: HTMLAudioElement;
     shuffleSound: HTMLAudioElement;
@@ -27,6 +28,7 @@ export default class Game {
         this.isFinalHand = true;
         this.highScore = 100;
         this.numberOfDecks = 4;
+        this.shoePenetration = Math.floor((this.numberOfDecks * 52) / 4);
         this.isSoundMuted = true;
         this.dealCardSound = new Audio(cardAudioSrc);
         this.dealCardSound.volume = 0.5;
@@ -91,7 +93,8 @@ export default class Game {
             const canHit =
                 this.player.hands[this.player.currentHand].total < 21;
             const canDouble = this.player.money >= this.player.currentBet;
-            const canSplit = initHand.cards[0].rank === initHand.cards[1].rank;
+            const canSplit =
+                canDouble && initHand.cards[0].rank === initHand.cards[1].rank;
             this.table.activateSelections(canHit, canDouble, canSplit);
         }
     }
@@ -105,6 +108,12 @@ export default class Game {
                 else this.player.money += bet * 2;
             } else if (result === "Push") this.player.money += bet;
         });
+        if (this.player.money > 0) {
+            this.table.newGameButton.textContent = "Start New Game";
+        } else {
+            this.table.newGameButton.textContent = "New Hand";
+            this.player.money = 100;
+        }
     }
     getRankValue(rank: string | number, total: number) {
         const numbericValue = typeof rank === "number" ? rank : 0;
@@ -193,6 +202,19 @@ export default class Game {
             }
         }
     }
+    getUnknownResults() {
+        this.player.hands.forEach((hand) => {
+            if (!hand.result) {
+                const result = this.getResult(hand.total, this.dealer.total);
+                hand.result = result;
+                let resultText = "You win, well done!";
+                if (result === "Lost")
+                    resultText = "You lose, better luck next time!";
+                else if (result === "Push") resultText = "Push. Try again?";
+                hand.resultText = resultText;
+            }
+        });
+    }
     showResultText() {
         if (this.player.hands.length === 1 || !this.isFinalHand) {
             this.table.gameResultText.textContent =
@@ -218,15 +240,10 @@ export default class Game {
         }
         this.table.disableSelections();
         this.table.disableBets();
-        this.determineHighScore();
+        this.getUnknownResults();
         this.payout();
-        if (this.player.money > 0) {
-            this.table.newGameButton.textContent = "Start New Game";
-        } else {
-            this.table.newGameButton.textContent = "New Hand";
-            this.player.money = 100;
-        }
-        this.table.totalMoneyText.textContent = this.player.money.toString();
+        this.table.totalMoneyText.textContent = this.player.money.toString(10);
+        this.determineHighScore();
         this.showResultText();
     }
     checkSavedHighScore() {

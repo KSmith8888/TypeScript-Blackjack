@@ -1,5 +1,5 @@
 import Card from "./card.js";
-//this.ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
+
 export default class Deck {
     cards: Card[];
     suits: string[];
@@ -7,7 +7,7 @@ export default class Deck {
     constructor() {
         this.cards = [];
         this.suits = ["Hearts", "Clubs", "Spades", "Diamonds"];
-        this.ranks = ["K"];
+        this.ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
     }
     createCard(suit: string, rank: string | number): Card {
         return new Card(suit, rank);

@@ -24,7 +24,7 @@ export default class Player {
         this.game.startRound();
     }
     drawCard() {
-        if (this.game.deck.cards.length < 10) {
+        if (this.game.deck.cards.length < this.game.shoePenetration) {
             this.game.shuffleCards();
         }
         const index = this.game.deck.getCardIndex();
@@ -50,8 +50,6 @@ export default class Player {
         }
         if (didBust) {
             this.hands[this.currentHand].result = "Lost";
-            this.game.table.playerScoreText.textContent =
-                currentHand.total.toString();
             this.hands[this.currentHand].resultText =
                 "You busted. Better luck next time";
             if (this.game.isFinalHand) {
@@ -60,12 +58,14 @@ export default class Player {
                 this.game.showResultText();
             }
         }
+        this.game.table.playerScoreText.textContent =
+            currentHand.total.toString();
     }
     hit() {
         this.game.playCardSound();
-        const canHit = this.hands[this.currentHand].total < 21;
         setTimeout(() => {
             this.drawCard();
+            const canHit = this.hands[this.currentHand].total < 21;
             this.game.table.activateSelections(canHit, false, false);
         }, 750);
     }
@@ -89,6 +89,8 @@ export default class Player {
             if (this.game.isFinalHand && !this.hands[this.currentHand].result) {
                 this.game.dealer.revealHoleCard();
                 this.game.dealer.startTurn();
+            } else {
+                this.game.nextHand();
             }
         }, 750);
     }
@@ -99,17 +101,19 @@ export default class Player {
             this.game.table.splitSection.append(
                 this.cardElements[this.currentHand + 1]
             );
+            const currentHand = this.hands[this.currentHand];
             const splitHand = new Hand();
             this.hands.push(splitHand);
             splitHand.cards.push(splitCard);
             if (typeof splitCard.rank === "string") {
                 if (splitCard.rank === "A") {
-                    this.hands[this.currentHand].total -= 1;
+                    currentHand.total -= 1;
+                    splitHand.aceOverage = 10;
                 } else {
-                    this.hands[this.currentHand].total -= 10;
+                    currentHand.total -= 10;
                 }
             } else {
-                this.hands[this.currentHand].total -= splitCard.rank;
+                currentHand.total -= splitCard.rank;
             }
             this.money -= this.currentBet;
             this.game.table.playerScoreText.textContent =
@@ -121,7 +125,7 @@ export default class Player {
             this.game.playCardSound();
             setTimeout(() => {
                 this.drawCard();
-                const canHit = this.hands[this.currentHand].total < 21;
+                const canHit = currentHand.total < 21;
                 const canDouble = this.money >= this.currentBet;
                 this.game.table.activateSelections(canHit, canDouble, false);
             }, 500);
