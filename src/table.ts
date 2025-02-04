@@ -15,21 +15,24 @@ export default class Table {
     nextHandBtn: HTMLButtonElement;
     dealerFaceDownCard: HTMLDivElement;
     resetSection: HTMLElement;
-    hitButton: HTMLButtonElement;
-    stayButton: HTMLButtonElement;
-    doubleDownBtn: HTMLButtonElement;
-    splitButton: HTMLButtonElement;
+    #hitButton: HTMLButtonElement;
+    #stayButton: HTMLButtonElement;
+    #doubleDownBtn: HTMLButtonElement;
+    #splitButton: HTMLButtonElement;
     gameResultText: HTMLParagraphElement;
     rulesModal: HTMLDialogElement;
     resetModal: HTMLDialogElement;
     newGameButton: HTMLButtonElement;
-    openRulesBtn: HTMLButtonElement;
-    closeRulesBtn: HTMLButtonElement;
+    #openRulesBtn: HTMLButtonElement;
+    #closeRulesBtn: HTMLButtonElement;
+    #settingsModal: HTMLDialogElement;
+    #openSettingsBtn: HTMLButtonElement;
+    #closeSettingsBtn: HTMLButtonElement;
     topPayout: HTMLSpanElement;
-    bet5Btn: HTMLButtonElement;
-    bet10Btn: HTMLButtonElement;
-    bet25Btn: HTMLButtonElement;
-    bet50Btn: HTMLButtonElement;
+    #bet5Btn: HTMLButtonElement;
+    #bet10Btn: HTMLButtonElement;
+    #bet25Btn: HTMLButtonElement;
+    #bet50Btn: HTMLButtonElement;
     totalMoneyText: HTMLSpanElement;
     shoeMeter: HTMLMeterElement;
     cardsRemaining: HTMLSpanElement;
@@ -63,31 +66,31 @@ export default class Table {
         this.newGameButton = <HTMLButtonElement>(
             document.getElementById("new-game-button")
         );
-        this.hitButton = <HTMLButtonElement>(
+        this.#hitButton = <HTMLButtonElement>(
             document.getElementById("hit-button")
         );
-        this.hitButton.addEventListener("click", () => {
+        this.#hitButton.addEventListener("click", () => {
             this.disableSelections();
             this.game.player.hit();
         });
-        this.stayButton = <HTMLButtonElement>(
+        this.#stayButton = <HTMLButtonElement>(
             document.getElementById("stay-button")
         );
-        this.stayButton.addEventListener("click", () => {
+        this.#stayButton.addEventListener("click", () => {
             this.disableSelections();
             this.game.player.stay();
         });
-        this.doubleDownBtn = <HTMLButtonElement>(
+        this.#doubleDownBtn = <HTMLButtonElement>(
             document.getElementById("double-down-button")
         );
-        this.doubleDownBtn.addEventListener("click", () => {
+        this.#doubleDownBtn.addEventListener("click", () => {
             this.disableSelections();
             this.game.player.double();
         });
-        this.splitButton = <HTMLButtonElement>(
+        this.#splitButton = <HTMLButtonElement>(
             document.getElementById("split-button")
         );
-        this.splitButton.addEventListener("click", () => {
+        this.#splitButton.addEventListener("click", () => {
             this.disableSelections();
             this.game.player.split();
         });
@@ -108,17 +111,32 @@ export default class Table {
             this.game.resetBoard();
         });
         this.topPayout = <HTMLSpanElement>document.getElementById("top-payout");
-        this.openRulesBtn = <HTMLButtonElement>(
+        this.#openRulesBtn = <HTMLButtonElement>(
             document.getElementById("open-rules-button")
         );
-        this.openRulesBtn.addEventListener("click", () => {
+        this.#openRulesBtn.addEventListener("click", () => {
             this.rulesModal.showModal();
         });
-        this.closeRulesBtn = <HTMLButtonElement>(
+        this.#closeRulesBtn = <HTMLButtonElement>(
             document.getElementById("close-rules-button")
         );
-        this.closeRulesBtn.addEventListener("click", () => {
+        this.#closeRulesBtn.addEventListener("click", () => {
             this.rulesModal.close();
+        });
+        this.#openSettingsBtn = <HTMLButtonElement>(
+            document.getElementById("open-settings-button")
+        );
+        this.#settingsModal = <HTMLDialogElement>(
+            document.getElementById("settings-modal")
+        );
+        this.#openSettingsBtn.addEventListener("click", () => {
+            this.#settingsModal.showModal();
+        });
+        this.#closeSettingsBtn = <HTMLButtonElement>(
+            document.getElementById("close-settings-button")
+        );
+        this.#closeSettingsBtn.addEventListener("click", () => {
+            this.#settingsModal.close();
         });
         this.totalMoneyText = <HTMLSpanElement>(
             document.getElementById("total-money-text")
@@ -129,59 +147,60 @@ export default class Table {
         this.cardsRemaining = <HTMLSpanElement>(
             document.getElementById("cards-remaining")
         );
-        this.bet5Btn = <HTMLButtonElement>(
+        this.#bet5Btn = <HTMLButtonElement>(
             document.getElementById("bet-5-button")
         );
-        this.bet10Btn = <HTMLButtonElement>(
+        this.#bet10Btn = <HTMLButtonElement>(
             document.getElementById("bet-10-button")
         );
-        this.bet25Btn = <HTMLButtonElement>(
+        this.#bet25Btn = <HTMLButtonElement>(
             document.getElementById("bet-25-button")
         );
-        this.bet50Btn = <HTMLButtonElement>(
+        this.#bet50Btn = <HTMLButtonElement>(
             document.getElementById("bet-50-button")
         );
-        this.bet5Btn.addEventListener("click", () => {
+        this.#bet5Btn.addEventListener("click", () => {
             this.game.player.bet(5);
         });
-        this.bet10Btn.addEventListener("click", () => {
+        this.#bet10Btn.addEventListener("click", () => {
             this.game.player.bet(10);
         });
-        this.bet25Btn.addEventListener("click", () => {
+        this.#bet25Btn.addEventListener("click", () => {
             this.game.player.bet(25);
         });
-        this.bet50Btn.addEventListener("click", () => {
+        this.#bet50Btn.addEventListener("click", () => {
             this.game.player.bet(50);
         });
     }
     activateSelections(canHit: boolean, canDouble: boolean, canSplit: boolean) {
         if (canHit) {
-            this.hitButton.disabled = false;
-            this.hitButton.focus();
+            this.#hitButton.disabled = false;
+            this.#hitButton.focus();
         } else {
-            this.stayButton.focus();
+            this.#stayButton.focus();
         }
-        this.stayButton.disabled = false;
-        if (canDouble) this.doubleDownBtn.disabled = false;
-        if (canSplit) this.splitButton.disabled = false;
+        this.#stayButton.disabled = false;
+        if (canDouble) this.#doubleDownBtn.disabled = false;
+        if (canSplit) this.#splitButton.disabled = false;
     }
     disableSelections() {
-        this.hitButton.disabled = true;
-        this.stayButton.disabled = true;
-        this.doubleDownBtn.disabled = true;
-        this.splitButton.disabled = true;
+        this.#hitButton.disabled = true;
+        this.#stayButton.disabled = true;
+        this.#doubleDownBtn.disabled = true;
+        this.#splitButton.disabled = true;
     }
     disableBets() {
-        this.bet5Btn.disabled = true;
-        this.bet10Btn.disabled = true;
-        this.bet25Btn.disabled = true;
-        this.bet50Btn.disabled = true;
+        this.#bet5Btn.disabled = true;
+        this.#bet10Btn.disabled = true;
+        this.#bet25Btn.disabled = true;
+        this.#bet50Btn.disabled = true;
     }
     activateBets(money: number) {
-        if (money >= 5) this.bet5Btn.disabled = false;
-        if (money >= 10) this.bet10Btn.disabled = false;
-        if (money >= 25) this.bet25Btn.disabled = false;
-        if (money >= 50) this.bet50Btn.disabled = false;
+        this.#bet5Btn.disabled = false;
+        this.#bet5Btn.focus();
+        if (money >= 10) this.#bet10Btn.disabled = false;
+        if (money >= 25) this.#bet25Btn.disabled = false;
+        if (money >= 50) this.#bet50Btn.disabled = false;
     }
     renderCard(currentTurn: string, rank: string | number, suit: string) {
         const cardContainer = document.createElement("div");

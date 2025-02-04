@@ -25,13 +25,13 @@ export default class Player {
     }
     drawCard() {
         if (this.game.deck.cards.length < this.game.shoePenetration) {
-            this.game.shuffleCards();
+            this.game.deck.shuffleCards();
         }
         const index = this.game.deck.getCardIndex();
         const newCard = this.game.deck.cards[index];
         this.game.table.renderCard("Player", newCard.rank, newCard.suit);
         this.game.deck.cards.splice(index, 1);
-        this.game.updateShoe();
+        this.game.deck.updateShoe();
         const currentHand = this.hands[this.currentHand];
         currentHand.cards.push(newCard);
         const result = this.game.getRankValue(newCard.rank, currentHand.total);
@@ -62,7 +62,7 @@ export default class Player {
             currentHand.total.toString();
     }
     hit() {
-        this.game.playCardSound();
+        this.game.deck.playCardSound();
         setTimeout(() => {
             this.drawCard();
             const canHit = this.hands[this.currentHand].total < 21;
@@ -80,7 +80,7 @@ export default class Player {
         }
     }
     double() {
-        this.game.playCardSound();
+        this.game.deck.playCardSound();
         setTimeout(() => {
             this.money -= this.currentBet;
             this.hands[this.currentHand].hasBeenDoubled = true;
@@ -122,7 +122,7 @@ export default class Player {
             this.game.table.newGameButton.style.display = "none";
             this.game.table.nextHandBtn.style.display = "inline-block";
             this.game.table.disableBets();
-            this.game.playCardSound();
+            this.game.deck.playCardSound();
             setTimeout(() => {
                 this.drawCard();
                 const canHit = currentHand.total < 21;

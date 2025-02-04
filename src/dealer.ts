@@ -16,7 +16,7 @@ export default class Dealer {
     }
     drawCard(hidden: boolean) {
         if (this.game.deck.cards.length < this.game.shoePenetration) {
-            this.game.shuffleCards();
+            this.game.deck.shuffleCards();
         }
         const index = this.game.deck.getCardIndex();
         const newCard = this.game.deck.cards[index];
@@ -36,11 +36,11 @@ export default class Dealer {
         if (!hidden)
             this.game.table.renderCard("Dealer", newCard.rank, newCard.suit);
         this.game.deck.cards.splice(index, 1);
-        this.game.updateShoe();
+        this.game.deck.updateShoe();
     }
     revealHoleCard() {
         this.holeCardRevealed = true;
-        this.game.playCardSound();
+        this.game.deck.playCardSound();
         setTimeout(() => {
             this.game.table.dealerFaceDownCard.style.display = "none";
             const hiddenDealerCard = this.hand[1];
@@ -55,7 +55,7 @@ export default class Dealer {
     startTurn() {
         const continueDrawing = setInterval(() => {
             if (this.total < 17) {
-                this.game.playCardSound();
+                this.game.deck.playCardSound();
                 this.drawCard(false);
             } else {
                 clearInterval(continueDrawing);

@@ -69,10 +69,25 @@ button:disabled {
     align-items: center;
 }
 
-#shoe-meter {
-    margin: 0.5em 0;
+#top-info-container {
     min-width: 70%;
     max-width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+#meter-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#shoe-meter {
+    margin: 0.25em 0;
+    width: 100%;
 }
 
 #shoe-label {
@@ -210,7 +225,8 @@ button:disabled {
 }
 
 #rules-modal[open],
-#game-reset-modal[open] {
+#game-reset-modal[open],
+#settings-modal[open] {
     max-width: 50%;
     padding: 1em 1.5em;
     display: flex;
@@ -218,6 +234,10 @@ button:disabled {
     flex-direction: column;
     background-color: var(--white);
     border: 2px solid var(--off-black);
+}
+
+#number-of-decks-setting {
+    cursor: pointer;
 }
 
 #rule-heading {
@@ -228,7 +248,8 @@ button:disabled {
     margin-bottom: 0.5em;
 }
 
-#close-rules-button {
+#close-rules-button,
+#close-settings-button {
     padding: 0.25em 0.5em 0 0.5em;
     margin: 0 0.25em;
     align-self: flex-end;
@@ -266,7 +287,7 @@ button:disabled {
         justify-content: center;
     }
     #gameplay-area,
-    #shoe-meter {
+    #top-info-container {
         width: 100%;
         max-width: 100%;
     }
@@ -295,7 +316,8 @@ button:disabled {
         font-size: 1.1rem;
         font-weight: 700;
     }
-    #rules-modal[open] {
+    #rules-modal[open],
+    #settings-modal[open] {
         max-width: 95%;
         width: 95%;
     }
