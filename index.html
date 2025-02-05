@@ -31,23 +31,6 @@
     <body>
         <div id="main-container">
             <main id="main-section">
-                <div id="top-info-container">
-                    <button id="open-rules-button" class="button" autofocus>
-                        Rules
-                    </button>
-                    <div id="meter-container">
-                        <label for="shoe-meter" id="shoe-label"
-                            >Cards remaining:
-                            <span id="cards-remaining">0</span></label
-                        >
-                        <meter id="shoe-meter" min="0" max="208" value="0">
-                            0
-                        </meter>
-                    </div>
-                    <button id="open-settings-button" class="button">
-                        Settings
-                    </button>
-                </div>
                 <dialog id="game-reset-modal">
                     <section id="reset-section">
                         <p id="game-result-text"></p>
@@ -127,44 +110,65 @@
                         X
                     </button>
                     <h2 id="rule-heading">Game Settings</h2>
-                    <label for="hit-on-soft-17-setting"
-                        >Dealer hits on soft 17</label
-                    >
-                    <button id="hit-on-soft-17-button" class="button">
-                        Off
-                    </button>
-                    <label for="number-of-decks-setting"
-                        >Number of decks (1-8)</label
-                    >
-                    <input
-                        id="number-of-decks-setting"
-                        type="range"
-                        min="1"
-                        max="8"
-                        value="4"
-                        list="deck-number-options"
-                    />
-                    <datalist id="deck-number-options">
-                        <option value="1" label="1" class="deck-setting-option">
-                            1
-                        </option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                        <option
+                    <label for="mute-audio-setting">Mute/Unmute Audio</label>
+                    <button id="mute-audio-setting" class="button">Mute</button>
+                    <label for="soft-17-setting">Dealer hits on soft 17</label>
+                    <button id="soft-17-setting" class="button">Turn On</button>
+                    <div id="number-of-decks-container">
+                        <label for="number-of-decks-setting"
+                            >Number of decks</label
+                        >
+                        <input
+                            id="number-of-decks-setting"
+                            type="range"
+                            min="1"
+                            max="8"
                             value="4"
-                            label="4"
-                            class="deck-setting-option"
-                        ></option>
-                        <option value="5"></option>
-                        <option value="6"></option>
-                        <option value="7"></option>
-                        <option
-                            value="8"
-                            label="8"
-                            class="deck-setting-option"
-                        ></option>
-                    </datalist>
+                            list="deck-number-options"
+                        />
+                        <datalist id="deck-number-options">
+                            <option
+                                value="1"
+                                label="1"
+                                class="deck-setting-option"
+                            >
+                                1
+                            </option>
+                            <option value="2"></option>
+                            <option value="3"></option>
+                            <option
+                                value="4"
+                                label="4"
+                                class="deck-setting-option"
+                            ></option>
+                            <option value="5"></option>
+                            <option value="6"></option>
+                            <option value="7"></option>
+                            <option
+                                value="8"
+                                label="8"
+                                class="deck-setting-option"
+                            ></option>
+                        </datalist>
+                    </div>
                 </dialog>
+                <div id="top-info-container">
+                    <button id="open-rules-button" class="button" autofocus>
+                        Rules
+                    </button>
+                    <div id="meter-container">
+                        <label for="shoe-meter" id="shoe-label"
+                            >Cards remaining:
+                            <span id="cards-remaining">0</span></label
+                        >
+                        <meter id="shoe-meter" min="0" max="208" value="0">
+                            0
+                        </meter>
+                    </div>
+                    <button id="open-settings-button" class="button">
+                        Settings
+                    </button>
+                </div>
                 <div id="gameplay-area">
                     <div id="scores-container">
                         <p class="name-text">

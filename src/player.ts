@@ -16,7 +16,7 @@ export default class Player {
         this.cardElements = [];
         this.game = game;
     }
-    bet(amount: number): void {
+    bet(amount: number) {
         this.currentBet = amount;
         this.money -= amount;
         this.game.table.disableBets();
@@ -24,9 +24,6 @@ export default class Player {
         this.game.startRound();
     }
     drawCard() {
-        if (this.game.deck.cards.length < this.game.shoePenetration) {
-            this.game.deck.shuffleCards();
-        }
         const index = this.game.deck.getCardIndex();
         const newCard = this.game.deck.cards[index];
         this.game.table.renderCard("Player", newCard.rank, newCard.suit);
@@ -62,6 +59,7 @@ export default class Player {
             currentHand.total.toString();
     }
     hit() {
+        this.game.table.disableSelections();
         this.game.deck.playCardSound();
         setTimeout(() => {
             this.drawCard();
@@ -70,6 +68,7 @@ export default class Player {
         }, 750);
     }
     stay() {
+        this.game.table.disableSelections();
         if (this.game.isFinalHand) {
             setTimeout(() => {
                 this.game.dealer.revealHoleCard();
@@ -80,6 +79,7 @@ export default class Player {
         }
     }
     double() {
+        this.game.table.disableSelections();
         this.game.deck.playCardSound();
         setTimeout(() => {
             this.money -= this.currentBet;
@@ -95,6 +95,7 @@ export default class Player {
         }, 750);
     }
     split() {
+        this.game.table.disableSelections();
         this.game.isFinalHand = false;
         const splitCard = this.hands[this.currentHand].cards.pop();
         if (splitCard) {

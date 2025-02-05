@@ -15,9 +15,6 @@ export default class Dealer {
         this.holeCardRevealed = false;
     }
     drawCard(hidden: boolean) {
-        if (this.game.deck.cards.length < this.game.shoePenetration) {
-            this.game.deck.shuffleCards();
-        }
         const index = this.game.deck.getCardIndex();
         const newCard = this.game.deck.cards[index];
         this.hand.push(newCard);

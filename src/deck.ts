@@ -57,7 +57,7 @@ export default class Deck {
     }
     shuffleCards() {
         this.cards = [];
-        this.playShuffleSound();
+        //this.playShuffleSound();
         if (this.game.numberOfDecks >= 1 && this.game.numberOfDecks < 9) {
             for (let i = 0; i < this.game.numberOfDecks; i++) {
                 this.#generateDeck();

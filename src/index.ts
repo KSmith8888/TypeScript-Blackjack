@@ -27,10 +27,13 @@ export default class Game {
         this.numberOfDecks = 4;
         this.shoePenetration = Math.floor((this.numberOfDecks * 52) / 4);
         this.hitOnSoft17 = false;
-        this.isSoundMuted = true;
+        this.isSoundMuted = false;
         this.#checkSavedHighScore();
     }
     startRound() {
+        if (this.deck.cards.length < this.shoePenetration) {
+            this.deck.shuffleCards();
+        }
         this.deck.playCardSound();
         setTimeout(() => {
             const initHand = new Hand();
@@ -45,7 +48,7 @@ export default class Game {
         }, 500);
         setTimeout(() => {
             this.#initHandCheck();
-        }, 500);
+        }, 1500);
     }
     #initHandCheck() {
         if (this.player.hands[this.player.currentHand].total === 21) {
@@ -123,6 +126,7 @@ export default class Game {
         this.table.playerScoreText.textContent = "0";
         this.table.dealerScoreText.textContent = "0";
         this.table.dealerFaceDownCard.style.display = "none";
+        this.table.disableSelections();
         this.table.activateBets(this.player.money);
     }
     nextHand() {
@@ -202,7 +206,9 @@ export default class Game {
         this.#payout();
         this.table.totalMoneyText.textContent = this.player.money.toString(10);
         this.#determineHighScore();
-        this.showResultText();
+        setTimeout(() => {
+            this.showResultText();
+        }, 750);
     }
     #checkSavedHighScore() {
         const savedScore = localStorage.getItem("high-score");

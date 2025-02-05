@@ -28,6 +28,9 @@ export default class Table {
     #settingsModal: HTMLDialogElement;
     #openSettingsBtn: HTMLButtonElement;
     #closeSettingsBtn: HTMLButtonElement;
+    #muteAudioSetting: HTMLButtonElement;
+    #soft17Setting: HTMLButtonElement;
+    #numOfDecksSetting: HTMLInputElement;
     topPayout: HTMLSpanElement;
     #bet5Btn: HTMLButtonElement;
     #bet10Btn: HTMLButtonElement;
@@ -137,6 +140,42 @@ export default class Table {
         );
         this.#closeSettingsBtn.addEventListener("click", () => {
             this.#settingsModal.close();
+        });
+        this.#muteAudioSetting = <HTMLButtonElement>(
+            document.getElementById("mute-audio-setting")
+        );
+        this.#muteAudioSetting.addEventListener("click", () => {
+            if (this.game.isSoundMuted) {
+                this.game.isSoundMuted = false;
+                this.#muteAudioSetting.textContent = "Mute";
+            } else {
+                this.game.isSoundMuted = true;
+                this.#muteAudioSetting.textContent = "Unmute";
+            }
+        });
+        this.#soft17Setting = <HTMLButtonElement>(
+            document.getElementById("soft-17-setting")
+        );
+        this.#soft17Setting.addEventListener("click", () => {
+            if (this.game.hitOnSoft17) {
+                this.game.hitOnSoft17 = false;
+                this.#soft17Setting.textContent = "Turn On";
+            } else {
+                this.game.hitOnSoft17 = true;
+                this.#soft17Setting.textContent = "Turn Off";
+            }
+        });
+        this.#numOfDecksSetting = <HTMLInputElement>(
+            document.getElementById("number-of-decks-setting")
+        );
+        this.#numOfDecksSetting.addEventListener("change", () => {
+            const value = parseInt(this.#numOfDecksSetting.value, 10);
+            if (typeof value === "number" && value >= 1 && value <= 8) {
+                this.game.numberOfDecks = value;
+            }
+            this.shoeMeter.max = value * 52;
+            console.log(this.shoeMeter.max);
+            this.game.shoePenetration = Math.floor((value * 52) / 4);
         });
         this.totalMoneyText = <HTMLSpanElement>(
             document.getElementById("total-money-text")
