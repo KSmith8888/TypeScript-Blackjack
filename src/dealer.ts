@@ -51,7 +51,8 @@ export default class Dealer {
     }
     startTurn() {
         const continueDrawing = setInterval(() => {
-            if (this.total < 17) {
+            const soft17Hit = this.aceOverage > 0 && this.game.hitOnSoft17;
+            if (this.total < 17 || soft17Hit) {
                 this.game.deck.playCardSound();
                 this.drawCard(false);
             } else {

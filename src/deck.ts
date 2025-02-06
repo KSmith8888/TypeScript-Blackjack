@@ -58,14 +58,10 @@ export default class Deck {
     shuffleCards() {
         this.cards = [];
         //this.playShuffleSound();
-        if (this.game.numberOfDecks >= 1 && this.game.numberOfDecks < 9) {
-            for (let i = 0; i < this.game.numberOfDecks; i++) {
-                this.#generateDeck();
-            }
-        } else {
-            this.game.numberOfDecks = 1;
+        for (let i = 0; i < this.game.numberOfDecks; i++) {
             this.#generateDeck();
         }
+        this.updateShoe();
     }
     updateShoe() {
         this.game.table.shoeMeter.value = this.cards.length;

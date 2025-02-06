@@ -28,7 +28,7 @@ export default class Game {
         this.shoePenetration = Math.floor((this.numberOfDecks * 52) / 4);
         this.hitOnSoft17 = false;
         this.isSoundMuted = false;
-        this.#checkSavedHighScore();
+        this.#checkSavedSettings();
     }
     startRound() {
         if (this.deck.cards.length < this.shoePenetration) {
@@ -210,7 +210,7 @@ export default class Game {
             this.showResultText();
         }, 750);
     }
-    #checkSavedHighScore() {
+    #checkSavedSettings() {
         const savedScore = localStorage.getItem("high-score");
         if (
             savedScore &&
@@ -220,6 +220,32 @@ export default class Game {
             this.highScore = parseInt(savedScore, 10);
             localStorage.setItem("high-score", this.highScore.toString(10));
             this.table.topPayout.textContent = this.highScore.toString(10);
+        }
+        const muteSetting = localStorage.getItem("mute-setting");
+        if (muteSetting === "true") {
+            this.isSoundMuted = true;
+            this.table.muteAudioSetting.textContent = "Unmute";
+        } else if (muteSetting === "false") {
+            this.isSoundMuted = false;
+            this.table.muteAudioSetting.textContent = "Mute";
+        }
+        const soft17Setting = localStorage.getItem("soft-17-setting");
+        if (soft17Setting === "true") {
+            this.hitOnSoft17 = true;
+            this.table.soft17Setting.textContent = "Turn Off";
+        } else if (soft17Setting === "false") {
+            this.hitOnSoft17 = false;
+            this.table.soft17Setting.textContent = "Turn On";
+        }
+        const deckNumberSetting = localStorage.getItem("deck-number-setting");
+        if (deckNumberSetting) {
+            const deckNum = parseInt(deckNumberSetting, 10);
+            if (typeof deckNum === "number" && deckNum >= 1 && deckNum < 9) {
+                this.numberOfDecks = deckNum;
+                this.table.shoeMeter.max = deckNum * 52;
+                this.shoePenetration = Math.floor((deckNum * 52) / 4);
+                this.table.numOfDecksSetting.value = deckNum.toString(10);
+            }
         }
     }
     #determineHighScore() {
