@@ -139,7 +139,7 @@ export default class Player {
             setTimeout(() => {
                 this.drawCard();
                 const canHit = currentHand.total < 21;
-                const canDouble = this.money >= this.currentBet;
+                const canDouble = canHit && this.money >= this.currentBet;
                 this.game.table.activateSelections(canHit, canDouble, false);
             }, 500);
         }

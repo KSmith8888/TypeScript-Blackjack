@@ -39,21 +39,28 @@ export default class Game {
             const initHand = new Hand();
             this.player.hands.push(initHand);
             this.player.drawCard();
-            this.player.drawCard();
+            this.deck.playCardSound();
+        }, 750);
+        setTimeout(() => {
             this.dealer.drawCard(false);
+            this.deck.playCardSound();
+        }, 1500);
+        setTimeout(() => {
+            this.player.drawCard();
+            this.deck.playCardSound();
+        }, 2250);
+        setTimeout(() => {
             this.dealer.drawCard(true);
             this.table.dealerSection.append(this.table.dealerFaceDownCard);
             this.table.dealerFaceDownCard.style.display = "block";
             this.table.dealerScoreText.textContent = "??";
-        }, 500);
-        setTimeout(() => {
             this.#initHandCheck();
-        }, 1500);
+        }, 3000);
     }
     #initHandCheck() {
         if (this.player.hands[this.player.currentHand].total === 21) {
             if (this.dealer.total !== 21) {
-                this.player.hands[this.player.currentHand].result = "Won";
+                this.player.hands[this.player.currentHand].result = "Blackjack";
                 this.player.hands[this.player.currentHand].resultText =
                     "BlackJack, well done!";
                 this.endRound();
@@ -72,7 +79,8 @@ export default class Game {
             const initHand = this.player.hands[0];
             const canHit =
                 this.player.hands[this.player.currentHand].total < 21;
-            const canDouble = this.player.money >= this.player.currentBet;
+            const canDouble =
+                canHit && this.player.money >= this.player.currentBet;
             const canSplit =
                 canDouble && initHand.cards[0].rank === initHand.cards[1].rank;
             this.table.activateSelections(canHit, canDouble, canSplit);
@@ -87,11 +95,14 @@ export default class Game {
                 if (hand.hasBeenDoubled) this.player.money += bet * 4;
                 else this.player.money += bet * 2;
             } else if (result === "Push") this.player.money += bet;
+            else if (result === "Blackjack")
+                this.player.money += Math.floor(bet * 1.5);
         });
-        if (this.player.money > 0) {
-            this.table.newGameButton.textContent = "Start New Game";
-        } else {
+        if (this.player.money > 5) {
             this.table.newGameButton.textContent = "New Hand";
+        } else {
+            this.table.gameOverText.classList.remove("hidden");
+            this.table.newGameButton.textContent = "Start New Game";
             this.player.money = 100;
         }
     }
@@ -126,6 +137,7 @@ export default class Game {
         this.table.playerScoreText.textContent = "0";
         this.table.dealerScoreText.textContent = "0";
         this.table.dealerFaceDownCard.style.display = "none";
+        this.table.gameOverText.classList.add("hidden");
         this.table.disableSelections();
         this.table.activateBets(this.player.money);
     }

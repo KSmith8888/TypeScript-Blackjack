@@ -39,6 +39,7 @@ export default class Deck {
     }
     playCardSound() {
         if (!this.game.isSoundMuted) {
+            this.#dealCardSound.currentTime = 0;
             this.#dealCardSound.play().catch((err: unknown) => {
                 if (err instanceof Error) {
                     console.error(err.message);

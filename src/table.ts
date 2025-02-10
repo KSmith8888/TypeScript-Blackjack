@@ -20,6 +20,7 @@ export default class Table {
     #doubleDownBtn: HTMLButtonElement;
     #splitButton: HTMLButtonElement;
     gameResultText: HTMLParagraphElement;
+    gameOverText: HTMLParagraphElement;
     rulesModal: HTMLDialogElement;
     resetModal: HTMLDialogElement;
     newGameButton: HTMLButtonElement;
@@ -99,6 +100,9 @@ export default class Table {
         });
         this.gameResultText = <HTMLParagraphElement>(
             document.getElementById("game-result-text")
+        );
+        this.gameOverText = <HTMLParagraphElement>(
+            document.getElementById("game-over-text")
         );
         this.dealerFaceDownCard = document.createElement("div");
         this.dealerFaceDownCard.id = "dealer-face-down-card";

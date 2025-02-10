@@ -278,7 +278,9 @@ button:disabled {
 }
 
 #close-rules-button:hover,
-#close-rules-button:focus {
+#close-rules-button:focus,
+#close-settings-button:hover,
+#close-settings-button:focus {
     background-color: var(--dark-red);
 }
 
@@ -289,12 +291,17 @@ button:disabled {
     align-items: center;
 }
 
-#game-result-text {
-    margin: 1em;
+#game-result-text,
+#game-over-text {
+    margin: 0.5em 1em;
     text-align: center;
     font-size: 1.3rem;
     color: var(--off-black);
     font-weight: 700;
+}
+
+.hidden {
+    display: none;
 }
 
 @media (max-width: 850px) {

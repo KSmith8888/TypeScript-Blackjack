@@ -34,6 +34,9 @@
                 <dialog id="game-reset-modal">
                     <section id="reset-section">
                         <p id="game-result-text"></p>
+                        <p id="game-over-text" class="hidden">
+                            Game over! Want to restart with $100?
+                        </p>
                         <button
                             id="new-game-button"
                             class="button"
@@ -61,7 +64,8 @@
                     <h2 id="rule-heading">Game Rules</h2>
                     <ul>
                         <li class="rule-text">
-                            The game is played with a single deck.
+                            The game is played with between 1 and 8 decks,
+                            depending on your settings.
                         </li>
                         <li class="rule-text">
                             The goal is to get the total value of your hand as
@@ -78,26 +82,35 @@
                         </li>
                         <li class="rule-text">
                             The dealer is required to hit when their hand totals
-                            16 or less.
+                            16 or less, and possibly on soft 17 depending on
+                            your settings.
                         </li>
                         <li class="rule-text">
                             If the total of the dealer's hand goes above 21, you
                             win that round.
                         </li>
-                        <li>
+                        <li class="rule-text">
                             If the total of your hand ties the total of the
                             dealer's hand, you push and get your wager amount
                             back.
                         </li>
                         <li class="rule-text">
+                            If your first two cards total exactly 21 after on
+                            your initial hand, that is BlackJack and you win
+                            with a payout of 3/2
+                        </li>
+                        <li class="rule-text">
                             After the initial cards are shown, you have one
                             chance to double down. If you do, your wager amount
-                            for that round is doubled, and you draw exactly one
+                            for that hand is doubled, and you draw exactly one
                             additional card.
                         </li>
                         <li class="rule-text">
-                            The high score is equal to the highest total amount
-                            of money reached.
+                            If your initial two cards for a hand are of the same
+                            rank, you can split the hand. If you do, your wager
+                            amount for that round is doubled, and you will have
+                            two hands, with each starting with one of those
+                            cards.
                         </li>
                     </ul>
                 </dialog>
