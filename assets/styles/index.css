@@ -74,7 +74,7 @@ button:disabled {
 }
 
 #top-info-container {
-    width: 90%;
+    width: 95%;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -199,9 +199,27 @@ button:disabled {
     padding: 0 0.5em;
 }
 
+#side-bets-button {
+    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    cursor: pointer;
+    border: 1px solid var(--off-black);
+    color: var(--off-black);
+    background-color: var(--gold);
+    font-size: 1.1rem;
+    padding: 0.2em 0.5em;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
 #top-payout-text,
 #total-money {
     margin: 0.5em;
+}
+
+#top-payout,
+#total-money-text {
+    display: block;
+    text-align: center;
 }
 
 #selections-section {
@@ -237,6 +255,12 @@ button:disabled {
     flex-direction: column;
     background-color: var(--white);
     border: 2px solid var(--off-black);
+}
+
+.setting-label {
+    max-width: 70%;
+    text-align: center;
+    margin: 0.5em 0 0 0;
 }
 
 #number-of-decks-container {
@@ -309,7 +333,6 @@ button:disabled {
         justify-content: center;
     }
     #gameplay-area,
-    #top-info-container,
     #selections-section,
     #bet-buttons-container,
     #selections-container {

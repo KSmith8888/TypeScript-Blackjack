@@ -16,6 +16,7 @@ export default class Game {
     numberOfDecks: number;
     shoePenetration: number;
     hitOnSoft17: boolean;
+    hitOnSplitAces: boolean;
     isSoundMuted: boolean;
     constructor() {
         this.deck = new Deck(this);
@@ -27,6 +28,7 @@ export default class Game {
         this.numberOfDecks = 4;
         this.shoePenetration = Math.floor((this.numberOfDecks * 52) / 4);
         this.hitOnSoft17 = false;
+        this.hitOnSplitAces = false;
         this.isSoundMuted = false;
         this.#checkSavedSettings();
     }
@@ -96,7 +98,7 @@ export default class Game {
                 else this.player.money += bet * 2;
             } else if (result === "Push") this.player.money += bet;
             else if (result === "Blackjack")
-                this.player.money += Math.floor(bet * 1.5);
+                this.player.money += Math.floor(bet * 1.5) + bet;
         });
         if (this.player.money > 5) {
             this.table.newGameButton.textContent = "New Hand";
@@ -145,18 +147,23 @@ export default class Game {
         this.player.currentHand += 1;
         this.isFinalHand =
             this.player.hands.length === this.player.currentHand + 1;
+        const currentHand = this.player.hands[this.player.currentHand];
+        const splitCard = currentHand.cards[0];
+        const rankResult = this.getRankValue(splitCard.rank, currentHand.total);
+        currentHand.total += rankResult.value;
         this.deck.playCardSound();
         setTimeout(() => {
             this.player.drawCard();
             const canHit =
                 this.player.hands[this.player.currentHand].total < 21;
-            const canDouble = this.player.money >= this.player.currentBet;
-            this.table.activateSelections(canHit, canDouble, false);
+            const canDouble =
+                canHit && this.player.money >= this.player.currentBet;
+            if (splitCard.rank !== "A" || this.hitOnSplitAces) {
+                this.table.activateSelections(canHit, canDouble, false);
+            } else {
+                this.table.activateSelections(false, false, false);
+            }
         }, 500);
-        const currentHand = this.player.hands[this.player.currentHand];
-        const splitCard = currentHand.cards[0];
-        const rankResult = this.getRankValue(splitCard.rank, currentHand.total);
-        currentHand.total += rankResult.value;
         this.table.playerScoreText.textContent = currentHand.total.toString();
         this.table.newGameButton.style.display = "inline-block";
         this.table.nextHandBtn.style.display = "none";
@@ -258,6 +265,16 @@ export default class Game {
                 this.shoePenetration = Math.floor((deckNum * 52) / 4);
                 this.table.numOfDecksSetting.value = deckNum.toString(10);
             }
+        }
+        const hitSplitAcesSetting = localStorage.getItem(
+            "hit-split-aces-setting"
+        );
+        if (hitSplitAcesSetting === "true") {
+            this.hitOnSplitAces = true;
+            this.table.hitSplitAcesSettings.textContent = "Turn Off";
+        } else if (hitSplitAcesSetting === "false") {
+            this.hitOnSplitAces = false;
+            this.table.hitSplitAcesSettings.textContent = "Turn On";
         }
     }
     #determineHighScore() {

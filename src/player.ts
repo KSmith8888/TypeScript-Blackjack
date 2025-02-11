@@ -53,8 +53,19 @@ export default class Player {
         this.hands[this.currentHand].result = "Lost";
         this.hands[this.currentHand].resultText =
             "You busted. Better luck next time";
-        if (this.game.isFinalHand) {
+        if (this.hands.length === 1) {
             this.game.endRound();
+        } else if (this.game.isFinalHand) {
+            let unfinishedHands = 0;
+            this.hands.forEach((hand) => {
+                if (!hand.result) unfinishedHands += 1;
+            });
+            if (unfinishedHands > 0) {
+                this.game.dealer.revealHoleCard();
+                this.game.dealer.startTurn();
+            } else {
+                this.game.endRound();
+            }
         } else {
             this.game.showResultText();
         }
@@ -134,13 +145,24 @@ export default class Player {
             this.game.table.totalMoneyText.textContent = this.money.toString();
             this.game.table.newGameButton.style.display = "none";
             this.game.table.nextHandBtn.style.display = "inline-block";
-            this.game.table.disableBets();
+            //this.game.table.disableBets();
             this.game.deck.playCardSound();
             setTimeout(() => {
                 this.drawCard();
                 const canHit = currentHand.total < 21;
                 const canDouble = canHit && this.money >= this.currentBet;
-                this.game.table.activateSelections(canHit, canDouble, false);
+                if (
+                    currentHand.cards[0].rank !== "A" ||
+                    this.game.hitOnSplitAces
+                ) {
+                    this.game.table.activateSelections(
+                        canHit,
+                        canDouble,
+                        false
+                    );
+                } else {
+                    this.game.table.activateSelections(false, false, false);
+                }
             }, 500);
         }
     }

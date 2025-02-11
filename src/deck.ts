@@ -3,7 +3,7 @@ import Card from "./card.js";
 
 import cardAudioSrc from "../assets/audio/deal-card-sound.wav";
 import shuffleAudioSrc from "../assets/audio/cardShuffle.wav";
-
+//this.#ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
 export default class Deck {
     game: Game;
     cards: Card[];
@@ -15,7 +15,21 @@ export default class Deck {
         this.game = game;
         this.cards = [];
         this.#suits = ["Hearts", "Clubs", "Spades", "Diamonds"];
-        this.#ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
+        this.#ranks = [
+            "A",
+            "A",
+            "A",
+            "A",
+            "A",
+            "A",
+            "A",
+            8,
+            9,
+            10,
+            "J",
+            "Q",
+            "K",
+        ];
         this.#dealCardSound = new Audio(cardAudioSrc);
         this.#dealCardSound.volume = 0.5;
         this.#shuffleSound = new Audio(shuffleAudioSrc);

@@ -31,6 +31,7 @@ export default class Table {
     #closeSettingsBtn: HTMLButtonElement;
     muteAudioSetting: HTMLButtonElement;
     soft17Setting: HTMLButtonElement;
+    hitSplitAcesSettings: HTMLButtonElement;
     numOfDecksSetting: HTMLInputElement;
     topPayout: HTMLSpanElement;
     #bet5Btn: HTMLButtonElement;
@@ -187,6 +188,20 @@ export default class Table {
             this.game.shoePenetration = Math.floor((value * 52) / 4);
             localStorage.setItem("deck-number-setting", value.toString(10));
             this.game.deck.shuffleCards();
+        });
+        this.hitSplitAcesSettings = <HTMLButtonElement>(
+            document.getElementById("hit-split-aces-setting")
+        );
+        this.hitSplitAcesSettings.addEventListener("click", () => {
+            if (this.game.hitOnSplitAces) {
+                this.game.hitOnSplitAces = false;
+                this.hitSplitAcesSettings.textContent = "Turn On";
+                localStorage.setItem("hit-split-aces-setting", "false");
+            } else {
+                this.game.hitOnSplitAces = true;
+                this.hitSplitAcesSettings.textContent = "Turn Off";
+                localStorage.setItem("hit-split-aces-setting", "true");
+            }
         });
         this.totalMoneyText = <HTMLSpanElement>(
             document.getElementById("total-money-text")

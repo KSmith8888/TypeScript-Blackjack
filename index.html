@@ -123,9 +123,13 @@
                         X
                     </button>
                     <h2 id="rule-heading">Game Settings</h2>
-                    <label for="mute-audio-setting">Mute/Unmute Audio</label>
+                    <label for="mute-audio-setting" class="setting-label"
+                        >Mute/Unmute Audio</label
+                    >
                     <button id="mute-audio-setting" class="button">Mute</button>
-                    <label for="soft-17-setting">Dealer hits on soft 17</label>
+                    <label for="soft-17-setting" class="setting-label"
+                        >Dealer hits on soft 17</label
+                    >
                     <button id="soft-17-setting" class="button">Turn On</button>
                     <div id="number-of-decks-container">
                         <label for="number-of-decks-setting"
@@ -164,6 +168,12 @@
                             ></option>
                         </datalist>
                     </div>
+                    <label for="hit-split-aces-setting" class="setting-label"
+                        >Player can hit or double down on split aces</label
+                    >
+                    <button id="hit-split-aces-setting" class="button">
+                        Turn On
+                    </button>
                 </dialog>
                 <div id="top-info-container">
                     <button id="open-rules-button" class="button" autofocus>
@@ -198,9 +208,10 @@
                     <section id="split-section"></section>
                     <div id="money-score-container">
                         <p id="total-money">
-                            Current Total: $
-                            <span id="total-money-text">100</span>
+                            Current bank:
+                            <span id="total-money-text">$100</span>
                         </p>
+                        <button id="side-bets-button">Side Bets</button>
                         <p id="top-payout-text">
                             High score:
                             <span id="top-payout">100</span>
