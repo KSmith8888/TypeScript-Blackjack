@@ -26,13 +26,6 @@ export default class Table {
     newGameButton: HTMLButtonElement;
     #openRulesBtn: HTMLButtonElement;
     #closeRulesBtn: HTMLButtonElement;
-    #settingsModal: HTMLDialogElement;
-    #openSettingsBtn: HTMLButtonElement;
-    #closeSettingsBtn: HTMLButtonElement;
-    muteAudioSetting: HTMLButtonElement;
-    soft17Setting: HTMLButtonElement;
-    hitSplitAcesSettings: HTMLButtonElement;
-    numOfDecksSetting: HTMLInputElement;
     topPayout: HTMLSpanElement;
     #bet5Btn: HTMLButtonElement;
     #bet10Btn: HTMLButtonElement;
@@ -130,78 +123,6 @@ export default class Table {
         );
         this.#closeRulesBtn.addEventListener("click", () => {
             this.rulesModal.close();
-        });
-        this.#openSettingsBtn = <HTMLButtonElement>(
-            document.getElementById("open-settings-button")
-        );
-        this.#settingsModal = <HTMLDialogElement>(
-            document.getElementById("settings-modal")
-        );
-        this.#openSettingsBtn.addEventListener("click", () => {
-            this.#settingsModal.showModal();
-        });
-        this.#closeSettingsBtn = <HTMLButtonElement>(
-            document.getElementById("close-settings-button")
-        );
-        this.#closeSettingsBtn.addEventListener("click", () => {
-            this.#settingsModal.close();
-        });
-        this.muteAudioSetting = <HTMLButtonElement>(
-            document.getElementById("mute-audio-setting")
-        );
-        this.muteAudioSetting.addEventListener("click", () => {
-            if (this.game.isSoundMuted) {
-                this.game.isSoundMuted = false;
-                this.muteAudioSetting.textContent = "Mute";
-                localStorage.setItem("mute-setting", "false");
-            } else {
-                this.game.isSoundMuted = true;
-                this.muteAudioSetting.textContent = "Unmute";
-                localStorage.setItem("mute-setting", "true");
-            }
-        });
-        this.soft17Setting = <HTMLButtonElement>(
-            document.getElementById("soft-17-setting")
-        );
-        this.soft17Setting.addEventListener("click", () => {
-            if (this.game.hitOnSoft17) {
-                this.game.hitOnSoft17 = false;
-                this.soft17Setting.textContent = "Turn On";
-                localStorage.setItem("soft-17-setting", "false");
-            } else {
-                this.game.hitOnSoft17 = true;
-                this.soft17Setting.textContent = "Turn Off";
-                localStorage.setItem("soft-17-setting", "true");
-            }
-        });
-        this.numOfDecksSetting = <HTMLInputElement>(
-            document.getElementById("number-of-decks-setting")
-        );
-        this.numOfDecksSetting.addEventListener("change", () => {
-            const value = parseInt(this.numOfDecksSetting.value, 10);
-            if (typeof value === "number" && value >= 1 && value <= 8) {
-                this.game.numberOfDecks = value;
-            }
-            const newMax = value * 52;
-            this.shoeMeter.max = newMax;
-            this.shoeMeter.value = newMax;
-            this.game.shoePenetration = Math.floor((value * 52) / 4);
-            localStorage.setItem("deck-number-setting", value.toString(10));
-            this.game.deck.shuffleCards();
-        });
-        this.hitSplitAcesSettings = <HTMLButtonElement>(
-            document.getElementById("hit-split-aces-setting")
-        );
-        this.hitSplitAcesSettings.addEventListener("click", () => {
-            if (this.game.hitOnSplitAces) {
-                this.game.hitOnSplitAces = false;
-                this.hitSplitAcesSettings.textContent = "Turn On";
-                localStorage.setItem("hit-split-aces-setting", "false");
-            } else {
-                this.game.hitOnSplitAces = true;
-                this.hitSplitAcesSettings.textContent = "Turn Off";
-                localStorage.setItem("hit-split-aces-setting", "true");
-            }
         });
         this.totalMoneyText = <HTMLSpanElement>(
             document.getElementById("total-money-text")

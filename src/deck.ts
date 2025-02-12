@@ -52,7 +52,7 @@ export default class Deck {
         return randomNumber;
     }
     playCardSound() {
-        if (!this.game.isSoundMuted) {
+        if (!this.game.settings.isSoundMuted) {
             this.#dealCardSound.currentTime = 0;
             this.#dealCardSound.play().catch((err: unknown) => {
                 if (err instanceof Error) {
@@ -62,7 +62,7 @@ export default class Deck {
         }
     }
     playShuffleSound() {
-        if (!this.game.isSoundMuted) {
+        if (!this.game.settings.isSoundMuted) {
             this.#shuffleSound.play().catch((err: unknown) => {
                 if (err instanceof Error) {
                     console.error(err.message);
@@ -73,7 +73,7 @@ export default class Deck {
     shuffleCards() {
         this.cards = [];
         //this.playShuffleSound();
-        for (let i = 0; i < this.game.numberOfDecks; i++) {
+        for (let i = 0; i < this.game.settings.numberOfDecks; i++) {
             this.#generateDeck();
         }
         this.updateShoe();

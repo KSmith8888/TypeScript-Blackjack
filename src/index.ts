@@ -1,8 +1,15 @@
+/**
+ * Copyright Kevyn Smith 2022-2025
+ * https://github.com/KSmith8888/TypeScript-Blackjack/blob/main/LICENSE
+ * @license SPDX-License-Identifier: MIT
+ */
+
 import Player from "./player.js";
 import Dealer from "./dealer.js";
 import Deck from "./deck.js";
 import Hand from "./hand.js";
 import Table from "./table.js";
+import SettingsMenu from "./settings-menu.js";
 
 import "../assets/styles/index.css";
 
@@ -11,29 +18,20 @@ export default class Game {
     player: Player;
     dealer: Dealer;
     table: Table;
+    settings: SettingsMenu;
     isFinalHand: boolean;
     highScore: number;
-    numberOfDecks: number;
-    shoePenetration: number;
-    hitOnSoft17: boolean;
-    hitOnSplitAces: boolean;
-    isSoundMuted: boolean;
     constructor() {
         this.deck = new Deck(this);
         this.player = new Player(this);
         this.dealer = new Dealer(this);
         this.table = new Table(this);
+        this.settings = new SettingsMenu(this);
         this.isFinalHand = true;
         this.highScore = 100;
-        this.numberOfDecks = 4;
-        this.shoePenetration = Math.floor((this.numberOfDecks * 52) / 4);
-        this.hitOnSoft17 = false;
-        this.hitOnSplitAces = false;
-        this.isSoundMuted = false;
-        this.#checkSavedSettings();
     }
     startRound() {
-        if (this.deck.cards.length < this.shoePenetration) {
+        if (this.deck.cards.length < this.settings.shoePenetration) {
             this.deck.shuffleCards();
         }
         this.deck.playCardSound();
@@ -158,7 +156,7 @@ export default class Game {
                 this.player.hands[this.player.currentHand].total < 21;
             const canDouble =
                 canHit && this.player.money >= this.player.currentBet;
-            if (splitCard.rank !== "A" || this.hitOnSplitAces) {
+            if (splitCard.rank !== "A" || this.settings.hitOnSplitAces) {
                 this.table.activateSelections(canHit, canDouble, false);
             } else {
                 this.table.activateSelections(false, false, false);
@@ -223,13 +221,15 @@ export default class Game {
         this.table.disableBets();
         this.#getUnknownResults();
         this.#payout();
-        this.table.totalMoneyText.textContent = this.player.money.toString(10);
+        this.table.totalMoneyText.textContent = `$${this.player.money.toString(
+            10
+        )}`;
         this.#determineHighScore();
         setTimeout(() => {
             this.showResultText();
         }, 750);
     }
-    #checkSavedSettings() {
+    #checkSavedHighScore() {
         const savedScore = localStorage.getItem("high-score");
         if (
             savedScore &&
@@ -240,42 +240,6 @@ export default class Game {
             localStorage.setItem("high-score", this.highScore.toString(10));
             this.table.topPayout.textContent = this.highScore.toString(10);
         }
-        const muteSetting = localStorage.getItem("mute-setting");
-        if (muteSetting === "true") {
-            this.isSoundMuted = true;
-            this.table.muteAudioSetting.textContent = "Unmute";
-        } else if (muteSetting === "false") {
-            this.isSoundMuted = false;
-            this.table.muteAudioSetting.textContent = "Mute";
-        }
-        const soft17Setting = localStorage.getItem("soft-17-setting");
-        if (soft17Setting === "true") {
-            this.hitOnSoft17 = true;
-            this.table.soft17Setting.textContent = "Turn Off";
-        } else if (soft17Setting === "false") {
-            this.hitOnSoft17 = false;
-            this.table.soft17Setting.textContent = "Turn On";
-        }
-        const deckNumberSetting = localStorage.getItem("deck-number-setting");
-        if (deckNumberSetting) {
-            const deckNum = parseInt(deckNumberSetting, 10);
-            if (typeof deckNum === "number" && deckNum >= 1 && deckNum < 9) {
-                this.numberOfDecks = deckNum;
-                this.table.shoeMeter.max = deckNum * 52;
-                this.shoePenetration = Math.floor((deckNum * 52) / 4);
-                this.table.numOfDecksSetting.value = deckNum.toString(10);
-            }
-        }
-        const hitSplitAcesSetting = localStorage.getItem(
-            "hit-split-aces-setting"
-        );
-        if (hitSplitAcesSetting === "true") {
-            this.hitOnSplitAces = true;
-            this.table.hitSplitAcesSettings.textContent = "Turn Off";
-        } else if (hitSplitAcesSetting === "false") {
-            this.hitOnSplitAces = false;
-            this.table.hitSplitAcesSettings.textContent = "Turn On";
-        }
     }
     #determineHighScore() {
         if (this.player.money > this.highScore) {
@@ -284,7 +248,11 @@ export default class Game {
             this.table.topPayout.textContent = this.player.money.toString(10);
         }
     }
+    initSetup() {
+        this.table.disableSelections();
+        this.#checkSavedHighScore();
+        this.settings.checkSavedSettings();
+    }
 }
-
 const game = new Game();
-game.table.disableSelections();
+game.initSetup();

@@ -20,7 +20,7 @@ export default class Player {
         this.currentBet = amount;
         this.money -= amount;
         this.game.table.disableBets();
-        this.game.table.totalMoneyText.textContent = this.money.toString();
+        this.game.table.totalMoneyText.textContent = `$${this.money.toString()}`;
         this.game.startRound();
     }
     drawCard() {
@@ -100,7 +100,7 @@ export default class Player {
         setTimeout(() => {
             this.money -= this.currentBet;
             this.hands[this.currentHand].hasBeenDoubled = true;
-            this.game.table.totalMoneyText.textContent = this.money.toString();
+            this.game.table.totalMoneyText.textContent = `$${this.money.toString()}`;
             const didBust = this.drawCard();
             if (!didBust) {
                 if (
@@ -142,7 +142,7 @@ export default class Player {
             this.money -= this.currentBet;
             this.game.table.playerScoreText.textContent =
                 splitHand.total.toString();
-            this.game.table.totalMoneyText.textContent = this.money.toString();
+            this.game.table.totalMoneyText.textContent = `$${this.money.toString()}`;
             this.game.table.newGameButton.style.display = "none";
             this.game.table.nextHandBtn.style.display = "inline-block";
             //this.game.table.disableBets();
@@ -153,7 +153,7 @@ export default class Player {
                 const canDouble = canHit && this.money >= this.currentBet;
                 if (
                     currentHand.cards[0].rank !== "A" ||
-                    this.game.hitOnSplitAces
+                    this.game.settings.hitOnSplitAces
                 ) {
                     this.game.table.activateSelections(
                         canHit,
