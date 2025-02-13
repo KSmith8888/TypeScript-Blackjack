@@ -1,5 +1,5 @@
-import Game from "./index.js";
-import Card from "./card.js";
+import Game from "./index.ts";
+import Card from "./card.ts";
 
 export default class Dealer {
     game: Game;
@@ -47,7 +47,7 @@ export default class Dealer {
                 hiddenDealerCard.suit
             );
             this.game.table.dealerScoreText.textContent = this.total.toString();
-        }, 500);
+        }, this.game.settings.drawDelay);
     }
     startTurn() {
         const continueDrawing = setInterval(() => {
@@ -60,6 +60,6 @@ export default class Dealer {
                 clearInterval(continueDrawing);
                 this.game.endRound();
             }
-        }, 1000);
+        }, this.game.settings.drawDelay);
     }
 }

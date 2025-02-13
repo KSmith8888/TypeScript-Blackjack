@@ -4,12 +4,13 @@
  * @license SPDX-License-Identifier: MIT
  */
 
-import Player from "./player.js";
-import Dealer from "./dealer.js";
-import Deck from "./deck.js";
-import Hand from "./hand.js";
-import Table from "./table.js";
-import SettingsMenu from "./settings-menu.js";
+import Player from "./player.ts";
+import Dealer from "./dealer.ts";
+import Deck from "./deck.ts";
+import Hand from "./hand.ts";
+import Table from "./table.ts";
+import SettingsMenu from "./settings-menu.ts";
+import SideBets from "./side-bets.ts";
 
 import "../assets/styles/index.css";
 
@@ -19,6 +20,7 @@ export default class Game {
     dealer: Dealer;
     table: Table;
     settings: SettingsMenu;
+    sideBets: SideBets;
     isFinalHand: boolean;
     highScore: number;
     constructor() {
@@ -27,6 +29,7 @@ export default class Game {
         this.dealer = new Dealer(this);
         this.table = new Table(this);
         this.settings = new SettingsMenu(this);
+        this.sideBets = new SideBets(this);
         this.isFinalHand = true;
         this.highScore = 100;
     }
@@ -40,22 +43,22 @@ export default class Game {
             this.player.hands.push(initHand);
             this.player.drawCard();
             this.deck.playCardSound();
-        }, 750);
+        }, this.settings.drawDelay);
         setTimeout(() => {
             this.dealer.drawCard(false);
             this.deck.playCardSound();
-        }, 1500);
+        }, this.settings.drawDelay * 2);
         setTimeout(() => {
             this.player.drawCard();
             this.deck.playCardSound();
-        }, 2250);
+        }, this.settings.drawDelay * 3);
         setTimeout(() => {
             this.dealer.drawCard(true);
             this.table.dealerSection.append(this.table.dealerFaceDownCard);
             this.table.dealerFaceDownCard.style.display = "block";
             this.table.dealerScoreText.textContent = "??";
             this.#initHandCheck();
-        }, 3000);
+        }, this.settings.drawDelay * 4);
     }
     #initHandCheck() {
         if (this.player.hands[this.player.currentHand].total === 21) {
@@ -161,7 +164,7 @@ export default class Game {
             } else {
                 this.table.activateSelections(false, false, false);
             }
-        }, 500);
+        }, this.settings.drawDelay);
         this.table.playerScoreText.textContent = currentHand.total.toString();
         this.table.newGameButton.style.display = "inline-block";
         this.table.nextHandBtn.style.display = "none";

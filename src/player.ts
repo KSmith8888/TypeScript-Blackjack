@@ -1,5 +1,5 @@
-import Game from "./index.js";
-import Hand from "./hand.js";
+import Game from "./index.ts";
+import Hand from "./hand.ts";
 
 export default class Player {
     hands: Hand[];
@@ -81,15 +81,15 @@ export default class Player {
             } else {
                 this.busted();
             }
-        }, 750);
+        }, this.game.settings.drawDelay);
     }
     stay() {
         this.game.table.disableSelections();
+        this.game.dealer.revealHoleCard();
         if (this.game.isFinalHand) {
             setTimeout(() => {
-                this.game.dealer.revealHoleCard();
                 this.game.dealer.startTurn();
-            }, 750);
+            }, this.game.settings.drawDelay);
         } else {
             this.game.nextHand();
         }
@@ -115,7 +115,7 @@ export default class Player {
             } else {
                 this.busted();
             }
-        }, 750);
+        }, this.game.settings.drawDelay);
     }
     split() {
         //this.game.table.disableSelections();
@@ -163,7 +163,7 @@ export default class Player {
                 } else {
                     this.game.table.activateSelections(false, false, false);
                 }
-            }, 500);
+            }, this.game.settings.drawDelay);
         }
     }
 }

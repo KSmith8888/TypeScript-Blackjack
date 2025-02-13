@@ -1,4 +1,4 @@
-import Game from "./index.js";
+import Game from "./index.ts";
 
 export default class SettingsMenu {
     game: Game;
@@ -10,10 +10,14 @@ export default class SettingsMenu {
     shoePenetration: number;
     hitOnSoft17: boolean;
     hitOnSplitAces: boolean;
+    drawDelay: number;
     isSoundMutedBtn: HTMLButtonElement;
     numberOfDecksInput: HTMLInputElement;
     hitOnSoft17Btn: HTMLButtonElement;
     hitOnSplitAcesBtn: HTMLButtonElement;
+    relaxedSpeedBtn: HTMLButtonElement;
+    normalSpeedBtn: HTMLButtonElement;
+    instantSpeedBtn: HTMLButtonElement;
     constructor(game: Game) {
         this.game = game;
         this.#settingsModal = <HTMLDialogElement>(
@@ -31,11 +35,12 @@ export default class SettingsMenu {
         this.#closeSettingsBtn.addEventListener("click", () => {
             this.#settingsModal.close();
         });
+        this.isSoundMuted = false;
         this.numberOfDecks = 4;
         this.shoePenetration = Math.floor((this.numberOfDecks * 52) / 4);
         this.hitOnSoft17 = false;
         this.hitOnSplitAces = false;
-        this.isSoundMuted = false;
+        this.drawDelay = 750;
         this.isSoundMutedBtn = <HTMLButtonElement>(
             document.getElementById("mute-audio-setting")
         );
@@ -93,6 +98,45 @@ export default class SettingsMenu {
                 localStorage.setItem("hit-split-aces-setting", "true");
             }
         });
+        this.relaxedSpeedBtn = <HTMLButtonElement>(
+            document.getElementById("relaxed-speed-setting")
+        );
+        this.relaxedSpeedBtn.addEventListener("click", () => {
+            this.drawDelay = 1500;
+            this.relaxedSpeedBtn.disabled = true;
+            this.normalSpeedBtn.disabled = false;
+            this.instantSpeedBtn.disabled = false;
+            localStorage.setItem(
+                "draw-speed-setting",
+                this.drawDelay.toString(10)
+            );
+        });
+        this.normalSpeedBtn = <HTMLButtonElement>(
+            document.getElementById("normal-speed-setting")
+        );
+        this.normalSpeedBtn.addEventListener("click", () => {
+            this.drawDelay = 750;
+            this.normalSpeedBtn.disabled = true;
+            this.relaxedSpeedBtn.disabled = false;
+            this.instantSpeedBtn.disabled = false;
+            localStorage.setItem(
+                "draw-speed-setting",
+                this.drawDelay.toString(10)
+            );
+        });
+        this.instantSpeedBtn = <HTMLButtonElement>(
+            document.getElementById("instant-speed-setting")
+        );
+        this.instantSpeedBtn.addEventListener("click", () => {
+            this.drawDelay = 0;
+            this.instantSpeedBtn.disabled = true;
+            this.relaxedSpeedBtn.disabled = false;
+            this.normalSpeedBtn.disabled = false;
+            localStorage.setItem(
+                "draw-speed-setting",
+                this.drawDelay.toString(10)
+            );
+        });
     }
     checkSavedSettings() {
         const muteSetting = localStorage.getItem("mute-setting");
@@ -130,6 +174,22 @@ export default class SettingsMenu {
         } else if (hitSplitAcesSetting === "false") {
             this.hitOnSplitAces = false;
             this.hitOnSplitAcesBtn.textContent = "Turn On";
+        }
+        const drawSpeedSetting = localStorage.getItem("draw-speed-setting");
+        if (drawSpeedSetting) {
+            const drawDelayNum = parseInt(drawSpeedSetting, 10);
+            if (drawDelayNum === 0) {
+                this.drawDelay = 0;
+                this.instantSpeedBtn.disabled = true;
+            } else if (drawDelayNum === 750) {
+                this.drawDelay = 750;
+                this.normalSpeedBtn.disabled = true;
+            } else {
+                this.drawDelay = 1500;
+                this.relaxedSpeedBtn.disabled = true;
+            }
+        } else {
+            this.normalSpeedBtn.disabled = true;
         }
     }
 }
