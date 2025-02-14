@@ -217,6 +217,18 @@ button:disabled {
     background-color: var(--dark-gold);
 }
 
+#side-bets-main-heading {
+    margin: 0 0 0.5em 0;
+}
+
+.side-bets-sub-heading {
+    margin: 1em 0 0.5em 0;
+}
+
+#current-side-bets-list {
+    margin: 0 0 1em 0;
+}
+
 #top-payout-text,
 #total-money {
     margin: 0.5em;
@@ -255,7 +267,7 @@ button:disabled {
 #rules-modal[open],
 #game-reset-modal[open],
 #settings-modal[open],
-#side-bets-modal {
+#side-bets-modal[open] {
     max-width: 50%;
     padding: 1em 1.5em;
     display: flex;
@@ -299,9 +311,7 @@ button:disabled {
     margin-bottom: 0.5em;
 }
 
-#close-rules-button,
-#close-settings-button,
-#close-side-bets-modal {
+.close-modal-button {
     padding: 0.25em 0.5em 0 0.5em;
     margin: 0 0.25em;
     align-self: flex-end;
@@ -314,10 +324,8 @@ button:disabled {
     border-radius: 5px;
 }
 
-#close-rules-button:hover,
-#close-rules-button:focus,
-#close-settings-button:hover,
-#close-settings-button:focus {
+.close-modal-button:hover,
+.close-modal-button:focus {
     background-color: var(--dark-red);
 }
 

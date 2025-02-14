@@ -1,4 +1,4 @@
-import Card from "./card";
+import Card from "./card.ts";
 
 export default class Hand {
     cards: Card[];

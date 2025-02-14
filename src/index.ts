@@ -10,6 +10,7 @@ import Deck from "./deck.ts";
 import Hand from "./hand.ts";
 import Table from "./table.ts";
 import SettingsMenu from "./settings-menu.ts";
+import SideBetsMenu from "./side-bets-menu.ts";
 import SideBets from "./side-bets.ts";
 
 import "../assets/styles/index.css";
@@ -20,6 +21,7 @@ export default class Game {
     dealer: Dealer;
     table: Table;
     settings: SettingsMenu;
+    sideBetsMenu: SideBetsMenu;
     sideBets: SideBets;
     isFinalHand: boolean;
     highScore: number;
@@ -29,6 +31,7 @@ export default class Game {
         this.dealer = new Dealer(this);
         this.table = new Table(this);
         this.settings = new SettingsMenu(this);
+        this.sideBetsMenu = new SideBetsMenu(this);
         this.sideBets = new SideBets(this);
         this.isFinalHand = true;
         this.highScore = 100;
@@ -61,21 +64,23 @@ export default class Game {
         }, this.settings.drawDelay * 4);
     }
     #initHandCheck() {
-        if (this.player.hands[this.player.currentHand].total === 21) {
+        const currentHand = this.player.hands[this.player.currentHand];
+        if (this.settings.sideBetAmount > 0) {
+            this.sideBets.checkForMatches(currentHand.cards);
+        }
+        if (currentHand.total === 21) {
             if (this.dealer.total !== 21) {
-                this.player.hands[this.player.currentHand].result = "Blackjack";
-                this.player.hands[this.player.currentHand].resultText =
-                    "BlackJack, well done!";
+                currentHand.result = "Blackjack";
+                currentHand.resultText = "BlackJack, well done!";
                 this.endRound();
             } else {
-                this.player.hands[this.player.currentHand].result = "Push";
-                this.player.hands[this.player.currentHand].resultText =
-                    "Push. Try again?";
+                currentHand.result = "Push";
+                currentHand.resultText = "Push. Try again?";
                 this.endRound();
             }
         } else if (this.dealer.total === 21) {
-            this.player.hands[this.player.currentHand].result = "Lost";
-            this.player.hands[this.player.currentHand].resultText =
+            currentHand.result = "Lost";
+            currentHand.resultText =
                 "Dealer got BlackJack, better luck next time!";
             this.endRound();
         } else {
@@ -143,6 +148,7 @@ export default class Game {
         this.table.gameOverText.classList.add("hidden");
         this.table.disableSelections();
         this.table.activateBets(this.player.money);
+        this.sideBets.resetBets();
     }
     nextHand() {
         this.player.currentHand += 1;
@@ -255,6 +261,7 @@ export default class Game {
         this.table.disableSelections();
         this.#checkSavedHighScore();
         this.settings.checkSavedSettings();
+        this.sideBets.resetBets();
     }
 }
 const game = new Game();

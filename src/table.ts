@@ -1,4 +1,4 @@
-import Game from "./index.js";
+import Game from "./index.ts";
 
 import clubsImage from "../assets/images/Clubs.png";
 import diamondsImage from "../assets/images/Diamonds.png";

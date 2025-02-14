@@ -11,6 +11,7 @@ export default class SettingsMenu {
     hitOnSoft17: boolean;
     hitOnSplitAces: boolean;
     drawDelay: number;
+    sideBetAmount: number;
     isSoundMutedBtn: HTMLButtonElement;
     numberOfDecksInput: HTMLInputElement;
     hitOnSoft17Btn: HTMLButtonElement;
@@ -18,6 +19,10 @@ export default class SettingsMenu {
     relaxedSpeedBtn: HTMLButtonElement;
     normalSpeedBtn: HTMLButtonElement;
     instantSpeedBtn: HTMLButtonElement;
+    sideBetOffBtn: HTMLButtonElement;
+    sideBet1Btn: HTMLButtonElement;
+    sideBet5Btn: HTMLButtonElement;
+    sideBet10Btn: HTMLButtonElement;
     constructor(game: Game) {
         this.game = game;
         this.#settingsModal = <HTMLDialogElement>(
@@ -41,6 +46,7 @@ export default class SettingsMenu {
         this.hitOnSoft17 = false;
         this.hitOnSplitAces = false;
         this.drawDelay = 750;
+        this.sideBetAmount = 0;
         this.isSoundMutedBtn = <HTMLButtonElement>(
             document.getElementById("mute-audio-setting")
         );
@@ -137,6 +143,62 @@ export default class SettingsMenu {
                 this.drawDelay.toString(10)
             );
         });
+        this.sideBetOffBtn = <HTMLButtonElement>(
+            document.getElementById("side-bet-off")
+        );
+        this.sideBetOffBtn.addEventListener("click", () => {
+            this.sideBetAmount = 0;
+            this.sideBetOffBtn.disabled = true;
+            this.sideBet1Btn.disabled = false;
+            this.sideBet5Btn.disabled = false;
+            this.sideBet10Btn.disabled = false;
+            localStorage.setItem(
+                "side-bet-setting",
+                this.sideBetAmount.toString(10)
+            );
+        });
+        this.sideBet1Btn = <HTMLButtonElement>(
+            document.getElementById("side-bet-one")
+        );
+        this.sideBet1Btn.addEventListener("click", () => {
+            this.sideBetAmount = 1;
+            this.sideBetOffBtn.disabled = false;
+            this.sideBet1Btn.disabled = true;
+            this.sideBet5Btn.disabled = false;
+            this.sideBet10Btn.disabled = false;
+            localStorage.setItem(
+                "side-bet-setting",
+                this.sideBetAmount.toString(10)
+            );
+        });
+        this.sideBet5Btn = <HTMLButtonElement>(
+            document.getElementById("side-bet-five")
+        );
+        this.sideBet5Btn.addEventListener("click", () => {
+            this.sideBetAmount = 5;
+            this.sideBetOffBtn.disabled = false;
+            this.sideBet1Btn.disabled = false;
+            this.sideBet5Btn.disabled = true;
+            this.sideBet10Btn.disabled = false;
+            localStorage.setItem(
+                "side-bet-setting",
+                this.sideBetAmount.toString(10)
+            );
+        });
+        this.sideBet10Btn = <HTMLButtonElement>(
+            document.getElementById("side-bet-ten")
+        );
+        this.sideBet10Btn.addEventListener("click", () => {
+            this.sideBetAmount = 10;
+            this.sideBetOffBtn.disabled = false;
+            this.sideBet1Btn.disabled = false;
+            this.sideBet5Btn.disabled = false;
+            this.sideBet10Btn.disabled = true;
+            localStorage.setItem(
+                "side-bet-setting",
+                this.sideBetAmount.toString(10)
+            );
+        });
     }
     checkSavedSettings() {
         const muteSetting = localStorage.getItem("mute-setting");
@@ -190,6 +252,25 @@ export default class SettingsMenu {
             }
         } else {
             this.normalSpeedBtn.disabled = true;
+        }
+        const sideBetSetting = localStorage.getItem("side-bet-setting");
+        if (sideBetSetting) {
+            const sideBetNum = parseInt(sideBetSetting, 10);
+            if (sideBetNum === 1) {
+                this.sideBetAmount = 1;
+                this.sideBet1Btn.disabled = true;
+            } else if (sideBetNum === 5) {
+                this.sideBetAmount = 5;
+                this.sideBet5Btn.disabled = true;
+            } else if (sideBetNum === 10) {
+                this.sideBetAmount = 10;
+                this.sideBet10Btn.disabled = true;
+            } else {
+                this.sideBetAmount = 0;
+                this.sideBetOffBtn.disabled = true;
+            }
+        } else {
+            this.sideBetOffBtn.disabled = true;
         }
     }
 }
