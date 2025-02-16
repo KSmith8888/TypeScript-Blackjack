@@ -37,31 +37,35 @@ export default class Game {
         this.highScore = 100;
     }
     startRound() {
+        let shuffleDelay = 0;
         if (this.deck.cards.length < this.settings.shoePenetration) {
+            shuffleDelay = 4000;
             this.deck.shuffleCards();
         }
-        this.deck.playCardSound();
         setTimeout(() => {
-            const initHand = new Hand();
-            this.player.hands.push(initHand);
-            this.player.drawCard();
             this.deck.playCardSound();
-        }, this.settings.drawDelay);
-        setTimeout(() => {
-            this.dealer.drawCard(false);
-            this.deck.playCardSound();
-        }, this.settings.drawDelay * 2);
-        setTimeout(() => {
-            this.player.drawCard();
-            this.deck.playCardSound();
-        }, this.settings.drawDelay * 3);
-        setTimeout(() => {
-            this.dealer.drawCard(true);
-            this.table.dealerSection.append(this.table.dealerFaceDownCard);
-            this.table.dealerFaceDownCard.style.display = "block";
-            this.table.dealerScoreText.textContent = "??";
-            this.#initHandCheck();
-        }, this.settings.drawDelay * 4);
+            setTimeout(() => {
+                const initHand = new Hand();
+                this.player.hands.push(initHand);
+                this.player.drawCard();
+                this.deck.playCardSound();
+            }, this.settings.drawDelay);
+            setTimeout(() => {
+                this.dealer.drawCard(false);
+                this.deck.playCardSound();
+            }, this.settings.drawDelay * 2);
+            setTimeout(() => {
+                this.player.drawCard();
+                this.deck.playCardSound();
+            }, this.settings.drawDelay * 3);
+            setTimeout(() => {
+                this.dealer.drawCard(true);
+                this.table.dealerSection.append(this.table.dealerFaceDownCard);
+                this.table.dealerFaceDownCard.style.display = "block";
+                this.table.dealerScoreText.textContent = "??";
+                this.#initHandCheck();
+            }, this.settings.drawDelay * 4);
+        }, shuffleDelay);
     }
     #initHandCheck() {
         const currentHand = this.player.hands[this.player.currentHand];

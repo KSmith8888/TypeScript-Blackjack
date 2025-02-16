@@ -59,11 +59,17 @@ https://github.com/sindresorhus/globals
 
 ### Assets
 
-Playing Card Suits by PixLoger licensed under the Pixabay license:  
+Playing Card Suits by PixLoger licensed under Pixabay content license:  
 https://pixabay.com/vectors/playing-cards-cards-suit-spades-2091948/
 
-"54 Casino Sound Effects (Cards, Dice, Chips)" by Kenney licensed CC0:  
-https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips and www.kenney.nl
+flipCard by Splashdust (Freesound) under Pixabay content license:
+https://pixabay.com/sound-effects/flipcard-91468/
+
+Card Sounds by henrygillard (Freesound) under Pixabay content license:
+https://pixabay.com/sound-effects/card-sounds-35956/
+
+Riffle Card Shuffle by Kodack (Freesound) under Pixabay content license:
+https://pixabay.com/sound-effects/riffle-card-shuffle-104313/
 
 ## License
 
