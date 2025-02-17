@@ -40,6 +40,7 @@ export default class Game {
         let shuffleDelay = 0;
         if (this.deck.cards.length < this.settings.shoePenetration) {
             shuffleDelay = 4000;
+            this.deck.shuffleModal.showModal();
             this.deck.shuffleCards();
         }
         setTimeout(() => {
@@ -70,6 +71,9 @@ export default class Game {
     #initHandCheck() {
         const currentHand = this.player.hands[this.player.currentHand];
         if (this.settings.sideBetAmount > 0) {
+            this.player.money -= this.settings.sideBetAmount;
+            this.table.totalMoneyText.textContent =
+                this.player.money.toString(10);
             this.sideBets.checkForMatches(currentHand.cards);
         }
         if (currentHand.total === 21) {

@@ -31,7 +31,7 @@
     <body>
         <div id="main-container">
             <main id="main-section">
-                <dialog id="game-reset-modal">
+                <dialog id="game-reset-modal" class="modal">
                     <section id="reset-section">
                         <p id="game-result-text"></p>
                         <p id="game-over-text" class="hidden">
@@ -53,7 +53,7 @@
                         </button>
                     </section>
                 </dialog>
-                <dialog id="rules-modal">
+                <dialog id="rules-modal" class="modal">
                     <button
                         id="close-rules-button"
                         class="close-modal-button"
@@ -115,7 +115,7 @@
                         </li>
                     </ul>
                 </dialog>
-                <dialog id="settings-modal">
+                <dialog id="settings-modal" class="modal">
                     <button
                         id="close-settings-button"
                         class="close-modal-button"
@@ -191,7 +191,7 @@
                         </div>
                     </fieldset>
                 </dialog>
-                <dialog id="side-bets-modal">
+                <dialog id="side-bets-modal" class="modal">
                     <button
                         id="close-side-bets-button"
                         class="close-modal-button"
@@ -210,6 +210,18 @@
                     </div>
                     <h3 class="side-bets-sub-heading">Active Side Bets:</h3>
                     <ul id="current-side-bets-list"></ul>
+                </dialog>
+                <dialog id="won-side-bet-modal" class="modal">
+                    <h2 id="won-side-bet-heading">You won a side bet!</h2>
+                    <p id="won-side-bet-text"></p>
+                    <p id="won-side-bet-payout"></p>
+                    <button id="won-side-bet-button" class="button">
+                        Continue
+                    </button>
+                </dialog>
+                <dialog id="shuffle-modal">
+                    <div id="shuffle-spinner"></div>
+                    <p id="shuffle-spinner-text">Shuffling</p>
                 </dialog>
                 <div id="top-info-container">
                     <button id="open-rules-button" class="button" autofocus>

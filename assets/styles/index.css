@@ -264,17 +264,20 @@ button:disabled {
     font-weight: 600;
 }
 
-#rules-modal[open],
-#game-reset-modal[open],
-#settings-modal[open],
-#side-bets-modal[open] {
+.modal[open] {
     max-width: 50%;
     padding: 1em 1.5em;
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: var(--white);
+    color: var(--off-black);
+    background-color: var(--off-white);
     border: 2px solid var(--off-black);
+}
+
+#won-side-bet-text,
+#won-side-bet-payout {
+    margin: 0.5em 0;
 }
 
 .setting-label {
@@ -349,6 +352,46 @@ button:disabled {
     display: none;
 }
 
+#shuffle-modal[open] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5em;
+    border-radius: 5px;
+    border: 2px solid var(--off-black);
+    background-color: var(--light-grey);
+}
+
+#shuffle-spinner {
+    border-radius: 50%;
+    width: 6em;
+    height: 6em;
+    border-left: solid var(--dark-red) 1em;
+    border-right: solid var(--dark-red) 1em;
+    border-top: solid transparent 1em;
+    border-bottom: solid transparent 1em;
+    animation-name: rotate-loader;
+    animation-duration: 1.3s;
+    animation-iteration-count: infinite;
+}
+
+#shuffle-spinner-text {
+    margin: 1em 0 0 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark-red);
+}
+
+@keyframes rotate-loader {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 @media (max-width: 850px) {
     #main-section {
         justify-content: center;
@@ -388,8 +431,7 @@ button:disabled {
         font-size: 1.1rem;
         font-weight: 700;
     }
-    #rules-modal[open],
-    #settings-modal[open] {
+    .modal[open] {
         max-width: 95%;
         width: 95%;
     }

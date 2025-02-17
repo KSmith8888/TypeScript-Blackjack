@@ -12,6 +12,7 @@ export default class Deck {
     cards: Card[];
     #suits: string[];
     #ranks: (number | string)[];
+    shuffleModal: HTMLDialogElement;
     #dealCardSound: HTMLAudioElement;
     #flipCardSound: HTMLAudioElement;
     #shuffleSound: HTMLAudioElement;
@@ -34,6 +35,9 @@ export default class Deck {
             "Q",
             "K",
         ];
+        this.shuffleModal = <HTMLDialogElement>(
+            document.getElementById("shuffle-modal")
+        );
         this.#dealCardSound = new Audio(drawCardSound);
         this.#dealCardSound.volume = 0.5;
         this.#flipCardSound = new Audio(flipCardSound);
@@ -91,6 +95,9 @@ export default class Deck {
         }
     }
     shuffleCards() {
+        setTimeout(() => {
+            this.shuffleModal.close();
+        }, 4000);
         this.cards = [];
         this.playShuffleSound();
         for (let i = 0; i < this.game.settings.numberOfDecks; i++) {

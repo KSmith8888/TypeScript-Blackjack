@@ -4,6 +4,10 @@ import Card from "./card.ts";
 export default class SideBets {
     game: Game;
     currentIndexes: number[];
+    wonSideBetModal: HTMLDialogElement;
+    wonSideBetText: HTMLParagraphElement;
+    wonSideBetPayout: HTMLParagraphElement;
+    wonSideBetBtn: HTMLButtonElement;
     bets: {
         payout: number;
         description: string;
@@ -12,6 +16,21 @@ export default class SideBets {
     constructor(game: Game) {
         this.game = game;
         this.currentIndexes = [1, 2];
+        this.wonSideBetModal = <HTMLDialogElement>(
+            document.getElementById("won-side-bet-modal")
+        );
+        this.wonSideBetText = <HTMLParagraphElement>(
+            document.getElementById("won-side-bet-text")
+        );
+        this.wonSideBetPayout = <HTMLParagraphElement>(
+            document.getElementById("won-side-bet-payout")
+        );
+        this.wonSideBetBtn = <HTMLButtonElement>(
+            document.getElementById("won-side-bet-button")
+        );
+        this.wonSideBetBtn.addEventListener("click", () => {
+            this.wonSideBetModal.close();
+        });
         this.bets = [
             {
                 payout: 100,
@@ -47,22 +66,39 @@ export default class SideBets {
         this.game.sideBetsMenu.currentBetsList.replaceChildren();
         this.currentIndexes = [1, 2];
         this.currentIndexes.forEach((index) => {
-            const itemText = this.bets[index].description;
-            const listItem = document.createElement("li");
-            listItem.textContent = itemText;
-            listItem.classList.add("side-bet-list-item");
-            this.game.sideBetsMenu.currentBetsList.append(listItem);
+            const itemText = `Condition: ${this.bets[index].description}`;
+            const description = document.createElement("li");
+            description.textContent = itemText;
+            description.classList.add("side-bet-list-item");
+            this.game.sideBetsMenu.currentBetsList.append(description);
+            const payout = document.createElement("li");
+            payout.textContent = `Payout: ${this.bets[index].payout.toString(
+                10
+            )}/1`;
+            payout.classList.add("side-bet-list-item");
+            this.game.sideBetsMenu.currentBetsList.append(payout);
         });
+    }
+    wonSideBet(description: string, payout: number) {
+        this.wonSideBetText.textContent = description;
+        this.wonSideBetPayout.textContent = `Payout: ${payout.toString(
+            10
+        )}/1 - Bet amount: $${this.game.settings.sideBetAmount.toString(10)}`;
+        this.game.player.money += payout * this.game.settings.sideBetAmount;
+        this.game.table.totalMoneyText.textContent = `$${this.game.player.money.toString(
+            10
+        )}`;
+        this.wonSideBetModal.showModal();
     }
     checkForMatches(cards: Card[]) {
         this.currentIndexes.forEach((betIndex) => {
             const didWin = this.bets[betIndex].didWin(cards);
             if (didWin) {
-                this.game.player.money += this.bets[betIndex].payout;
+                this.wonSideBet(
+                    this.bets[betIndex].description,
+                    this.bets[betIndex].payout
+                );
             }
-            this.game.table.totalMoneyText.textContent = `$${this.game.player.money.toString(
-                10
-            )}`;
         });
     }
 }

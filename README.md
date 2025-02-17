@@ -62,13 +62,13 @@ https://github.com/sindresorhus/globals
 Playing Card Suits by PixLoger licensed under Pixabay content license:  
 https://pixabay.com/vectors/playing-cards-cards-suit-spades-2091948/
 
-flipCard by Splashdust (Freesound) under Pixabay content license:
+flipCard by Splashdust (Freesound) under Pixabay content license:  
 https://pixabay.com/sound-effects/flipcard-91468/
 
-Card Sounds by henrygillard (Freesound) under Pixabay content license:
+Card Sounds by henrygillard (Freesound) under Pixabay content license:  
 https://pixabay.com/sound-effects/card-sounds-35956/
 
-Riffle Card Shuffle by Kodack (Freesound) under Pixabay content license:
+Riffle Card Shuffle by Kodack (Freesound) under Pixabay content license:  
 https://pixabay.com/sound-effects/riffle-card-shuffle-104313/
 
 ## License
