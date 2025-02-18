@@ -71,7 +71,7 @@ export default class Player {
         }
     }
     hit() {
-        //this.game.table.disableSelections();
+        this.game.table.surrenderButton.disabled = true;
         this.game.deck.playCardSound();
         setTimeout(() => {
             const didBust = this.drawCard();
@@ -84,6 +84,7 @@ export default class Player {
         }, this.game.settings.drawDelay);
     }
     stay() {
+        this.game.table.surrenderButton.disabled = true;
         this.game.table.disableSelections();
         this.game.dealer.revealHoleCard();
         if (this.game.isFinalHand) {
@@ -95,7 +96,7 @@ export default class Player {
         }
     }
     double() {
-        //this.game.table.disableSelections();
+        this.game.table.surrenderButton.disabled = true;
         this.game.deck.playCardSound();
         setTimeout(() => {
             this.money -= this.currentBet;
@@ -118,7 +119,7 @@ export default class Player {
         }, this.game.settings.drawDelay);
     }
     split() {
-        //this.game.table.disableSelections();
+        this.game.table.surrenderButton.disabled = true;
         this.game.isFinalHand = false;
         const splitCard = this.hands[this.currentHand].cards.pop();
         if (splitCard) {
@@ -145,7 +146,6 @@ export default class Player {
             this.game.table.totalMoneyText.textContent = `$${this.money.toString()}`;
             this.game.table.newGameButton.style.display = "none";
             this.game.table.nextHandBtn.style.display = "inline-block";
-            //this.game.table.disableBets();
             this.game.deck.playCardSound();
             setTimeout(() => {
                 this.drawCard();
@@ -165,5 +165,11 @@ export default class Player {
                 }
             }, this.game.settings.drawDelay);
         }
+    }
+    surrender() {
+        this.hands[this.currentHand].result = "Surrender";
+        this.hands[this.currentHand].resultText =
+            "Surrender. It could have been worse";
+        this.game.endRound();
     }
 }

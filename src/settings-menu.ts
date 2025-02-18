@@ -12,6 +12,7 @@ export default class SettingsMenu {
     hitOnSplitAces: boolean;
     drawDelay: number;
     sideBetAmount: number;
+    surrenderOption: boolean;
     isSoundMutedBtn: HTMLButtonElement;
     numberOfDecksInput: HTMLInputElement;
     hitOnSoft17Btn: HTMLButtonElement;
@@ -23,6 +24,7 @@ export default class SettingsMenu {
     sideBet1Btn: HTMLButtonElement;
     sideBet5Btn: HTMLButtonElement;
     sideBet10Btn: HTMLButtonElement;
+    surrenderOptionBtn: HTMLButtonElement;
     constructor(game: Game) {
         this.game = game;
         this.#settingsModal = <HTMLDialogElement>(
@@ -47,6 +49,7 @@ export default class SettingsMenu {
         this.hitOnSplitAces = false;
         this.drawDelay = 750;
         this.sideBetAmount = 0;
+        this.surrenderOption = true;
         this.isSoundMutedBtn = <HTMLButtonElement>(
             document.getElementById("mute-audio-setting")
         );
@@ -88,6 +91,11 @@ export default class SettingsMenu {
             this.game.table.shoeMeter.value = newMax;
             this.shoePenetration = Math.floor((value * 52) / 4);
             localStorage.setItem("deck-number-setting", value.toString(10));
+            this.game.deck.playShuffleSound();
+            this.game.deck.shuffleModal.showModal();
+            setTimeout(() => {
+                this.game.deck.shuffleModal.close();
+            }, 4000);
             this.game.deck.shuffleCards();
         });
         this.hitOnSplitAcesBtn = <HTMLButtonElement>(
@@ -199,6 +207,22 @@ export default class SettingsMenu {
                 this.sideBetAmount.toString(10)
             );
         });
+        this.surrenderOptionBtn = <HTMLButtonElement>(
+            document.getElementById("surrender-setting")
+        );
+        this.surrenderOptionBtn.addEventListener("click", () => {
+            if (this.surrenderOption) {
+                this.surrenderOption = false;
+                this.surrenderOptionBtn.textContent = "Turn On";
+                this.game.table.surrenderButton.classList.add("hidden");
+                localStorage.setItem("surrender-setting", "false");
+            } else {
+                this.surrenderOption = true;
+                this.surrenderOptionBtn.textContent = "Turn Off";
+                this.game.table.surrenderButton.classList.remove("hidden");
+                localStorage.setItem("surrender-setting", "true");
+            }
+        });
     }
     checkSavedSettings() {
         const muteSetting = localStorage.getItem("mute-setting");
@@ -271,6 +295,18 @@ export default class SettingsMenu {
             }
         } else {
             this.sideBetOffBtn.disabled = true;
+        }
+        const surrenderSetting = localStorage.getItem("surrender-setting");
+        if (surrenderSetting) {
+            if (surrenderSetting === "false") {
+                this.surrenderOption = false;
+                this.surrenderOptionBtn.textContent = "Turn On";
+                this.game.table.surrenderButton.classList.add("hidden");
+            } else {
+                this.surrenderOption = true;
+                this.surrenderOptionBtn.textContent = "Turn Off";
+                this.game.table.surrenderButton.classList.remove("hidden");
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ export default class Table {
     #bet10Btn: HTMLButtonElement;
     #bet25Btn: HTMLButtonElement;
     #bet50Btn: HTMLButtonElement;
+    surrenderButton: HTMLButtonElement;
     totalMoneyText: HTMLSpanElement;
     shoeMeter: HTMLMeterElement;
     cardsRemaining: HTMLSpanElement;
@@ -157,6 +158,13 @@ export default class Table {
         this.#bet50Btn.addEventListener("click", () => {
             this.game.player.bet(50);
         });
+        this.surrenderButton = <HTMLButtonElement>(
+            document.getElementById("surrender-button")
+        );
+        this.surrenderButton.addEventListener("click", () => {
+            this.game.player.surrender();
+            this.surrenderButton.disabled = true;
+        });
     }
     activateSelections(canHit: boolean, canDouble: boolean, canSplit: boolean) {
         if (canHit) {
@@ -174,6 +182,7 @@ export default class Table {
         this.#stayButton.disabled = true;
         this.#doubleDownBtn.disabled = true;
         this.#splitButton.disabled = true;
+        this.surrenderButton.disabled = true;
     }
     disableBets() {
         this.#bet5Btn.disabled = true;

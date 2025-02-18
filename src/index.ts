@@ -39,8 +39,10 @@ export default class Game {
     startRound() {
         let shuffleDelay = 0;
         if (this.deck.cards.length < this.settings.shoePenetration) {
-            shuffleDelay = 4000;
-            this.deck.shuffleModal.showModal();
+            if (this.settings.drawDelay !== 0) {
+                shuffleDelay = 4000;
+                this.deck.shuffleModal.showModal();
+            }
             this.deck.shuffleCards();
         }
         setTimeout(() => {
@@ -92,6 +94,7 @@ export default class Game {
                 "Dealer got BlackJack, better luck next time!";
             this.endRound();
         } else {
+            this.table.surrenderButton.disabled = false;
             const initHand = this.player.hands[0];
             const canHit =
                 this.player.hands[this.player.currentHand].total < 21;
@@ -113,6 +116,8 @@ export default class Game {
             } else if (result === "Push") this.player.money += bet;
             else if (result === "Blackjack")
                 this.player.money += Math.floor(bet * 1.5) + bet;
+            else if (result === "Surrender")
+                this.player.money += Math.floor(bet / 2);
         });
         if (this.player.money > 5) {
             this.table.newGameButton.textContent = "New Hand";

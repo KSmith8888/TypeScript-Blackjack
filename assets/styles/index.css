@@ -264,6 +264,10 @@ button:disabled {
     font-weight: 600;
 }
 
+#surrender-button {
+    align-self: flex-start;
+}
+
 .modal[open] {
     max-width: 50%;
     padding: 1em 1.5em;
@@ -410,6 +414,9 @@ button:disabled {
     #selections-section {
         width: 95%;
         flex-direction: column;
+    }
+    #surrender-button {
+        align-self: center;
     }
     #player-section,
     #dealer-section {

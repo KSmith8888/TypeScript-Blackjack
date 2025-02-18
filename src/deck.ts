@@ -4,7 +4,7 @@ import Card from "./card.ts";
 import drawCardSound from "../assets/audio/card-sound-one.mp3";
 import flipCardSound from "../assets/audio/card-sound-two.mp3";
 import shuffleSound from "../assets/audio/shuffle-sound.mp3";
-//this.#ranks = ["A","A","A","A","A","A","A",8,9,10,"J","Q","K",];
+//this.#ranks = ["A","A","A","A","A","A","A",8,9,10,"J","Q","K"];
 //this.#ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
 
 export default class Deck {
@@ -20,21 +20,7 @@ export default class Deck {
         this.game = game;
         this.cards = [];
         this.#suits = ["Hearts", "Clubs", "Spades", "Diamonds"];
-        this.#ranks = [
-            "A",
-            "A",
-            "A",
-            "A",
-            "A",
-            "A",
-            "A",
-            8,
-            9,
-            10,
-            "J",
-            "Q",
-            "K",
-        ];
+        this.#ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
         this.shuffleModal = <HTMLDialogElement>(
             document.getElementById("shuffle-modal")
         );
@@ -84,7 +70,10 @@ export default class Deck {
         }
     }
     playShuffleSound() {
-        if (!this.game.settings.isSoundMuted) {
+        if (
+            !this.game.settings.isSoundMuted &&
+            this.game.settings.drawDelay !== 0
+        ) {
             this.#shuffleSound.currentTime = 0;
             this.#shuffleSound.play().catch((err: unknown) => {
                 if (err instanceof Error) console.error(err.message);
@@ -95,9 +84,11 @@ export default class Deck {
         }
     }
     shuffleCards() {
-        setTimeout(() => {
-            this.shuffleModal.close();
-        }, 4000);
+        if (this.game.settings.drawDelay !== 0) {
+            setTimeout(() => {
+                this.shuffleModal.close();
+            }, 4000);
+        }
         this.cards = [];
         this.playShuffleSound();
         for (let i = 0; i < this.game.settings.numberOfDecks; i++) {
