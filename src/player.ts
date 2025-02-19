@@ -86,8 +86,8 @@ export default class Player {
     stay() {
         this.game.table.surrenderButton.disabled = true;
         this.game.table.disableSelections();
-        this.game.dealer.revealHoleCard();
         if (this.game.isFinalHand) {
+            this.game.dealer.revealHoleCard();
             setTimeout(() => {
                 this.game.dealer.startTurn();
             }, this.game.settings.drawDelay);

@@ -1,6 +1,7 @@
 :root {
     --light-grey: rgb(223, 215, 215);
     --medium-grey: rgb(161, 153, 153);
+    --dark-grey: rgb(105, 100, 100);
     --off-white: rgb(207, 207, 207);
     --white: rgb(230, 227, 227);
     --medium-red: rgb(177, 8, 8);
@@ -12,6 +13,10 @@
 
 * {
     box-sizing: border-box;
+}
+
+button {
+    font-family: inherit;
 }
 
 body {
@@ -32,7 +37,6 @@ body {
 }
 
 .button {
-    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
     cursor: pointer;
     border: 1px solid var(--medium-grey);
     color: var(--light-grey);
@@ -42,12 +46,15 @@ body {
     padding: 0.2em 0.5em;
     border-radius: 5px;
     text-decoration: none;
-    min-width: 4em;
 }
 
 .button:hover,
 .button:focus {
     background-color: var(--dark-red);
+}
+
+.button-row-container .button {
+    min-width: 4em;
 }
 
 button:disabled {
@@ -202,12 +209,13 @@ button:disabled {
 }
 
 #side-bets-button {
-    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    align-self: flex-start;
     cursor: pointer;
     border: 1px solid var(--off-black);
     color: var(--off-black);
     background-color: var(--gold);
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin: 0.5em;
     padding: 0.2em 0.5em;
     border-radius: 5px;
 }
@@ -225,8 +233,10 @@ button:disabled {
     margin: 1em 0 0.5em 0;
 }
 
-#current-side-bets-list {
+#current-side-bets-list,
+.side-bet-sub-list {
     margin: 0 0 1em 0;
+    list-style-type: square;
 }
 
 #top-payout-text,
@@ -253,7 +263,6 @@ button:disabled {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
 }
 
 #bet-text,
@@ -266,6 +275,24 @@ button:disabled {
 
 #surrender-button {
     align-self: flex-start;
+    cursor: pointer;
+    border: 1px solid var(--off-black);
+    color: var(--off-black);
+    background-color: var(--off-white);
+    margin: 0.5em;
+    font-size: 1rem;
+    padding: 0.2em 0.5em;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+#surrender-button:hover,
+#surrender-button:focus {
+    background-color: var(--medium-grey);
+}
+
+#surrender-button:disabled {
+    color: var(--dark-grey);
 }
 
 .modal[open] {
@@ -396,6 +423,12 @@ button:disabled {
     }
 }
 
+@media (prefers-reduced-motion) {
+    #shuffle-spinner {
+        animation-duration: 0;
+    }
+}
+
 @media (max-width: 850px) {
     #main-section {
         justify-content: center;
@@ -415,7 +448,8 @@ button:disabled {
         width: 95%;
         flex-direction: column;
     }
-    #surrender-button {
+    #surrender-button,
+    #side-bets-button {
         align-self: center;
     }
     #player-section,

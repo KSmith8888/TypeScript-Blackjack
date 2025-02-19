@@ -113,6 +113,11 @@
                             two hands, with each starting with one of those
                             cards.
                         </li>
+                        <li class="rule-text">
+                            After the initial cards are shown, you have one
+                            chance to surrender. If you do, you receive half of
+                            your wager amount back and the round ends.
+                        </li>
                     </ul>
                 </dialog>
                 <dialog id="settings-modal" class="modal">
@@ -171,7 +176,7 @@
                         </datalist>
                     </div>
                     <label for="hit-split-aces-setting" class="setting-label"
-                        >Player can hit or double down on split aces</label
+                        >Hit or double down on split aces</label
                     >
                     <button id="hit-split-aces-setting" class="button">
                         Turn On
@@ -265,7 +270,6 @@
                             Current bank:
                             <span id="total-money-text">$100</span>
                         </p>
-                        <button id="side-bets-button">Side Bets</button>
                         <p id="top-payout-text">
                             High score:
                             <span id="top-payout">100</span>
@@ -288,9 +292,12 @@
                             </button>
                         </div>
                     </div>
-                    <button id="surrender-button" class="button">
-                        Surrender
-                    </button>
+                    <div class="button-row-container">
+                        <button id="side-bets-button">Side Bets</button>
+                        <button id="surrender-button" class="surrender">
+                            Surrender
+                        </button>
+                    </div>
                     <div id="selections-container">
                         <p id="selection-text">Choose your move:</p>
                         <div class="button-row-container">
