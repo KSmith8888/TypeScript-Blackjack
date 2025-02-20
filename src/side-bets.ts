@@ -4,6 +4,7 @@ import Card from "./card.ts";
 export default class SideBets {
     game: Game;
     currentIndexes: number[];
+    resetCount: number;
     wonSideBetModal: HTMLDialogElement;
     wonSideBetText: HTMLParagraphElement;
     wonSideBetPayout: HTMLParagraphElement;
@@ -11,12 +12,12 @@ export default class SideBets {
     bets: {
         payout: number;
         description: string;
-        isActive: boolean;
         didWin: (cards: Card[]) => boolean;
     }[];
     constructor(game: Game) {
         this.game = game;
         this.currentIndexes = [];
+        this.resetCount = Math.floor(Math.random() * 10) + 1;
         this.wonSideBetModal = <HTMLDialogElement>(
             document.getElementById("won-side-bet-modal")
         );
@@ -36,7 +37,6 @@ export default class SideBets {
             {
                 payout: 100,
                 description: "Both cards are fours",
-                isActive: false,
                 didWin: (cards: Card[]) => {
                     if (cards[0].rank === 4 && cards[1].rank === 4) return true;
                     else return false;
@@ -45,7 +45,6 @@ export default class SideBets {
             {
                 payout: 200,
                 description: "Both cards are aces",
-                isActive: false,
                 didWin: (cards: Card[]) => {
                     if (cards[0].rank === "A" && cards[1].rank === "A")
                         return true;
@@ -55,7 +54,6 @@ export default class SideBets {
             {
                 payout: 100,
                 description: "One card is a Jack and the other is an ace",
-                isActive: false,
                 didWin: (cards: Card[]) => {
                     if (cards[0].rank === "A" && cards[1].rank === "J")
                         return true;
@@ -67,7 +65,6 @@ export default class SideBets {
             {
                 payout: 150,
                 description: "Both cards are hearts",
-                isActive: false,
                 didWin: (cards: Card[]) => {
                     if (
                         cards[0].suit === "Hearts" &&
@@ -80,7 +77,6 @@ export default class SideBets {
             {
                 payout: 150,
                 description: "Both cards are diamonds",
-                isActive: false,
                 didWin: (cards: Card[]) => {
                     if (
                         cards[0].suit === "Diamonds" &&
@@ -93,7 +89,6 @@ export default class SideBets {
             {
                 payout: 150,
                 description: "Both cards are clubs",
-                isActive: false,
                 didWin: (cards: Card[]) => {
                     if (cards[0].suit === "Clubs" && cards[1].suit === "Clubs")
                         return true;
@@ -102,14 +97,20 @@ export default class SideBets {
             },
         ];
     }
+    countdown() {
+        this.resetCount -= 1;
+        if (this.resetCount <= 0) {
+            this.resetBets();
+            this.resetCount = Math.floor(Math.random() * 10) + 1;
+            console.log(this.resetCount);
+        }
+    }
     resetIndexes() {
-        const newIndexes: number[] = [];
-        this.bets.forEach((bet, index) => {
-            if (!bet.isActive && newIndexes.length < 3) newIndexes.push(index);
-        });
-        this.bets.forEach((bet) => (bet.isActive = false));
-        newIndexes.forEach((index) => (this.bets[index].isActive = true));
-        this.currentIndexes = newIndexes;
+        const indexSet: Set<number> = new Set();
+        while (indexSet.size < 3) {
+            indexSet.add(Math.floor(Math.random() * this.bets.length));
+        }
+        this.currentIndexes = Array.from(indexSet);
     }
     resetBets() {
         this.game.sideBetsMenu.currentBetsList.replaceChildren();

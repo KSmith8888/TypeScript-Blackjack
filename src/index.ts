@@ -66,11 +66,22 @@ export default class Game {
                 this.table.dealerSection.append(this.table.dealerFaceDownCard);
                 this.table.dealerFaceDownCard.style.display = "block";
                 this.table.dealerScoreText.textContent = "??";
-                this.#initHandCheck();
+                if (
+                    this.settings.insuranceOption &&
+                    this.dealer.hand[0].rank === "A"
+                )
+                    this.table.insuranceModal.showModal();
+                else this.initHandCheck();
             }, this.settings.drawDelay * 4);
         }, shuffleDelay);
     }
-    #initHandCheck() {
+    #insurancePayout() {
+        this.player.money += this.player.currentBet;
+        this.table.totalMoneyText.textContent = `$${this.player.money.toString(
+            10
+        )}`;
+    }
+    initHandCheck() {
         const currentHand = this.player.hands[this.player.currentHand];
         if (this.settings.sideBetAmount > 0) {
             this.player.money -= this.settings.sideBetAmount;
@@ -84,11 +95,13 @@ export default class Game {
                 currentHand.resultText = "BlackJack, well done!";
                 this.endRound();
             } else {
+                if (this.player.hasInsurance) this.#insurancePayout();
                 currentHand.result = "Push";
                 currentHand.resultText = "Push. Try again?";
                 this.endRound();
             }
         } else if (this.dealer.total === 21) {
+            if (this.player.hasInsurance) this.#insurancePayout();
             currentHand.result = "Lost";
             currentHand.resultText =
                 "Dealer got BlackJack, better luck next time!";
@@ -151,6 +164,7 @@ export default class Game {
         this.player.currentHand = 0;
         this.player.hands = [];
         this.player.cardElements = [];
+        this.player.hasInsurance = false;
         this.table.dealerSection.replaceChildren();
         this.table.playerSection.replaceChildren();
         this.table.splitSection.replaceChildren();
@@ -161,7 +175,7 @@ export default class Game {
         this.table.gameOverText.classList.add("hidden");
         this.table.disableSelections();
         this.table.activateBets(this.player.money);
-        this.sideBets.resetBets();
+        this.sideBets.countdown();
     }
     nextHand() {
         this.player.currentHand += 1;

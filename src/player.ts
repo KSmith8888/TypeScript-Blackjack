@@ -7,6 +7,7 @@ export default class Player {
     money: number;
     currentBet: number;
     cardElements: HTMLElement[];
+    hasInsurance: boolean;
     game: Game;
     constructor(game: Game) {
         this.hands = [];
@@ -14,6 +15,7 @@ export default class Player {
         this.money = 100;
         this.currentBet = 0;
         this.cardElements = [];
+        this.hasInsurance = false;
         this.game = game;
     }
     bet(amount: number) {

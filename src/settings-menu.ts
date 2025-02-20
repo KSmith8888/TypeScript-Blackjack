@@ -13,6 +13,7 @@ export default class SettingsMenu {
     drawDelay: number;
     sideBetAmount: number;
     surrenderOption: boolean;
+    insuranceOption: boolean;
     isSoundMutedBtn: HTMLButtonElement;
     numberOfDecksInput: HTMLInputElement;
     hitOnSoft17Btn: HTMLButtonElement;
@@ -25,6 +26,7 @@ export default class SettingsMenu {
     sideBet5Btn: HTMLButtonElement;
     sideBet10Btn: HTMLButtonElement;
     surrenderOptionBtn: HTMLButtonElement;
+    insuranceOptionBtn: HTMLButtonElement;
     constructor(game: Game) {
         this.game = game;
         this.#settingsModal = <HTMLDialogElement>(
@@ -50,6 +52,7 @@ export default class SettingsMenu {
         this.drawDelay = 750;
         this.sideBetAmount = 0;
         this.surrenderOption = true;
+        this.insuranceOption = true;
         this.isSoundMutedBtn = <HTMLButtonElement>(
             document.getElementById("mute-audio-setting")
         );
@@ -223,6 +226,20 @@ export default class SettingsMenu {
                 localStorage.setItem("surrender-setting", "true");
             }
         });
+        this.insuranceOptionBtn = <HTMLButtonElement>(
+            document.getElementById("insurance-setting")
+        );
+        this.insuranceOptionBtn.addEventListener("click", () => {
+            if (this.insuranceOption) {
+                this.insuranceOption = false;
+                this.insuranceOptionBtn.textContent = "Turn On";
+                localStorage.setItem("insurance-setting", "false");
+            } else {
+                this.insuranceOption = true;
+                this.insuranceOptionBtn.textContent = "Turn Off";
+                localStorage.setItem("insurance-setting", "true");
+            }
+        });
     }
     checkSavedSettings() {
         const muteSetting = localStorage.getItem("mute-setting");
@@ -306,6 +323,16 @@ export default class SettingsMenu {
                 this.surrenderOption = true;
                 this.surrenderOptionBtn.textContent = "Turn Off";
                 this.game.table.surrenderButton.classList.remove("hidden");
+            }
+        }
+        const insuranceOption = localStorage.getItem("insurance-setting");
+        if (insuranceOption) {
+            if (insuranceOption === "false") {
+                this.insuranceOption = false;
+                this.insuranceOptionBtn.textContent = "Turn On";
+            } else {
+                this.insuranceOption = true;
+                this.insuranceOptionBtn.textContent = "Turn Off";
             }
         }
     }

@@ -292,6 +292,7 @@ button:disabled {
 }
 
 #surrender-button:disabled {
+    cursor: not-allowed;
     color: var(--dark-grey);
 }
 
