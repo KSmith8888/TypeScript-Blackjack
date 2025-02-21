@@ -174,4 +174,11 @@ export default class Player {
             "Surrender. It could have been worse";
         this.game.endRound();
     }
+    buyInsurance() {
+        this.money -= Math.floor(this.currentBet / 2);
+        this.game.table.totalMoneyText.textContent = `$${this.money.toString(
+            10
+        )}`;
+        this.hasInsurance = true;
+    }
 }

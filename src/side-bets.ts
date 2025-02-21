@@ -102,7 +102,6 @@ export default class SideBets {
         if (this.resetCount <= 0) {
             this.resetBets();
             this.resetCount = Math.floor(Math.random() * 10) + 1;
-            console.log(this.resetCount);
         }
     }
     resetIndexes() {
@@ -114,6 +113,7 @@ export default class SideBets {
     }
     resetBets() {
         this.game.sideBetsMenu.currentBetsList.replaceChildren();
+        this.game.sideBetsMenu.openSideBetsBtn.classList.add("change-color");
         this.resetIndexes();
         this.currentIndexes.forEach((index) => {
             const itemText = `Condition: ${this.bets[index].description}`;

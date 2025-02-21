@@ -38,6 +38,7 @@ export default class Table {
     insuranceModal: HTMLDialogElement;
     insuranceYesBtn: HTMLButtonElement;
     insuranceNoBtn: HTMLButtonElement;
+    insuranceBet: HTMLSpanElement;
     constructor(game: Game) {
         this.game = game;
         this.playerScoreText = <HTMLSpanElement>(
@@ -175,13 +176,7 @@ export default class Table {
             document.getElementById("insurance-yes-button")
         );
         this.insuranceYesBtn.addEventListener("click", () => {
-            this.game.player.money -= Math.floor(
-                this.game.player.currentBet / 2
-            );
-            this.totalMoneyText.textContent = `$${this.game.player.money.toString(
-                10
-            )}`;
-            this.game.player.hasInsurance = true;
+            this.game.player.buyInsurance();
             this.insuranceModal.close();
             this.game.initHandCheck();
         });
@@ -192,6 +187,9 @@ export default class Table {
             this.insuranceModal.close();
             this.game.initHandCheck();
         });
+        this.insuranceBet = <HTMLSpanElement>(
+            document.getElementById("buy-insurance-bet")
+        );
     }
     activateSelections(canHit: boolean, canDouble: boolean, canSplit: boolean) {
         if (canHit) {

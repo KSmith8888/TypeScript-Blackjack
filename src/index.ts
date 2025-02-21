@@ -69,9 +69,14 @@ export default class Game {
                 if (
                     this.settings.insuranceOption &&
                     this.dealer.hand[0].rank === "A"
-                )
+                ) {
+                    this.table.insuranceBet.textContent = Math.floor(
+                        this.player.currentBet / 2
+                    ).toString(10);
                     this.table.insuranceModal.showModal();
-                else this.initHandCheck();
+                } else {
+                    this.initHandCheck();
+                }
             }, this.settings.drawDelay * 4);
         }, shuffleDelay);
     }
@@ -173,6 +178,7 @@ export default class Game {
         this.table.dealerScoreText.textContent = "0";
         this.table.dealerFaceDownCard.style.display = "none";
         this.table.gameOverText.classList.add("hidden");
+        this.sideBetsMenu.openSideBetsBtn.classList.remove("change-color");
         this.table.disableSelections();
         this.table.activateBets(this.player.money);
         this.sideBets.countdown();

@@ -124,6 +124,7 @@ button:disabled {
     justify-content: space-between;
     align-items: center;
     padding: 0 0.5em;
+    border-bottom: 1px solid var(--gold);
 }
 
 .name-text {
@@ -151,7 +152,6 @@ button:disabled {
     justify-content: center;
     flex-wrap: wrap;
     width: 100%;
-    border-top: 2px solid var(--gold);
 }
 
 #next-hand-button {
@@ -206,6 +206,7 @@ button:disabled {
     justify-content: space-between;
     align-items: center;
     padding: 0 0.5em;
+    border-top: 2px solid var(--gold);
 }
 
 #side-bets-button {
@@ -214,10 +215,16 @@ button:disabled {
     border: 1px solid var(--off-black);
     color: var(--off-black);
     background-color: var(--gold);
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin: 0.5em;
     padding: 0.2em 0.5em;
     border-radius: 5px;
+}
+
+.change-color {
+    animation-name: change-color;
+    animation-duration: 1.3s;
+    animation-iteration-count: 5;
 }
 
 #side-bets-button:hover,
@@ -280,7 +287,7 @@ button:disabled {
     color: var(--off-black);
     background-color: var(--off-white);
     margin: 0.5em;
-    font-size: 1rem;
+    font-size: 1.1rem;
     padding: 0.2em 0.5em;
     border-radius: 5px;
     text-decoration: none;
@@ -380,6 +387,12 @@ button:disabled {
     font-weight: 700;
 }
 
+#buy-insurance-text {
+    margin: 0.5em 0;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
 .hidden {
     display: none;
 }
@@ -424,8 +437,20 @@ button:disabled {
     }
 }
 
+@keyframes change-color {
+    0% {
+        background-color: var(--gold);
+        border-top: 1px solid black;
+    }
+    100% {
+        border-top: 1px solid blue;
+        background-color: var(--dark-gold);
+    }
+}
+
 @media (prefers-reduced-motion) {
-    #shuffle-spinner {
+    #shuffle-spinner,
+    #side-bets-button {
         animation-duration: 0;
     }
 }
