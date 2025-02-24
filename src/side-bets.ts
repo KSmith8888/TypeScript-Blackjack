@@ -136,8 +136,10 @@ export default class SideBets {
         this.wonSideBetText.textContent = description;
         this.wonSideBetPayout.textContent = `Payout: ${payout.toString(
             10
-        )}/1 - Bet amount: $${this.game.settings.sideBetAmount.toString(10)}`;
-        this.game.player.money += payout * this.game.settings.sideBetAmount;
+        )}/1 - Bet amount: $${this.game.sideBetsMenu.sideBetAmount.toString(
+            10
+        )}`;
+        this.game.player.money += payout * this.game.sideBetsMenu.sideBetAmount;
         this.game.table.totalMoneyText.textContent = `$${this.game.player.money.toString(
             10
         )}`;

@@ -88,11 +88,16 @@ export default class Game {
     }
     initHandCheck() {
         const currentHand = this.player.hands[this.player.currentHand];
-        if (this.settings.sideBetAmount > 0) {
-            this.player.money -= this.settings.sideBetAmount;
-            this.table.totalMoneyText.textContent =
-                this.player.money.toString(10);
-            this.sideBets.checkForMatches(currentHand.cards);
+        if (this.sideBetsMenu.sideBetAmount > 0) {
+            if (this.player.money >= this.sideBetsMenu.sideBetAmount) {
+                this.player.money -= this.sideBetsMenu.sideBetAmount;
+                this.table.totalMoneyText.textContent = `$${this.player.money.toString(
+                    10
+                )}`;
+                this.sideBets.checkForMatches(currentHand.cards);
+            } else {
+                this.sideBetsMenu.turnOffSideBets();
+            }
         }
         if (currentHand.total === 21) {
             if (this.dealer.total !== 21) {
@@ -137,7 +142,7 @@ export default class Game {
             else if (result === "Surrender")
                 this.player.money += Math.floor(bet / 2);
         });
-        if (this.player.money > 5) {
+        if (this.player.money >= 5) {
             this.table.newGameButton.textContent = "New Hand";
         } else {
             this.table.gameOverText.classList.remove("hidden");

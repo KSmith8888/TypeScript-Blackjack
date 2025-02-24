@@ -20,21 +20,7 @@ export default class Deck {
         this.game = game;
         this.cards = [];
         this.#suits = ["Hearts", "Clubs", "Spades", "Diamonds"];
-        this.#ranks = [
-            "A",
-            "A",
-            "A",
-            "A",
-            "A",
-            "A",
-            "A",
-            8,
-            9,
-            10,
-            "J",
-            "Q",
-            "K",
-        ];
+        this.#ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
         this.shuffleModal = <HTMLDialogElement>(
             document.getElementById("shuffle-modal")
         );

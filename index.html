@@ -32,227 +32,285 @@
         <div id="main-container">
             <main id="main-section">
                 <dialog id="game-reset-modal" class="modal">
-                    <section id="reset-section">
-                        <p id="game-result-text"></p>
-                        <p id="game-over-text" class="hidden">
-                            Game over! Want to restart with $100?
-                        </p>
-                        <button
-                            id="new-game-button"
-                            class="button"
-                            type="button"
-                        >
-                            Start new game
-                        </button>
-                        <button
-                            id="next-hand-button"
-                            class="button"
-                            type="button"
-                        >
-                            Next hand
-                        </button>
-                    </section>
+                    <div class="modal-content">
+                        <section id="reset-section">
+                            <p id="game-result-text"></p>
+                            <p id="game-over-text" class="hidden">
+                                Game over! Want to restart with $100?
+                            </p>
+                            <button
+                                id="new-game-button"
+                                class="button"
+                                type="button"
+                            >
+                                Start new game
+                            </button>
+                            <button
+                                id="next-hand-button"
+                                class="button"
+                                type="button"
+                            >
+                                Next hand
+                            </button>
+                        </section>
+                    </div>
                 </dialog>
                 <dialog id="rules-modal" class="modal">
-                    <button
-                        id="close-rules-button"
-                        class="close-modal-button"
-                        type="button"
-                        aria-label="Close"
-                    >
-                        X
-                    </button>
-                    <h2 id="rule-heading">Game Rules</h2>
-                    <ul>
-                        <li class="rule-text">
-                            The game is played with between 1 and 8 decks,
-                            depending on your settings.
-                        </li>
-                        <li class="rule-text">
-                            The goal is to get the total value of your hand as
-                            close to 21 as possible, without going over.
-                        </li>
-                        <li class="rule-text">
-                            If at the end of each round, the total of your hand
-                            is higher than the total of the dealer's hand
-                            without having gone over 21, you win that round.
-                        </li>
-                        <li class="rule-text">
-                            If the total of your hand goes above 21, you bust
-                            and lose that round.
-                        </li>
-                        <li class="rule-text">
-                            The dealer is required to hit when their hand totals
-                            16 or less, and possibly on soft 17 depending on
-                            your settings.
-                        </li>
-                        <li class="rule-text">
-                            If the total of the dealer's hand goes above 21, you
-                            win that round.
-                        </li>
-                        <li class="rule-text">
-                            If the total of your hand ties the total of the
-                            dealer's hand, you push and get your wager amount
-                            back.
-                        </li>
-                        <li class="rule-text">
-                            If your first two cards total exactly 21 after on
-                            your initial hand, that is BlackJack and you win
-                            with a payout of 3/2
-                        </li>
-                        <li class="rule-text">
-                            After the initial cards are shown, you have one
-                            chance to double down. If you do, your wager amount
-                            for that hand is doubled, and you draw exactly one
-                            additional card.
-                        </li>
-                        <li class="rule-text">
-                            If your initial two cards for a hand are of the same
-                            rank, you can split the hand. If you do, your wager
-                            amount for that round is doubled, and you will have
-                            two hands, with each starting with one of those
-                            cards.
-                        </li>
-                        <li class="rule-text">
-                            After the initial cards are shown, you have one
-                            chance to surrender. If you do, you receive half of
-                            your wager amount back and the round ends.
-                        </li>
-                    </ul>
+                    <div class="modal-content">
+                        <button
+                            id="close-rules-button"
+                            class="close-modal-button"
+                            type="button"
+                            aria-label="Close"
+                        >
+                            X
+                        </button>
+                        <h2 id="rule-heading">Game Rules</h2>
+                        <ul>
+                            <li class="rule-text">
+                                The game is played with between 1 and 8 decks,
+                                depending on your settings.
+                            </li>
+                            <li class="rule-text">
+                                The goal is to get the total value of your hand
+                                as close to 21 as possible, without going over.
+                            </li>
+                            <li class="rule-text">
+                                If at the end of each round, the total of your
+                                hand is higher than the total of the dealer's
+                                hand without having gone over 21, you win that
+                                round.
+                            </li>
+                            <li class="rule-text">
+                                If the total of your hand goes above 21, you
+                                bust and lose that round.
+                            </li>
+                            <li class="rule-text">
+                                The dealer is required to hit when their hand
+                                totals 16 or less, and possibly on soft 17
+                                depending on your settings.
+                            </li>
+                            <li class="rule-text">
+                                If the total of the dealer's hand goes above 21,
+                                you win that round.
+                            </li>
+                            <li class="rule-text">
+                                If the total of your hand ties the total of the
+                                dealer's hand, you push and get your wager
+                                amount back.
+                            </li>
+                            <li class="rule-text">
+                                If your first two cards total exactly 21 after
+                                on your initial hand, that is BlackJack and you
+                                win with a payout of 3/2
+                            </li>
+                            <li class="rule-text">
+                                After the initial cards are shown, you have one
+                                chance to double down. If you do, your wager
+                                amount for that hand is doubled, and you draw
+                                exactly one additional card.
+                            </li>
+                            <li class="rule-text">
+                                If your initial two cards for a hand are of the
+                                same rank, you can split the hand. If you do,
+                                your wager amount for that round is doubled, and
+                                you will have two hands, with each starting with
+                                one of those cards.
+                            </li>
+                            <li class="rule-text">
+                                After the initial cards are shown, you have one
+                                chance to surrender. If you do, you receive half
+                                of your wager amount back and the round ends.
+                            </li>
+                        </ul>
+                        <div id="suits-container">
+                            <img
+                                src="./assets/images/Clubs.png"
+                                alt="Clubs"
+                                class="card-suit"
+                            />
+                            <img
+                                src="./assets/images/Hearts.png"
+                                alt="Hearts"
+                                class="card-suit"
+                            />
+                            <img
+                                src="./assets/images/Spades.png"
+                                alt="Spades"
+                                class="card-suit"
+                            />
+                            <img
+                                src="./assets//images/Diamonds.png"
+                                alt="Diamonds"
+                                class="card-suit"
+                            />
+                        </div>
+                    </div>
                 </dialog>
                 <dialog id="settings-modal" class="modal">
-                    <button
-                        id="close-settings-button"
-                        class="close-modal-button"
-                        type="button"
-                        aria-label="Close"
-                    >
-                        X
-                    </button>
-                    <h2 id="rule-heading">Game Settings</h2>
-                    <label for="mute-audio-setting" class="setting-label"
-                        >Mute/Unmute Audio</label
-                    >
-                    <button id="mute-audio-setting" class="button">Mute</button>
-                    <label for="soft-17-setting" class="setting-label"
-                        >Dealer hits on soft 17</label
-                    >
-                    <button id="soft-17-setting" class="button">Turn On</button>
-                    <div id="number-of-decks-container">
-                        <label for="number-of-decks-setting"
-                            >Number of decks</label
+                    <div class="modal-content">
+                        <button
+                            id="close-settings-button"
+                            class="close-modal-button"
+                            type="button"
+                            aria-label="Close"
                         >
-                        <input
-                            id="number-of-decks-setting"
-                            type="range"
-                            min="1"
-                            max="8"
-                            value="4"
-                            list="deck-number-options"
-                        />
-                        <datalist id="deck-number-options">
-                            <option
-                                value="1"
-                                label="1"
-                                class="deck-setting-option"
+                            X
+                        </button>
+                        <h2 id="rule-heading">Game Settings</h2>
+                        <label for="mute-audio-setting" class="setting-label"
+                            >Mute/Unmute Audio</label
+                        >
+                        <button id="mute-audio-setting" class="button">
+                            Mute
+                        </button>
+                        <label for="soft-17-setting" class="setting-label"
+                            >Dealer hits on soft 17</label
+                        >
+                        <button id="soft-17-setting" class="button">
+                            Turn On
+                        </button>
+                        <div id="number-of-decks-container">
+                            <label for="number-of-decks-setting"
+                                >Number of decks</label
                             >
-                                1
-                            </option>
-                            <option value="2"></option>
-                            <option value="3"></option>
-                            <option
+                            <input
+                                id="number-of-decks-setting"
+                                type="range"
+                                min="1"
+                                max="8"
                                 value="4"
-                                label="4"
-                                class="deck-setting-option"
-                            ></option>
-                            <option value="5"></option>
-                            <option value="6"></option>
-                            <option value="7"></option>
-                            <option
-                                value="8"
-                                label="8"
-                                class="deck-setting-option"
-                            ></option>
-                        </datalist>
-                    </div>
-                    <label for="hit-split-aces-setting" class="setting-label"
-                        >Hit or double down on split aces</label
-                    >
-                    <button id="hit-split-aces-setting" class="button">
-                        Turn On
-                    </button>
-                    <fieldset id="draw-speed-container">
-                        <legend>Draw speed</legend>
-                        <div class="button-row-container">
-                            <button id="relaxed-speed-setting" class="button">
-                                Relaxed
-                            </button>
-                            <button id="normal-speed-setting" class="button">
-                                Normal
-                            </button>
-                            <button id="instant-speed-setting" class="button">
-                                Instant
-                            </button>
+                                list="deck-number-options"
+                            />
+                            <datalist id="deck-number-options">
+                                <option
+                                    value="1"
+                                    label="1"
+                                    class="deck-setting-option"
+                                >
+                                    1
+                                </option>
+                                <option value="2"></option>
+                                <option value="3"></option>
+                                <option
+                                    value="4"
+                                    label="4"
+                                    class="deck-setting-option"
+                                ></option>
+                                <option value="5"></option>
+                                <option value="6"></option>
+                                <option value="7"></option>
+                                <option
+                                    value="8"
+                                    label="8"
+                                    class="deck-setting-option"
+                                ></option>
+                            </datalist>
                         </div>
-                    </fieldset>
-                    <label for="surrender-setting" class="setting-label"
-                        >Surrender Option</label
-                    >
-                    <button id="surrender-setting" class="button">
-                        Turn Off
-                    </button>
-                    <label for="insurance-setting" class="setting-label"
-                        >Insurance Option</label
-                    >
-                    <button id="insurance-setting" class="button">
-                        Turn Off
-                    </button>
+                        <label
+                            for="hit-split-aces-setting"
+                            class="setting-label"
+                            >Hit or double down on split aces</label
+                        >
+                        <button id="hit-split-aces-setting" class="button">
+                            Turn On
+                        </button>
+                        <fieldset id="draw-speed-container">
+                            <legend>Draw speed</legend>
+                            <div class="button-row-container">
+                                <button
+                                    id="relaxed-speed-setting"
+                                    class="button"
+                                >
+                                    Relaxed
+                                </button>
+                                <button
+                                    id="normal-speed-setting"
+                                    class="button"
+                                >
+                                    Normal
+                                </button>
+                                <button
+                                    id="instant-speed-setting"
+                                    class="button"
+                                >
+                                    Instant
+                                </button>
+                            </div>
+                        </fieldset>
+                        <label for="surrender-setting" class="setting-label"
+                            >Surrender Option</label
+                        >
+                        <button id="surrender-setting" class="button">
+                            Turn Off
+                        </button>
+                        <label for="insurance-setting" class="setting-label"
+                            >Insurance Option</label
+                        >
+                        <button id="insurance-setting" class="button">
+                            Turn Off
+                        </button>
+                    </div>
                 </dialog>
                 <dialog id="side-bets-modal" class="modal">
-                    <button
-                        id="close-side-bets-button"
-                        class="close-modal-button"
-                        type="button"
-                        aria-label="Close"
-                    >
-                        X
-                    </button>
-                    <h2 id="side-bets-main-heading">Side Bets</h2>
-                    <h3 class="side-bets-sub-heading">Current bet amount:</h3>
-                    <div class="button-row-container">
-                        <button id="side-bet-off" class="button">Off</button>
-                        <button id="side-bet-one" class="button">$1</button>
-                        <button id="side-bet-five" class="button">$5</button>
-                        <button id="side-bet-ten" class="button">$10</button>
+                    <div class="modal-content">
+                        <button
+                            id="close-side-bets-button"
+                            class="close-modal-button"
+                            type="button"
+                            aria-label="Close"
+                        >
+                            X
+                        </button>
+                        <h2 id="side-bets-main-heading">Side Bets</h2>
+                        <h3 class="side-bets-sub-heading">
+                            Current bet amount:
+                        </h3>
+                        <div class="button-row-container">
+                            <button id="side-bet-off" class="button">
+                                Off
+                            </button>
+                            <button id="side-bet-one" class="button">$1</button>
+                            <button id="side-bet-five" class="button">
+                                $5
+                            </button>
+                            <button id="side-bet-ten" class="button">
+                                $10
+                            </button>
+                        </div>
+                        <h3 class="side-bets-sub-heading">Active Side Bets:</h3>
+                        <ul id="current-side-bets-list"></ul>
                     </div>
-                    <h3 class="side-bets-sub-heading">Active Side Bets:</h3>
-                    <ul id="current-side-bets-list"></ul>
                 </dialog>
                 <dialog id="won-side-bet-modal" class="modal">
-                    <h2 id="won-side-bet-heading">You won a side bet!</h2>
-                    <p id="won-side-bet-text"></p>
-                    <p id="won-side-bet-payout"></p>
-                    <button id="won-side-bet-button" class="button">
-                        Continue
-                    </button>
+                    <div class="modal-content">
+                        <h2 id="won-side-bet-heading">You won a side bet!</h2>
+                        <p id="won-side-bet-text"></p>
+                        <p id="won-side-bet-payout"></p>
+                        <button id="won-side-bet-button" class="button">
+                            Continue
+                        </button>
+                    </div>
                 </dialog>
                 <dialog id="shuffle-modal">
                     <div id="shuffle-spinner"></div>
                     <p id="shuffle-spinner-text">Shuffling</p>
                 </dialog>
                 <dialog id="insurance-modal" class="modal">
-                    <h2 id="insurance-heading">Buy Insurance?</h2>
-                    <p id="buy-insurance-text">
-                        Bet $<span id="buy-insurance-bet">0</span> that the
-                        dealer has BlackJack with a 2/1 payout
-                    </p>
-                    <div class="button-row-container">
-                        <button id="insurance-yes-button" class="button">
-                            Yes
-                        </button>
-                        <button id="insurance-no-button" class="button">
-                            No
-                        </button>
+                    <div class="modal-content">
+                        <h2 id="insurance-heading">Buy Insurance?</h2>
+                        <p id="buy-insurance-text">
+                            Bet $<span id="buy-insurance-bet">0</span> that the
+                            dealer has BlackJack with a 2/1 payout
+                        </p>
+                        <div class="button-row-container">
+                            <button id="insurance-yes-button" class="button">
+                                Yes
+                            </button>
+                            <button id="insurance-no-button" class="button">
+                                No
+                            </button>
+                        </div>
                     </div>
                 </dialog>
                 <div id="top-info-container">

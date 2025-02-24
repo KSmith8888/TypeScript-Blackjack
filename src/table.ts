@@ -106,9 +106,16 @@ export default class Table {
         this.dealerFaceDownCard = document.createElement("div");
         this.dealerFaceDownCard.id = "dealer-face-down-card";
         this.dealerFaceDownCard.classList.add("blank-card-container");
+        this.dealerFaceDownCard.ariaLabel = "Dealer hole card";
+        const holeCardContent = document.createElement("div");
+        holeCardContent.classList.add("hole-card-content");
+        this.dealerFaceDownCard.append(holeCardContent);
         this.rulesModal = <HTMLDialogElement>(
             document.getElementById("rules-modal")
         );
+        this.rulesModal.addEventListener("click", (e) => {
+            if (e.target === e.currentTarget) this.rulesModal.close();
+        });
         this.resetModal = <HTMLDialogElement>(
             document.getElementById("game-reset-modal")
         );
@@ -235,6 +242,14 @@ export default class Table {
             this.dealerSection.append(cardContainer);
         }
         cardContainer.classList.add("card-container");
+        let labelRank = "";
+        if (typeof rank === "number") {
+            labelRank = rank.toString(10);
+        } else if (rank === "A") labelRank = "Ace";
+        else if (rank === "K") labelRank = "King";
+        else if (rank === "Q") labelRank = "Queen";
+        else if (rank === "J") labelRank = "Jack";
+        cardContainer.ariaLabel = `${labelRank} of ${suit}`;
         const cardRankTop = document.createElement("p");
         cardRankTop.textContent = rank.toString();
         cardRankTop.classList.add("card-rank-top");
