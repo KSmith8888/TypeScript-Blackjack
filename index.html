@@ -158,63 +158,82 @@
                             X
                         </button>
                         <h2 id="rule-heading">Game Settings</h2>
-                        <label for="mute-audio-setting" class="setting-label"
-                            >Mute/Unmute Audio</label
-                        >
-                        <button id="mute-audio-setting" class="button">
-                            Mute
-                        </button>
-                        <label for="soft-17-setting" class="setting-label"
-                            >Dealer hits on soft 17</label
-                        >
-                        <button id="soft-17-setting" class="button">
-                            Turn On
-                        </button>
-                        <div id="number-of-decks-container">
-                            <label for="number-of-decks-setting"
-                                >Number of decks</label
-                            >
-                            <input
-                                id="number-of-decks-setting"
-                                type="range"
-                                min="1"
-                                max="8"
-                                value="4"
-                                list="deck-number-options"
-                            />
-                            <datalist id="deck-number-options">
-                                <option
-                                    value="1"
-                                    label="1"
-                                    class="deck-setting-option"
+                        <div class="settings-row">
+                            <div class="setting-container">
+                                <label
+                                    for="mute-audio-setting"
+                                    class="setting-label"
+                                    >Mute/Unmute Audio</label
                                 >
-                                    1
-                                </option>
-                                <option value="2"></option>
-                                <option value="3"></option>
-                                <option
+                                <button id="mute-audio-setting" class="button">
+                                    Mute
+                                </button>
+                            </div>
+                            <div class="setting-container">
+                                <label
+                                    for="number-of-decks-setting"
+                                    class="setting-label"
+                                    >Number of decks</label
+                                >
+                                <input
+                                    id="number-of-decks-setting"
+                                    type="range"
+                                    min="1"
+                                    max="8"
                                     value="4"
-                                    label="4"
-                                    class="deck-setting-option"
-                                ></option>
-                                <option value="5"></option>
-                                <option value="6"></option>
-                                <option value="7"></option>
-                                <option
-                                    value="8"
-                                    label="8"
-                                    class="deck-setting-option"
-                                ></option>
-                            </datalist>
+                                    list="deck-number-options"
+                                />
+                                <datalist id="deck-number-options">
+                                    <option
+                                        value="1"
+                                        label="1"
+                                        class="deck-setting-option"
+                                    >
+                                        1
+                                    </option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option
+                                        value="4"
+                                        label="4"
+                                        class="deck-setting-option"
+                                    ></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option value="7"></option>
+                                    <option
+                                        value="8"
+                                        label="8"
+                                        class="deck-setting-option"
+                                    ></option>
+                                </datalist>
+                            </div>
                         </div>
-                        <label
-                            for="hit-split-aces-setting"
-                            class="setting-label"
-                            >Hit or double down on split aces</label
-                        >
-                        <button id="hit-split-aces-setting" class="button">
-                            Turn On
-                        </button>
+                        <div class="settings-row">
+                            <div class="setting-container">
+                                <label
+                                    for="soft-17-setting"
+                                    class="setting-label"
+                                    >Dealer soft 17</label
+                                >
+                                <button id="soft-17-setting" class="button">
+                                    Turn On
+                                </button>
+                            </div>
+                            <div class="setting-container">
+                                <label
+                                    for="hit-split-aces-setting"
+                                    class="setting-label"
+                                    >Hit on split aces</label
+                                >
+                                <button
+                                    id="hit-split-aces-setting"
+                                    class="button"
+                                >
+                                    Turn On
+                                </button>
+                            </div>
+                        </div>
                         <fieldset id="draw-speed-container">
                             <legend>Draw speed</legend>
                             <div class="button-row-container">
@@ -238,18 +257,28 @@
                                 </button>
                             </div>
                         </fieldset>
-                        <label for="surrender-setting" class="setting-label"
-                            >Surrender Option</label
-                        >
-                        <button id="surrender-setting" class="button">
-                            Turn Off
-                        </button>
-                        <label for="insurance-setting" class="setting-label"
-                            >Insurance Option</label
-                        >
-                        <button id="insurance-setting" class="button">
-                            Turn Off
-                        </button>
+                        <div class="settings-row">
+                            <div class="setting-container">
+                                <label
+                                    for="surrender-setting"
+                                    class="setting-label"
+                                    >Surrender Option</label
+                                >
+                                <button id="surrender-setting" class="button">
+                                    Turn Off
+                                </button>
+                            </div>
+                            <div class="setting-container">
+                                <label
+                                    for="insurance-setting"
+                                    class="setting-label"
+                                    >Insurance Option</label
+                                >
+                                <button id="insurance-setting" class="button">
+                                    Turn Off
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </dialog>
                 <dialog id="side-bets-modal" class="modal">

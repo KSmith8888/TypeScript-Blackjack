@@ -35,18 +35,29 @@ export default class SideBets {
         });
         this.bets = [
             {
-                payout: 100,
-                description: "Both cards are fours",
+                payout: 150,
+                description: "Both cards are King of Hearts",
                 didWin: (cards: Card[]) => {
-                    if (cards[0].rank === 4 && cards[1].rank === 4) return true;
+                    if (
+                        cards[0].rank === "K" &&
+                        cards[0].suit === "Hearts" &&
+                        cards[1].rank === "K" &&
+                        cards[1].suit === "Hearts"
+                    )
+                        return true;
                     else return false;
                 },
             },
             {
-                payout: 200,
-                description: "Both cards are aces",
+                payout: 100,
+                description: "Both cards are Ace of Diamonds",
                 didWin: (cards: Card[]) => {
-                    if (cards[0].rank === "A" && cards[1].rank === "A")
+                    if (
+                        cards[0].rank === "A" &&
+                        cards[0].suit === "Diamonds" &&
+                        cards[1].rank === "A" &&
+                        cards[1].suit === "Diamonds"
+                    )
                         return true;
                     else return false;
                 },
@@ -63,34 +74,73 @@ export default class SideBets {
                 },
             },
             {
-                payout: 150,
-                description: "Both cards are hearts",
+                payout: 50,
+                description: "Both cards are Eights",
+                didWin: (cards: Card[]) => {
+                    if (cards[0].rank === 8 && cards[1].rank === 8) return true;
+                    else return false;
+                },
+            },
+            {
+                payout: 50,
+                description: "Both cards are Fours",
+                didWin: (cards: Card[]) => {
+                    if (cards[0].rank === 4 && cards[1].rank === 4) return true;
+                    else return false;
+                },
+            },
+            {
+                payout: 25,
+                description: "Both cards are clubs",
+                didWin: (cards: Card[]) => {
+                    if (cards[0].suit === "Clubs" && cards[1].suit === "Clubs")
+                        return true;
+                    else return false;
+                },
+            },
+            {
+                payout: 100,
+                description: "Both cards are Jack of Clubs",
                 didWin: (cards: Card[]) => {
                     if (
-                        cards[0].suit === "Hearts" &&
-                        cards[1].suit === "Hearts"
+                        cards[0].suit === "Clubs" &&
+                        cards[0].rank === "J" &&
+                        cards[1].suit === "Clubs" &&
+                        cards[1].rank === "J"
                     )
                         return true;
                     else return false;
                 },
             },
             {
-                payout: 150,
-                description: "Both cards are diamonds",
+                payout: 200,
+                description: "One Jack of Spades and one Ace of Hearts",
+                didWin: (cards: Card[]) => {
+                    if (
+                        cards[0].suit === "Spades" &&
+                        cards[0].rank === "J" &&
+                        cards[1].suit === "Hearts" &&
+                        cards[1].rank === "A"
+                    )
+                        return true;
+                    else if (
+                        cards[0].suit === "Hearts" &&
+                        cards[0].rank === "A" &&
+                        cards[1].suit === "Spades" &&
+                        cards[1].rank === "J"
+                    )
+                        return true;
+                    else return false;
+                },
+            },
+            {
+                payout: 25,
+                description: "Both cards are Diamonds",
                 didWin: (cards: Card[]) => {
                     if (
                         cards[0].suit === "Diamonds" &&
                         cards[1].suit === "Diamonds"
                     )
-                        return true;
-                    else return false;
-                },
-            },
-            {
-                payout: 150,
-                description: "Both cards are clubs",
-                didWin: (cards: Card[]) => {
-                    if (cards[0].suit === "Clubs" && cards[1].suit === "Clubs")
                         return true;
                     else return false;
                 },

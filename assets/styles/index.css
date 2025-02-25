@@ -341,15 +341,24 @@ button:disabled {
     margin: 0.5em 0;
 }
 
-.setting-label {
-    max-width: 70%;
-    text-align: center;
-    margin: 0.5em 0 0 0;
+.settings-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-#number-of-decks-container {
+.setting-container {
+    margin: 0.5em;
+    width: 50%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.setting-label {
+    text-align: center;
+    margin: 0.5em 0 0 0;
 }
 
 #number-of-decks-setting {
@@ -358,6 +367,7 @@ button:disabled {
 }
 
 #deck-number-options {
+    width: 90%;
     display: flex;
     justify-content: space-between;
     margin: 0 0.5em;
