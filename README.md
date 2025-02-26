@@ -4,7 +4,7 @@ A classic BlackJack game, playable in the browser. The player and dealer receive
 
 Play the game at https://ksmith8888.github.io/TypeScript-Blackjack/
 
-![Playing cards on a green background resembling a casino table, above a series of red buttons providing gameplay options](/public/blackjack-screenshot-desktop.png)
+![Playing cards on a green background resembling a casino table, above a series of red buttons providing gameplay options](/public/blackjack-readme-screenshot.png)
 
 ## Running locally
 
@@ -70,6 +70,15 @@ https://pixabay.com/sound-effects/card-sounds-35956/
 
 Riffle Card Shuffle by Kodack (Freesound) under Pixabay content license:  
 https://pixabay.com/sound-effects/riffle-card-shuffle-104313/
+
+Arcade UI 6 by floraphonic licensed under Pixabay content license:  
+https://pixabay.com/sound-effects/arcade-ui-6-229503/
+
+Arcade UI 16 by floraphonic licensed under Pixabay content license:  
+https://pixabay.com/sound-effects/arcade-ui-16-229516/
+
+Arcade UI 4 by floraphonic licensed under Pixabay content license:  
+https://pixabay.com/sound-effects/arcade-ui-4-229502/
 
 ## License
 
