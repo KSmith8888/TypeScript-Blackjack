@@ -4,6 +4,8 @@ import Card from "./card.ts";
 import drawCardSound from "../assets/audio/card-sound-one.mp3";
 import flipCardSound from "../assets/audio/card-sound-two.mp3";
 import shuffleSound from "../assets/audio/shuffle-sound.mp3";
+import initWinSound from "../assets/audio/ui-sound-one.mp3";
+import initLossSound from "../assets/audio/ui-sound-three.mp3";
 //this.#ranks = ["A","A","A","A","A","A","A",8,9,10,"J","Q","K"];
 //this.#ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
 
@@ -16,6 +18,8 @@ export default class Deck {
     #dealCardSound: HTMLAudioElement;
     #flipCardSound: HTMLAudioElement;
     #shuffleSound: HTMLAudioElement;
+    initWinSound: HTMLAudioElement;
+    initLossSound: HTMLAudioElement;
     constructor(game: Game) {
         this.game = game;
         this.cards = [];
@@ -30,6 +34,10 @@ export default class Deck {
         this.#flipCardSound.volume = 0.3;
         this.#shuffleSound = new Audio(shuffleSound);
         this.#shuffleSound.volume = 0.3;
+        this.initWinSound = new Audio(initWinSound);
+        this.initWinSound.volume = 0.3;
+        this.initLossSound = new Audio(initLossSound);
+        this.initLossSound.volume = 0.3;
     }
     #createCard(suit: string, rank: string | number): Card {
         return new Card(suit, rank);
@@ -76,6 +84,28 @@ export default class Deck {
         ) {
             this.#shuffleSound.currentTime = 0;
             this.#shuffleSound.play().catch((err: unknown) => {
+                if (err instanceof Error) console.error(err.message);
+                this.game.settings.isSoundMuted = true;
+                this.game.settings.isSoundMutedBtn.textContent = "Unmute";
+                localStorage.setItem("mute-setting", "true");
+            });
+        }
+    }
+    playInitWinSound() {
+        if (!this.game.settings.isSoundMuted) {
+            this.initWinSound.currentTime = 0;
+            this.initWinSound.play().catch((err: unknown) => {
+                if (err instanceof Error) console.error(err.message);
+                this.game.settings.isSoundMuted = true;
+                this.game.settings.isSoundMutedBtn.textContent = "Unmute";
+                localStorage.setItem("mute-setting", "true");
+            });
+        }
+    }
+    playInitLossSound() {
+        if (!this.game.settings.isSoundMuted) {
+            this.initLossSound.currentTime = 0;
+            this.initLossSound.play().catch((err: unknown) => {
                 if (err instanceof Error) console.error(err.message);
                 this.game.settings.isSoundMuted = true;
                 this.game.settings.isSoundMutedBtn.textContent = "Unmute";

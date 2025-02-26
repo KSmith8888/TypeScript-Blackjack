@@ -5,6 +5,7 @@ export default class SideBetsMenu {
     sideBetsModal: HTMLDialogElement;
     openSideBetsBtn: HTMLButtonElement;
     closeSideBetsBtn: HTMLButtonElement;
+    activeBetsText: HTMLParagraphElement;
     currentBetsList: HTMLElement;
     sideBetAmount: number;
     sideBetOffBtn: HTMLButtonElement;
@@ -31,6 +32,9 @@ export default class SideBetsMenu {
         this.closeSideBetsBtn.addEventListener("click", () => {
             this.sideBetsModal.close();
         });
+        this.activeBetsText = <HTMLParagraphElement>(
+            document.getElementById("active-side-bets-text")
+        );
         this.currentBetsList = <HTMLElement>(
             document.getElementById("current-side-bets-list")
         );

@@ -1,6 +1,8 @@
 import Game from "./index.ts";
 import Card from "./card.ts";
 
+import wonSideBetSound from "../assets/audio/ui-sound-two.mp3";
+
 export default class SideBets {
     game: Game;
     currentIndexes: number[];
@@ -9,6 +11,7 @@ export default class SideBets {
     wonSideBetText: HTMLParagraphElement;
     wonSideBetPayout: HTMLParagraphElement;
     wonSideBetBtn: HTMLButtonElement;
+    #wonSideBetSound: HTMLAudioElement;
     bets: {
         payout: number;
         description: string;
@@ -33,6 +36,8 @@ export default class SideBets {
         this.wonSideBetBtn.addEventListener("click", () => {
             this.wonSideBetModal.close();
         });
+        this.#wonSideBetSound = new Audio(wonSideBetSound);
+        this.#wonSideBetSound.volume = 0.3;
         this.bets = [
             {
                 payout: 150,
@@ -149,8 +154,9 @@ export default class SideBets {
     }
     countdown() {
         this.resetCount -= 1;
+        this.game.sideBetsMenu.activeBetsText.classList.add("hidden");
         if (this.resetCount <= 0) {
-            this.resetBets();
+            this.resetBets(false);
             this.resetCount = Math.floor(Math.random() * 10) + 1;
         }
     }
@@ -161,9 +167,8 @@ export default class SideBets {
         }
         this.currentIndexes = Array.from(indexSet);
     }
-    resetBets() {
+    resetBets(init: boolean) {
         this.game.sideBetsMenu.currentBetsList.replaceChildren();
-        this.game.sideBetsMenu.openSideBetsBtn.classList.add("change-color");
         this.resetIndexes();
         this.currentIndexes.forEach((index) => {
             const itemText = `Condition: ${this.bets[index].description}`;
@@ -181,8 +186,13 @@ export default class SideBets {
             payout.classList.add("side-bet-list-item");
             subList.append(payout);
         });
+        if (!init) {
+            this.game.sideBetsMenu.activeBetsText.classList.remove("hidden");
+            this.game.sideBetsMenu.sideBetsModal.showModal();
+        }
     }
     wonSideBet(description: string, payout: number) {
+        this.#playWonSideBetSound();
         this.wonSideBetText.textContent = description;
         this.wonSideBetPayout.textContent = `Payout: ${payout.toString(
             10
@@ -205,5 +215,16 @@ export default class SideBets {
                 );
             }
         });
+    }
+    #playWonSideBetSound() {
+        if (!this.game.settings.isSoundMuted) {
+            this.#wonSideBetSound.currentTime = 0;
+            this.#wonSideBetSound.play().catch((err: unknown) => {
+                if (err instanceof Error) console.error(err.message);
+                this.game.settings.isSoundMuted = true;
+                this.game.settings.isSoundMutedBtn.textContent = "Unmute";
+                localStorage.setItem("mute-setting", "true");
+            });
+        }
     }
 }

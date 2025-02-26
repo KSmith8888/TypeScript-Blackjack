@@ -101,6 +101,9 @@ export default class Game {
         }
         if (currentHand.total === 21) {
             if (this.dealer.total !== 21) {
+                setTimeout(() => {
+                    this.deck.playInitWinSound();
+                }, 500);
                 currentHand.result = "Blackjack";
                 currentHand.resultText = "BlackJack, well done!";
                 this.endRound();
@@ -112,6 +115,9 @@ export default class Game {
             }
         } else if (this.dealer.total === 21) {
             if (this.player.hasInsurance) this.#insurancePayout();
+            setTimeout(() => {
+                this.deck.playInitLossSound();
+            }, 500);
             currentHand.result = "Lost";
             currentHand.resultText =
                 "Dealer got BlackJack, better luck next time!";
@@ -299,7 +305,7 @@ export default class Game {
         this.table.disableSelections();
         this.#checkSavedHighScore();
         this.settings.checkSavedSettings();
-        this.sideBets.resetBets();
+        this.sideBets.resetBets(true);
     }
 }
 const game = new Game();
