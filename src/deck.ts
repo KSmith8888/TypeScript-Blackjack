@@ -6,8 +6,6 @@ import flipCardSound from "../assets/audio/card-sound-two.mp3";
 import shuffleSound from "../assets/audio/shuffle-sound.mp3";
 import initWinSound from "../assets/audio/ui-sound-one.mp3";
 import initLossSound from "../assets/audio/ui-sound-three.mp3";
-//this.#ranks = ["A","A","A","A","A","A","A",8,9,10,"J","Q","K"];
-//this.#ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
 
 export default class Deck {
     game: Game;

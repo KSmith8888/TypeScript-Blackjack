@@ -1,10 +1,23 @@
 # TypeScript-Blackjack
 
-A classic BlackJack game, playable in the browser. The player and dealer receive cards that have been randomly selected from a generated deck and whoever gets closest to twenty-one without going over wins. Current scores and total money remaining each hand are displayed on the board. On subsequent hands, the all time high score is shown, which is stored in localStorage.
+# Introduction
 
-Play the game at https://ksmith8888.github.io/TypeScript-Blackjack/
+A classic BlackJack game made with TypeScript. Playable in the browser on mobile or desktop. Includes several adjustable gameplay and rule settings and an exciting side bet feature. Each hand, the player has the option to bet on a rotating set of side bets for what combination of initial cards will be dealt. For example, there is a 150/1 payout for getting two King of Hearts if that side bet is active.
+
+Play the game: https://ksmith8888.github.io/TypeScript-Blackjack/
 
 ![Playing cards on a green background resembling a casino table, above a series of red buttons providing gameplay options](/public/blackjack-readme-screenshot.png)
+
+## Settings/Rules
+
+-   BlackJack payout: 2/1
+-   Deck number: Adjustable setting between 1-8, default is 4
+-   Dealer soft 17: Adjustable setting, dealer stands by default
+-   Hitting/doubling down on split aces: Adjustable setting, false by default
+-   Hitting/doubling down on split cards besides aces: Allowed
+-   Surrender: Late surrender, option can be turned off
+-   Insurance: 1/2 of the original bet, option can be turned off
+-   Draw speed: Adjustable setting (Relaxed, Normal and Instant)
 
 ## Running locally
 
@@ -83,3 +96,5 @@ https://pixabay.com/sound-effects/arcade-ui-4-229502/
 ## License
 
 MIT: https://github.com/KSmith8888/TypeScript-Blackjack/blob/main/LICENSE
+
+Copyright Kevyn Smith 2022-2025
