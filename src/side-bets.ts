@@ -54,7 +54,7 @@ export default class SideBets {
                 },
             },
             {
-                payout: 100,
+                payout: 150,
                 description: "Both cards are Ace of Diamonds",
                 didWin: (cards: Card[]) => {
                     if (
@@ -90,7 +90,7 @@ export default class SideBets {
                 },
             },
             {
-                payout: 100,
+                payout: 150,
                 description: "Both cards are Eight of Hearts",
                 didWin: (cards: Card[]) => {
                     if (
@@ -104,13 +104,13 @@ export default class SideBets {
                 },
             },
             {
-                payout: 75,
-                description: "Both cards are Four of Spades",
+                payout: 125,
+                description: "Both cards are Four of Diamonds",
                 didWin: (cards: Card[]) => {
                     if (
-                        cards[0].suit === "Spades" &&
+                        cards[0].suit === "Diamonds" &&
                         cards[0].rank === 4 &&
-                        cards[1].suit === "Spades" &&
+                        cards[1].suit === "Diamonds" &&
                         cards[1].rank === 4
                     )
                         return true;
@@ -118,7 +118,7 @@ export default class SideBets {
                 },
             },
             {
-                payout: 100,
+                payout: 125,
                 description: "Both cards are Nine of clubs",
                 didWin: (cards: Card[]) => {
                     if (
@@ -132,7 +132,7 @@ export default class SideBets {
                 },
             },
             {
-                payout: 100,
+                payout: 150,
                 description: "Both cards are Jack of Clubs",
                 didWin: (cards: Card[]) => {
                     if (
@@ -167,7 +167,7 @@ export default class SideBets {
                 },
             },
             {
-                payout: 100,
+                payout: 150,
                 description: "Both cards are Ten of Diamonds",
                 didWin: (cards: Card[]) => {
                     if (
@@ -180,11 +180,22 @@ export default class SideBets {
                     else return false;
                 },
             },
+            {
+                payout: 25,
+                description: "Both cards are Spades",
+                didWin: (cards: Card[]) => {
+                    if (
+                        cards[0].suit === "Spades" &&
+                        cards[1].suit === "Spades"
+                    )
+                        return true;
+                    else return false;
+                },
+            },
         ];
     }
     countdown() {
         this.resetCount -= 1;
-        this.game.sideBetsMenu.activeBetsText.classList.add("hidden");
         if (this.resetCount <= 0) {
             this.resetBets(false);
             this.resetCount = Math.floor(Math.random() * 20) + 5;

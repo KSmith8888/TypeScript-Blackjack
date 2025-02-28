@@ -1,10 +1,10 @@
 # TypeScript-Blackjack
 
-# Introduction
-
-A classic BlackJack game made with TypeScript. Playable in the browser on mobile or desktop. Includes several adjustable gameplay and rule settings and an exciting side bet feature. Each hand, the player has the option to bet on a rotating set of side bets for what combination of initial cards will be dealt. For example, there is a 150/1 payout for getting two King of Hearts if that side bet is active.
+## Introduction
 
 Play the game: https://ksmith8888.github.io/TypeScript-Blackjack/
+
+A classic BlackJack game made with TypeScript. Playable in the browser on mobile or desktop. Includes several adjustable gameplay and rule settings and an exciting side bet feature. Each hand, the player has the option to bet on a rotating set of side bets for what combination of initial cards will be dealt. For example, there is a 150/1 payout for getting two King of Hearts if that side bet is active.
 
 ![Playing cards on a green background resembling a casino table, above a series of red buttons providing gameplay options](/public/blackjack-readme-screenshot.png)
 

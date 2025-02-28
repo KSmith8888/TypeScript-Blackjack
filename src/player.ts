@@ -22,6 +22,13 @@ export default class Player {
         this.currentBet = amount;
         this.money -= amount;
         this.game.table.disableBets();
+        if (this.game.sideBetsMenu.sideBetAmount > 0) {
+            if (this.money >= this.game.sideBetsMenu.sideBetAmount) {
+                this.money -= this.game.sideBetsMenu.sideBetAmount;
+            } else {
+                this.game.sideBetsMenu.turnOffSideBets();
+            }
+        }
         this.game.table.totalMoneyText.textContent = `$${this.money.toString()}`;
         this.game.startRound();
     }
@@ -111,7 +118,9 @@ export default class Player {
                     !this.hands[this.currentHand].result
                 ) {
                     this.game.dealer.revealHoleCard();
-                    this.game.dealer.startTurn();
+                    setTimeout(() => {
+                        this.game.dealer.startTurn();
+                    }, this.game.settings.drawDelay);
                 } else {
                     this.game.nextHand();
                 }

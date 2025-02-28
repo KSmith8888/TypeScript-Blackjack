@@ -89,15 +89,7 @@ export default class Game {
     initHandCheck() {
         const currentHand = this.player.hands[this.player.currentHand];
         if (this.sideBetsMenu.sideBetAmount > 0) {
-            if (this.player.money >= this.sideBetsMenu.sideBetAmount) {
-                this.player.money -= this.sideBetsMenu.sideBetAmount;
-                this.table.totalMoneyText.textContent = `$${this.player.money.toString(
-                    10
-                )}`;
-                this.sideBets.checkForMatches(currentHand.cards);
-            } else {
-                this.sideBetsMenu.turnOffSideBets();
-            }
+            this.sideBets.checkForMatches(currentHand.cards);
         }
         if (currentHand.total === 21) {
             if (this.dealer.total !== 21) {
