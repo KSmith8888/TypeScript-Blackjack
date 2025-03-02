@@ -475,13 +475,12 @@ button:disabled {
 }
 
 @media (prefers-reduced-motion) {
-    #shuffle-spinner,
-    .change-color {
+    #shuffle-spinner {
         animation-duration: 0;
     }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 950px) {
     #main-section {
         justify-content: center;
     }
@@ -524,6 +523,9 @@ button:disabled {
         font-size: 1.1rem;
         font-weight: 700;
     }
+}
+
+@media (max-width: 650px) {
     .modal[open] {
         max-width: 95%;
         width: 95%;
@@ -531,6 +533,17 @@ button:disabled {
     #game-reset-modal[open] {
         max-width: 95%;
         width: 95%;
-        margin: auto auto 5em auto;
+        margin: auto auto 40% auto;
+    }
+    #bet-buttons-container .button,
+    #selections-container .button {
+        width: 20%;
+        height: 2em;
+    }
+    #side-bets-button,
+    #surrender-button {
+        width: 30%;
+        height: 2em;
+        margin: 1em 0.5em 0.5em 0.5em;
     }
 }

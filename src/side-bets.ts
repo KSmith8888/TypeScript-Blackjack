@@ -70,17 +70,17 @@ export default class SideBets {
             {
                 payout: 150,
                 description:
-                    "One card is a King of Clubs and the other is a Queen of Clubs",
+                    "One card is a King of Clubs and the other is a Queen of Hearts",
                 didWin: (cards: Card[]) => {
                     if (
                         cards[0].suit === "Clubs" &&
                         cards[0].rank === "K" &&
-                        cards[1].suit === "Clubs" &&
+                        cards[1].suit === "Hearts" &&
                         cards[1].rank === "Q"
                     )
                         return true;
                     else if (
-                        cards[0].suit === "Clubs" &&
+                        cards[0].suit === "Hearts" &&
                         cards[0].rank === "Q" &&
                         cards[1].suit === "Clubs" &&
                         cards[1].rank === "K"
@@ -119,12 +119,12 @@ export default class SideBets {
             },
             {
                 payout: 125,
-                description: "Both cards are Nine of clubs",
+                description: "Both cards are Nine of Diamonds",
                 didWin: (cards: Card[]) => {
                     if (
-                        cards[0].suit === "Clubs" &&
+                        cards[0].suit === "Diamonds" &&
                         cards[0].rank === 9 &&
-                        cards[1].suit === "Clubs" &&
+                        cards[1].suit === "Diamonds" &&
                         cards[1].rank === 9
                     )
                         return true;
@@ -133,12 +133,12 @@ export default class SideBets {
             },
             {
                 payout: 150,
-                description: "Both cards are Jack of Clubs",
+                description: "Both cards are Jack of Hearts",
                 didWin: (cards: Card[]) => {
                     if (
-                        cards[0].suit === "Clubs" &&
+                        cards[0].suit === "Hearts" &&
                         cards[0].rank === "J" &&
-                        cards[1].suit === "Clubs" &&
+                        cards[1].suit === "Hearts" &&
                         cards[1].rank === "J"
                     )
                         return true;
@@ -188,6 +188,15 @@ export default class SideBets {
                         cards[0].suit === "Spades" &&
                         cards[1].suit === "Spades"
                     )
+                        return true;
+                    else return false;
+                },
+            },
+            {
+                payout: 25,
+                description: "Both cards are Clubs",
+                didWin: (cards: Card[]) => {
+                    if (cards[0].suit === "Clubs" && cards[1].suit === "Clubs")
                         return true;
                     else return false;
                 },
