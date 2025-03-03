@@ -255,10 +255,15 @@ button:disabled {
     margin: 1em 0 0.5em 0;
 }
 
-#current-side-bets-list,
-.side-bet-sub-list {
+#current-side-bets-list {
+    max-width: 22em;
     margin: 0 0 1em 0;
     list-style-type: square;
+}
+.side-bet-sub-list {
+    max-width: 100%;
+    margin: 0.5em 0;
+    list-style-type: disc;
 }
 
 #top-payout-text,
@@ -366,12 +371,14 @@ button:disabled {
     margin: 0.5em 0 0 0;
 }
 
-#number-of-decks-setting {
+#number-of-decks-setting,
+#volume-setting {
     cursor: pointer;
     margin: 0 0.5em;
 }
 
-#deck-number-options {
+#deck-number-options,
+#volume-options {
     width: 90%;
     display: flex;
     justify-content: space-between;

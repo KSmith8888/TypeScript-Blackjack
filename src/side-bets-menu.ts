@@ -59,7 +59,7 @@ export default class SideBetsMenu {
             this.sideBet5Btn.disabled = false;
             this.sideBet10Btn.disabled = false;
             localStorage.setItem(
-                "side-bet-setting",
+                "side-bet-amount-setting",
                 this.sideBetAmount.toString(10)
             );
         });
@@ -73,7 +73,7 @@ export default class SideBetsMenu {
             this.sideBet5Btn.disabled = true;
             this.sideBet10Btn.disabled = false;
             localStorage.setItem(
-                "side-bet-setting",
+                "side-bet-amount-setting",
                 this.sideBetAmount.toString(10)
             );
         });
@@ -87,15 +87,15 @@ export default class SideBetsMenu {
             this.sideBet5Btn.disabled = false;
             this.sideBet10Btn.disabled = true;
             localStorage.setItem(
-                "side-bet-setting",
+                "side-bet-amount-setting",
                 this.sideBetAmount.toString(10)
             );
         });
     }
     checkSavedSetting() {
-        const sideBetSetting = localStorage.getItem("side-bet-setting");
-        if (sideBetSetting) {
-            const sideBetNum = parseInt(sideBetSetting, 10);
+        const sideBetAmount = localStorage.getItem("side-bet-amount-setting");
+        if (sideBetAmount) {
+            const sideBetNum = parseInt(sideBetAmount, 10);
             if (sideBetNum === 1) {
                 this.sideBetAmount = 1;
                 this.sideBet1Btn.disabled = true;
@@ -120,7 +120,7 @@ export default class SideBetsMenu {
         this.sideBet5Btn.disabled = false;
         this.sideBet10Btn.disabled = false;
         localStorage.setItem(
-            "side-bet-setting",
+            "side-bet-amount-setting",
             this.sideBetAmount.toString(10)
         );
     }

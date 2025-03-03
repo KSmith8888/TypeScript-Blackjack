@@ -165,12 +165,35 @@
                             X
                         </button>
                         <h2 id="rule-heading">Game Settings</h2>
+                        <fieldset id="draw-speed-container">
+                            <legend>Draw speed</legend>
+                            <div class="button-row-container">
+                                <button
+                                    id="relaxed-speed-setting"
+                                    class="button"
+                                >
+                                    Relaxed
+                                </button>
+                                <button
+                                    id="normal-speed-setting"
+                                    class="button"
+                                >
+                                    Normal
+                                </button>
+                                <button
+                                    id="instant-speed-setting"
+                                    class="button"
+                                >
+                                    Instant
+                                </button>
+                            </div>
+                        </fieldset>
                         <div class="settings-row">
                             <div class="setting-container">
                                 <label
                                     for="mute-audio-setting"
                                     class="setting-label"
-                                    >Mute/Unmute Audio</label
+                                    >Mute Audio</label
                                 >
                                 <button id="mute-audio-setting" class="button">
                                     Mute
@@ -178,40 +201,34 @@
                             </div>
                             <div class="setting-container">
                                 <label
-                                    for="number-of-decks-setting"
+                                    for="volume-setting"
                                     class="setting-label"
-                                    >Number of decks</label
+                                    >Volume</label
                                 >
                                 <input
-                                    id="number-of-decks-setting"
+                                    id="volume-setting"
                                     type="range"
-                                    min="1"
-                                    max="8"
-                                    value="4"
-                                    list="deck-number-options"
+                                    min="0"
+                                    max="100"
+                                    value="0"
+                                    step="50"
+                                    list="volume-options"
                                 />
-                                <datalist id="deck-number-options">
+                                <datalist id="volume-options">
                                     <option
-                                        value="1"
-                                        label="1"
-                                        class="deck-setting-option"
-                                    >
-                                        1
-                                    </option>
-                                    <option value="2"></option>
-                                    <option value="3"></option>
-                                    <option
-                                        value="4"
-                                        label="4"
-                                        class="deck-setting-option"
+                                        value="0"
+                                        label="Low"
+                                        class="volume-option"
                                     ></option>
-                                    <option value="5"></option>
-                                    <option value="6"></option>
-                                    <option value="7"></option>
                                     <option
-                                        value="8"
-                                        label="8"
-                                        class="deck-setting-option"
+                                        value="50"
+                                        label="Med"
+                                        class="volume-option"
+                                    ></option>
+                                    <option
+                                        value="100"
+                                        label="High"
+                                        class="volume-option"
                                     ></option>
                                 </datalist>
                             </div>
@@ -244,29 +261,55 @@
                                 </button>
                             </div>
                         </div>
-                        <fieldset id="draw-speed-container">
-                            <legend>Draw speed</legend>
-                            <div class="button-row-container">
-                                <button
-                                    id="relaxed-speed-setting"
-                                    class="button"
+                        <div class="settings-row">
+                            <div class="setting-container">
+                                <label
+                                    for="side-bet-setting"
+                                    class="setting-label"
+                                    >Side Bet Option</label
                                 >
-                                    Relaxed
-                                </button>
-                                <button
-                                    id="normal-speed-setting"
-                                    class="button"
-                                >
-                                    Normal
-                                </button>
-                                <button
-                                    id="instant-speed-setting"
-                                    class="button"
-                                >
-                                    Instant
+                                <button id="side-bet-setting" class="button">
+                                    Turn Off
                                 </button>
                             </div>
-                        </fieldset>
+                            <div class="setting-container">
+                                <label
+                                    for="number-of-decks-setting"
+                                    class="setting-label"
+                                    >Number of decks</label
+                                >
+                                <input
+                                    id="number-of-decks-setting"
+                                    type="range"
+                                    min="1"
+                                    max="8"
+                                    value="4"
+                                    list="deck-number-options"
+                                />
+                                <datalist id="deck-number-options">
+                                    <option
+                                        value="1"
+                                        label="1"
+                                        class="deck-setting-option"
+                                    ></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option
+                                        value="4"
+                                        label="4"
+                                        class="deck-setting-option"
+                                    ></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option value="7"></option>
+                                    <option
+                                        value="8"
+                                        label="8"
+                                        class="deck-setting-option"
+                                    ></option>
+                                </datalist>
+                            </div>
+                        </div>
                         <div class="settings-row">
                             <div class="setting-container">
                                 <label

@@ -13,9 +13,9 @@ export default class Deck {
     #suits: string[];
     #ranks: (number | string)[];
     shuffleModal: HTMLDialogElement;
-    #dealCardSound: HTMLAudioElement;
-    #flipCardSound: HTMLAudioElement;
-    #shuffleSound: HTMLAudioElement;
+    dealCardSound: HTMLAudioElement;
+    flipCardSound: HTMLAudioElement;
+    shuffleSound: HTMLAudioElement;
     initWinSound: HTMLAudioElement;
     initLossSound: HTMLAudioElement;
     constructor(game: Game) {
@@ -26,16 +26,11 @@ export default class Deck {
         this.shuffleModal = <HTMLDialogElement>(
             document.getElementById("shuffle-modal")
         );
-        this.#dealCardSound = new Audio(drawCardSound);
-        this.#dealCardSound.volume = 0.5;
-        this.#flipCardSound = new Audio(flipCardSound);
-        this.#flipCardSound.volume = 0.3;
-        this.#shuffleSound = new Audio(shuffleSound);
-        this.#shuffleSound.volume = 0.3;
+        this.dealCardSound = new Audio(drawCardSound);
+        this.flipCardSound = new Audio(flipCardSound);
+        this.shuffleSound = new Audio(shuffleSound);
         this.initWinSound = new Audio(initWinSound);
-        this.initWinSound.volume = 0.3;
         this.initLossSound = new Audio(initLossSound);
-        this.initLossSound.volume = 0.3;
     }
     #createCard(suit: string, rank: string | number): Card {
         return new Card(suit, rank);
@@ -55,8 +50,8 @@ export default class Deck {
     }
     playCardSound() {
         if (!this.game.settings.isSoundMuted) {
-            this.#dealCardSound.currentTime = 0;
-            this.#dealCardSound.play().catch((err: unknown) => {
+            this.dealCardSound.currentTime = 0;
+            this.dealCardSound.play().catch((err: unknown) => {
                 if (err instanceof Error) console.error(err.message);
                 this.game.settings.isSoundMuted = true;
                 this.game.settings.isSoundMutedBtn.textContent = "Unmute";
@@ -66,8 +61,8 @@ export default class Deck {
     }
     playFlipSound() {
         if (!this.game.settings.isSoundMuted) {
-            this.#flipCardSound.currentTime = 0;
-            this.#flipCardSound.play().catch((err: unknown) => {
+            this.flipCardSound.currentTime = 0;
+            this.flipCardSound.play().catch((err: unknown) => {
                 if (err instanceof Error) console.error(err.message);
                 this.game.settings.isSoundMuted = true;
                 this.game.settings.isSoundMutedBtn.textContent = "Unmute";
@@ -80,8 +75,8 @@ export default class Deck {
             !this.game.settings.isSoundMuted &&
             this.game.settings.drawDelay !== 0
         ) {
-            this.#shuffleSound.currentTime = 0;
-            this.#shuffleSound.play().catch((err: unknown) => {
+            this.shuffleSound.currentTime = 0;
+            this.shuffleSound.play().catch((err: unknown) => {
                 if (err instanceof Error) console.error(err.message);
                 this.game.settings.isSoundMuted = true;
                 this.game.settings.isSoundMutedBtn.textContent = "Unmute";

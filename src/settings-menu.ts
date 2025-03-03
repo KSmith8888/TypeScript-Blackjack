@@ -11,15 +11,18 @@ export default class SettingsMenu {
     hitOnSoft17: boolean;
     hitOnSplitAces: boolean;
     drawDelay: number;
+    sideBetOption: boolean;
     surrenderOption: boolean;
     insuranceOption: boolean;
     isSoundMutedBtn: HTMLButtonElement;
+    volumeInput: HTMLInputElement;
     numberOfDecksInput: HTMLInputElement;
     hitOnSoft17Btn: HTMLButtonElement;
     hitOnSplitAcesBtn: HTMLButtonElement;
     relaxedSpeedBtn: HTMLButtonElement;
     normalSpeedBtn: HTMLButtonElement;
     instantSpeedBtn: HTMLButtonElement;
+    sideBetOptionBtn: HTMLButtonElement;
     surrenderOptionBtn: HTMLButtonElement;
     insuranceOptionBtn: HTMLButtonElement;
     constructor(game: Game) {
@@ -48,6 +51,7 @@ export default class SettingsMenu {
         this.hitOnSoft17 = false;
         this.hitOnSplitAces = false;
         this.drawDelay = 750;
+        this.sideBetOption = true;
         this.surrenderOption = true;
         this.insuranceOption = true;
         this.isSoundMutedBtn = <HTMLButtonElement>(
@@ -58,10 +62,12 @@ export default class SettingsMenu {
                 this.isSoundMuted = false;
                 this.isSoundMutedBtn.textContent = "Mute";
                 localStorage.setItem("mute-setting", "false");
+                this.volumeInput.disabled = false;
             } else {
                 this.isSoundMuted = true;
                 this.isSoundMutedBtn.textContent = "Unmute";
                 localStorage.setItem("mute-setting", "true");
+                this.volumeInput.disabled = true;
             }
         });
         this.hitOnSoft17Btn = <HTMLButtonElement>(
@@ -76,6 +82,22 @@ export default class SettingsMenu {
                 this.hitOnSoft17 = true;
                 this.hitOnSoft17Btn.textContent = "Turn Off";
                 localStorage.setItem("soft-17-setting", "true");
+            }
+        });
+        this.volumeInput = <HTMLInputElement>(
+            document.getElementById("volume-setting")
+        );
+        this.volumeInput.addEventListener("change", () => {
+            const value = parseInt(this.volumeInput.value, 10);
+            if (value === 100) {
+                localStorage.setItem("volume-setting", "High");
+                this.updateVolume("High");
+            } else if (value === 50) {
+                localStorage.setItem("volume-setting", "Medium");
+                this.updateVolume("Medium");
+            } else {
+                localStorage.setItem("volume-setting", "Low");
+                this.updateVolume("Low");
             }
         });
         this.numberOfDecksInput = <HTMLInputElement>(
@@ -151,7 +173,25 @@ export default class SettingsMenu {
                 this.drawDelay.toString(10)
             );
         });
-
+        this.sideBetOptionBtn = <HTMLButtonElement>(
+            document.getElementById("side-bet-setting")
+        );
+        this.sideBetOptionBtn.addEventListener("click", () => {
+            if (this.sideBetOption) {
+                this.sideBetOption = false;
+                this.sideBetOptionBtn.textContent = "Turn On";
+                this.game.sideBetsMenu.openSideBetsBtn.classList.add("hidden");
+                localStorage.setItem("side-bet-setting", "false");
+                this.game.sideBetsMenu.turnOffSideBets();
+            } else {
+                this.sideBetOption = true;
+                this.sideBetOptionBtn.textContent = "Turn Off";
+                this.game.sideBetsMenu.openSideBetsBtn.classList.remove(
+                    "hidden"
+                );
+                localStorage.setItem("side-bet-setting", "true");
+            }
+        });
         this.surrenderOptionBtn = <HTMLButtonElement>(
             document.getElementById("surrender-setting")
         );
@@ -259,5 +299,34 @@ export default class SettingsMenu {
                 this.insuranceOptionBtn.textContent = "Turn Off";
             }
         }
+        const volumeSetting = localStorage.getItem("volume-setting");
+        if (volumeSetting === "High") {
+            this.updateVolume("High");
+        } else if (volumeSetting === "Medium") {
+            this.updateVolume("Medium");
+        } else if (volumeSetting === "Low") {
+            this.updateVolume("Low");
+        } else {
+            this.updateVolume("Low");
+        }
+    }
+    updateVolume(setting: string) {
+        const sounds = [
+            this.game.deck.shuffleSound,
+            this.game.deck.dealCardSound,
+            this.game.deck.flipCardSound,
+            this.game.sideBets.wonSideBetSound,
+            this.game.deck.initWinSound,
+            this.game.deck.initLossSound,
+        ];
+        let newVolume = 0.3;
+        if (setting === "Medium") {
+            newVolume = 0.6;
+        } else if (setting === "High") {
+            newVolume = 0.9;
+        }
+        sounds.forEach((sound) => {
+            sound.volume = newVolume;
+        });
     }
 }

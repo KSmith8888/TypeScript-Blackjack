@@ -11,7 +11,7 @@ export default class SideBets {
     wonSideBetText: HTMLParagraphElement;
     wonSideBetPayout: HTMLParagraphElement;
     wonSideBetBtn: HTMLButtonElement;
-    #wonSideBetSound: HTMLAudioElement;
+    wonSideBetSound: HTMLAudioElement;
     bets: {
         payout: number;
         description: string;
@@ -36,8 +36,7 @@ export default class SideBets {
         this.wonSideBetBtn.addEventListener("click", () => {
             this.wonSideBetModal.close();
         });
-        this.#wonSideBetSound = new Audio(wonSideBetSound);
-        this.#wonSideBetSound.volume = 0.3;
+        this.wonSideBetSound = new Audio(wonSideBetSound);
         this.bets = [
             {
                 payout: 150,
@@ -236,7 +235,8 @@ export default class SideBets {
             payout.classList.add("side-bet-list-item");
             subList.append(payout);
         });
-        if (!init) {
+        console.log("Side bets reset");
+        if (!init && this.game.settings.sideBetOption) {
             this.game.sideBetsMenu.activeBetsText.classList.remove("hidden");
             this.game.sideBetsMenu.sideBetsModal.showModal();
         }
@@ -268,8 +268,8 @@ export default class SideBets {
     }
     #playWonSideBetSound() {
         if (!this.game.settings.isSoundMuted) {
-            this.#wonSideBetSound.currentTime = 0;
-            this.#wonSideBetSound.play().catch((err: unknown) => {
+            this.wonSideBetSound.currentTime = 0;
+            this.wonSideBetSound.play().catch((err: unknown) => {
                 if (err instanceof Error) console.error(err.message);
                 this.game.settings.isSoundMuted = true;
                 this.game.settings.isSoundMutedBtn.textContent = "Unmute";
