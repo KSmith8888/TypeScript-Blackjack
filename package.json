@@ -5,10 +5,9 @@
     "description": "A classic Blackjack game, playable in the browser",
     "license": "MIT",
     "author": "Kevyn Smith",
-    "homepage": "https://ksmith8888.github.io/TypeScript-Blackjack/",
+    "homepage": "https://blackjack-browser-game.pages.dev/",
     "scripts": {
         "lint": "eslint .",
-        "test": "node --test ./unit-tests",
         "dev": "vite",
         "preview": "vite preview --port 5173",
         "build": "tsc && vite build"
