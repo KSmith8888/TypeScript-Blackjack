@@ -328,6 +328,7 @@ button:disabled {
     padding: 0;
     color: var(--off-black);
     background-color: var(--off-white);
+    border-radius: 5px;
     border: 2px solid var(--off-black);
 }
 

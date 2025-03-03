@@ -235,7 +235,6 @@ export default class SideBets {
             payout.classList.add("side-bet-list-item");
             subList.append(payout);
         });
-        console.log("Side bets reset");
         if (!init && this.game.settings.sideBetOption) {
             this.game.sideBetsMenu.activeBetsText.classList.remove("hidden");
             this.game.sideBetsMenu.sideBetsModal.showModal();
