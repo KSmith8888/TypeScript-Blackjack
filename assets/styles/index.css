@@ -324,12 +324,12 @@ button:disabled {
 }
 
 .modal[open] {
-    max-width: 50%;
+    max-width: 30em;
     padding: 0;
     color: var(--off-black);
     background-color: var(--off-white);
     border-radius: 5px;
-    border: 2px solid var(--off-black);
+    border: 1px solid var(--off-black);
 }
 
 .modal-content {
