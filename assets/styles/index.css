@@ -159,12 +159,7 @@ button:disabled {
     width: 100%;
 }
 
-#next-hand-button {
-    display: none;
-}
-
-.card-container,
-.blank-card-container {
+.card-container {
     margin: 0.5em;
     padding: 0.5em;
     width: 6em;
@@ -178,9 +173,13 @@ button:disabled {
     background-color: var(--white);
 }
 
-#dealer-face-down-card {
-    display: none;
+.blank-card-container {
+    margin: 0.5em;
     padding: 0.25em;
+    width: 6em;
+    height: 8.5em;
+    border: 1px solid var(--off-black);
+    border-radius: 5px;
     background-color: var(--white);
 }
 

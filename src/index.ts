@@ -64,7 +64,7 @@ export default class Game {
             setTimeout(() => {
                 this.dealer.drawCard(true);
                 this.table.dealerSection.append(this.table.dealerFaceDownCard);
-                this.table.dealerFaceDownCard.style.display = "block";
+                this.table.dealerFaceDownCard.classList.remove("hidden");
                 this.table.dealerScoreText.textContent = "??";
                 if (
                     this.settings.insuranceOption &&
@@ -179,9 +179,7 @@ export default class Game {
         this.table.gameResultText.textContent = "";
         this.table.playerScoreText.textContent = "0";
         this.table.dealerScoreText.textContent = "0";
-        this.table.dealerFaceDownCard.style.display = "none";
         this.table.gameOverText.classList.add("hidden");
-        this.sideBetsMenu.openSideBetsBtn.classList.remove("change-color");
         this.table.disableSelections();
         this.table.activateBets(this.player.money);
         this.sideBets.countdown();
@@ -208,8 +206,8 @@ export default class Game {
             }
         }, this.settings.drawDelay);
         this.table.playerScoreText.textContent = currentHand.total.toString();
-        this.table.newGameButton.style.display = "inline-block";
-        this.table.nextHandBtn.style.display = "none";
+        this.table.newGameButton.classList.remove("hidden");
+        this.table.nextHandBtn.classList.add("hidden");
     }
     #getResult(playerTotal: number, dealerTotal: number) {
         if (playerTotal > 21) {

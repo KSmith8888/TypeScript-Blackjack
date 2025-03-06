@@ -39,7 +39,7 @@ export default class Dealer {
         this.holeCardRevealed = true;
         this.game.deck.playFlipSound();
         setTimeout(() => {
-            this.game.table.dealerFaceDownCard.style.display = "none";
+            this.game.table.dealerFaceDownCard.classList.add("hidden");
             const hiddenDealerCard = this.hand[1];
             this.game.table.renderCard(
                 "Dealer",

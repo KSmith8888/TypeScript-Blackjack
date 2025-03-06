@@ -1,0 +1,6 @@
+/*
+  Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'self'; img-src 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-XSS-Protection: 0
+  X-Permitted-Cross-Domain-Policies: none
