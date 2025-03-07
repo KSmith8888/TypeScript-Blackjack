@@ -240,7 +240,8 @@ button:disabled {
     background-color: var(--dark-red);
 }
 
-#active-side-bets-text {
+#active-side-bets-text,
+#side-bets-low-money-text {
     font-size: 1.1rem;
     margin: 0.5em 0;
     color: var(--medium-blue);

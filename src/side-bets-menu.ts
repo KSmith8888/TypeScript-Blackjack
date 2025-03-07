@@ -6,6 +6,7 @@ export default class SideBetsMenu {
     openSideBetsBtn: HTMLButtonElement;
     closeSideBetsBtn: HTMLButtonElement;
     activeBetsText: HTMLParagraphElement;
+    lowMoneyText: HTMLParagraphElement;
     currentBetsList: HTMLElement;
     sideBetAmount: number;
     sideBetOffBtn: HTMLButtonElement;
@@ -21,12 +22,14 @@ export default class SideBetsMenu {
             if (e.target === e.currentTarget) {
                 this.sideBetsModal.close();
                 this.activeBetsText.classList.add("hidden");
+                this.lowMoneyText.classList.add("hidden");
             }
         });
         this.openSideBetsBtn = <HTMLButtonElement>(
             document.getElementById("side-bets-button")
         );
         this.openSideBetsBtn.addEventListener("click", () => {
+            this.adjustAvailableBets();
             this.sideBetsModal.showModal();
         });
         this.closeSideBetsBtn = <HTMLButtonElement>(
@@ -35,9 +38,13 @@ export default class SideBetsMenu {
         this.closeSideBetsBtn.addEventListener("click", () => {
             this.sideBetsModal.close();
             this.activeBetsText.classList.add("hidden");
+            this.lowMoneyText.classList.add("hidden");
         });
         this.activeBetsText = <HTMLParagraphElement>(
             document.getElementById("active-side-bets-text")
+        );
+        this.lowMoneyText = <HTMLParagraphElement>(
+            document.getElementById("side-bets-low-money-text")
         );
         this.currentBetsList = <HTMLElement>(
             document.getElementById("current-side-bets-list")
@@ -53,43 +60,19 @@ export default class SideBetsMenu {
             document.getElementById("side-bet-one")
         );
         this.sideBet1Btn.addEventListener("click", () => {
-            this.sideBetAmount = 1;
-            this.sideBetOffBtn.disabled = false;
-            this.sideBet1Btn.disabled = true;
-            this.sideBet5Btn.disabled = false;
-            this.sideBet10Btn.disabled = false;
-            localStorage.setItem(
-                "side-bet-amount-setting",
-                this.sideBetAmount.toString(10)
-            );
+            this.setSideBetOne();
         });
         this.sideBet5Btn = <HTMLButtonElement>(
             document.getElementById("side-bet-five")
         );
         this.sideBet5Btn.addEventListener("click", () => {
-            this.sideBetAmount = 5;
-            this.sideBetOffBtn.disabled = false;
-            this.sideBet1Btn.disabled = false;
-            this.sideBet5Btn.disabled = true;
-            this.sideBet10Btn.disabled = false;
-            localStorage.setItem(
-                "side-bet-amount-setting",
-                this.sideBetAmount.toString(10)
-            );
+            this.setSideBetFive();
         });
         this.sideBet10Btn = <HTMLButtonElement>(
             document.getElementById("side-bet-ten")
         );
         this.sideBet10Btn.addEventListener("click", () => {
-            this.sideBetAmount = 10;
-            this.sideBetOffBtn.disabled = false;
-            this.sideBet1Btn.disabled = false;
-            this.sideBet5Btn.disabled = false;
-            this.sideBet10Btn.disabled = true;
-            localStorage.setItem(
-                "side-bet-amount-setting",
-                this.sideBetAmount.toString(10)
-            );
+            this.setSideBetTen();
         });
     }
     checkSavedSetting() {
@@ -114,14 +97,70 @@ export default class SideBetsMenu {
         }
     }
     turnOffSideBets() {
+        const playerMoney = this.game.player.money;
         this.sideBetAmount = 0;
         this.sideBetOffBtn.disabled = true;
-        this.sideBet1Btn.disabled = false;
-        this.sideBet5Btn.disabled = false;
-        this.sideBet10Btn.disabled = false;
+        this.sideBet1Btn.disabled = playerMoney < 1;
+        this.sideBet5Btn.disabled = playerMoney < 5;
+        this.sideBet10Btn.disabled = playerMoney < 10;
         localStorage.setItem(
             "side-bet-amount-setting",
             this.sideBetAmount.toString(10)
         );
+    }
+    setSideBetOne() {
+        const playerMoney = this.game.player.money;
+        this.sideBetAmount = 1;
+        this.sideBetOffBtn.disabled = false;
+        this.sideBet1Btn.disabled = true;
+        this.sideBet5Btn.disabled = playerMoney < 5;
+        this.sideBet10Btn.disabled = playerMoney < 10;
+        localStorage.setItem(
+            "side-bet-amount-setting",
+            this.sideBetAmount.toString(10)
+        );
+    }
+    setSideBetFive() {
+        const playerMoney = this.game.player.money;
+        this.sideBetAmount = 5;
+        this.sideBetOffBtn.disabled = false;
+        this.sideBet1Btn.disabled = playerMoney < 1;
+        this.sideBet5Btn.disabled = true;
+        this.sideBet10Btn.disabled = playerMoney < 10;
+        localStorage.setItem(
+            "side-bet-amount-setting",
+            this.sideBetAmount.toString(10)
+        );
+    }
+    setSideBetTen() {
+        const playerMoney = this.game.player.money;
+        this.sideBetAmount = 10;
+        this.sideBetOffBtn.disabled = false;
+        this.sideBet1Btn.disabled = playerMoney < 1;
+        this.sideBet5Btn.disabled = playerMoney < 5;
+        this.sideBet10Btn.disabled = true;
+        localStorage.setItem(
+            "side-bet-amount-setting",
+            this.sideBetAmount.toString(10)
+        );
+    }
+    adjustSideBetAmount(playerMoney: number) {
+        if (this.sideBetAmount === 10) {
+            if (playerMoney >= 5) this.setSideBetFive();
+            else if (playerMoney >= 1) this.setSideBetOne();
+            else this.turnOffSideBets();
+        } else if (this.sideBetAmount === 5) {
+            if (playerMoney >= 1) this.setSideBetOne();
+            else this.turnOffSideBets();
+        } else {
+            this.turnOffSideBets();
+        }
+    }
+    adjustAvailableBets() {
+        const playerMoney = this.game.player.money;
+        this.sideBet1Btn.disabled = this.sideBetAmount === 1 || playerMoney < 1;
+        this.sideBet5Btn.disabled = this.sideBetAmount === 5 || playerMoney < 5;
+        this.sideBet10Btn.disabled =
+            this.sideBetAmount === 10 || playerMoney < 10;
     }
 }

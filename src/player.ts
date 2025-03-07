@@ -26,7 +26,9 @@ export default class Player {
             if (this.money >= this.game.sideBetsMenu.sideBetAmount) {
                 this.money -= this.game.sideBetsMenu.sideBetAmount;
             } else {
-                this.game.sideBetsMenu.turnOffSideBets();
+                this.game.sideBetsMenu.adjustSideBetAmount(this.money);
+                this.game.sideBetsMenu.lowMoneyText.classList.remove("hidden");
+                this.game.sideBetsMenu.sideBetsModal.showModal();
             }
         }
         this.game.table.totalMoneyText.textContent = `$${this.money.toString()}`;

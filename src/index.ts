@@ -68,7 +68,8 @@ export default class Game {
                 this.table.dealerScoreText.textContent = "??";
                 if (
                     this.settings.insuranceOption &&
-                    this.dealer.hand[0].rank === "A"
+                    this.dealer.hand[0].rank === "A" &&
+                    this.player.money >= Math.floor(this.player.currentBet / 2)
                 ) {
                     this.table.insuranceBet.textContent = Math.floor(
                         this.player.currentBet / 2
