@@ -144,18 +144,6 @@ export default class SideBetsMenu {
             this.sideBetAmount.toString(10)
         );
     }
-    adjustSideBetAmount(playerMoney: number) {
-        if (this.sideBetAmount === 10) {
-            if (playerMoney >= 5) this.setSideBetFive();
-            else if (playerMoney >= 1) this.setSideBetOne();
-            else this.turnOffSideBets();
-        } else if (this.sideBetAmount === 5) {
-            if (playerMoney >= 1) this.setSideBetOne();
-            else this.turnOffSideBets();
-        } else {
-            this.turnOffSideBets();
-        }
-    }
     adjustAvailableBets() {
         const playerMoney = this.game.player.money;
         this.sideBet1Btn.disabled = this.sideBetAmount === 1 || playerMoney < 1;
