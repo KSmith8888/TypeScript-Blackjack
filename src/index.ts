@@ -135,8 +135,10 @@ export default class Game {
             if (result === "Won") {
                 if (hand.hasBeenDoubled) this.player.money += bet * 4;
                 else this.player.money += bet * 2;
-            } else if (result === "Push") this.player.money += bet;
-            else if (result === "Blackjack")
+            } else if (result === "Push") {
+                if (hand.hasBeenDoubled) this.player.money += bet * 2;
+                else this.player.money += bet;
+            } else if (result === "Blackjack")
                 this.player.money += Math.floor(bet * 1.5) + bet;
             else if (result === "Surrender")
                 this.player.money += Math.floor(bet / 2);
