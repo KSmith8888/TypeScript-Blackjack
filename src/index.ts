@@ -98,7 +98,7 @@ export default class Game {
                     this.deck.playInitWinSound();
                 }, 500);
                 currentHand.result = "Blackjack";
-                currentHand.resultText = "BlackJack, well done!";
+                currentHand.resultText = "Blackjack, well done!";
                 this.endRound();
             } else {
                 if (this.player.hasInsurance) this.#insurancePayout();
@@ -209,7 +209,6 @@ export default class Game {
             }
         }, this.settings.drawDelay);
         this.table.playerScoreText.textContent = currentHand.total.toString();
-        this.table.newGameButton.classList.remove("hidden");
         this.table.nextHandBtn.classList.add("hidden");
     }
     #getResult(playerTotal: number, dealerTotal: number) {
@@ -256,6 +255,16 @@ export default class Game {
             this.table.gameResultText.textContent = `Result: Won: ${won.toString(
                 10
             )} Lost: ${lost.toString(10)} Push: ${push.toString(10)}`;
+        }
+        if (this.isFinalHand) {
+            if (this.settings.autoReset) {
+                setTimeout(() => {
+                    this.table.resetModal.close();
+                    this.resetBoard();
+                }, this.settings.drawDelay * 2);
+            } else {
+                this.table.newGameButton.classList.remove("hidden");
+            }
         }
         this.table.resetModal.showModal();
     }

@@ -14,6 +14,7 @@ export default class SettingsMenu {
     sideBetOption: boolean;
     surrenderOption: boolean;
     insuranceOption: boolean;
+    autoReset: boolean;
     isSoundMutedBtn: HTMLButtonElement;
     volumeInput: HTMLInputElement;
     numberOfDecksInput: HTMLInputElement;
@@ -25,6 +26,7 @@ export default class SettingsMenu {
     sideBetOptionBtn: HTMLButtonElement;
     surrenderOptionBtn: HTMLButtonElement;
     insuranceOptionBtn: HTMLButtonElement;
+    autoResetBtn: HTMLButtonElement;
     constructor(game: Game) {
         this.game = game;
         this.#settingsModal = <HTMLDialogElement>(
@@ -54,6 +56,7 @@ export default class SettingsMenu {
         this.sideBetOption = true;
         this.surrenderOption = true;
         this.insuranceOption = true;
+        this.autoReset = true;
         this.isSoundMutedBtn = <HTMLButtonElement>(
             document.getElementById("mute-audio-setting")
         );
@@ -222,6 +225,21 @@ export default class SettingsMenu {
                 localStorage.setItem("insurance-setting", "true");
             }
         });
+        this.autoResetBtn = <HTMLButtonElement>(
+            document.getElementById("auto-reset-setting")
+        );
+        this.autoResetBtn.addEventListener("click", () => {
+            if (this.autoReset) {
+                this.autoReset = false;
+                this.autoResetBtn.textContent = "Turn On";
+                localStorage.setItem("auto-reset-setting", "false");
+            } else {
+                this.autoReset = true;
+                this.autoResetBtn.textContent = "Turn Off";
+                localStorage.setItem("auto-reset-setting", "true");
+                this.game.table.newGameButton.classList.add("hidden");
+            }
+        });
     }
     checkSavedSettings() {
         const muteSetting = localStorage.getItem("mute-setting");
@@ -297,6 +315,16 @@ export default class SettingsMenu {
             } else {
                 this.insuranceOption = true;
                 this.insuranceOptionBtn.textContent = "Turn Off";
+            }
+        }
+        const autoResetSetting = localStorage.getItem("auto-reset-setting");
+        if (autoResetSetting) {
+            if (autoResetSetting === "false") {
+                this.autoReset = false;
+                this.autoResetBtn.textContent = "Turn On";
+            } else {
+                this.autoReset = true;
+                this.autoResetBtn.textContent = "Turn Off";
             }
         }
         const volumeSetting = localStorage.getItem("volume-setting");

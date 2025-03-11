@@ -430,9 +430,9 @@ button:disabled {
 
 #game-result-text,
 #game-over-text {
-    margin: 0.5em 1em;
+    margin: 0.5em;
     text-align: center;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: var(--off-black);
     font-weight: 700;
 }
@@ -544,9 +544,8 @@ button:disabled {
         width: 95%;
     }
     #game-reset-modal[open] {
-        max-width: 95%;
-        width: 95%;
-        margin: auto auto 40% auto;
+        max-width: 70%;
+        width: 70%;
     }
     #bet-buttons-container .button,
     #selections-container .button {
