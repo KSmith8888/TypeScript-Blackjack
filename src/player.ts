@@ -157,7 +157,6 @@ export default class Player {
             this.game.table.playerScoreText.textContent =
                 splitHand.total.toString();
             this.game.table.totalMoneyText.textContent = `$${this.money.toString()}`;
-            this.game.table.nextHandBtn.classList.remove("hidden");
             this.game.deck.playCardSound();
             setTimeout(() => {
                 this.drawCard();

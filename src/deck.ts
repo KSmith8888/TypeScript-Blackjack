@@ -73,7 +73,7 @@ export default class Deck {
     playShuffleSound() {
         if (
             !this.game.settings.isSoundMuted &&
-            this.game.settings.drawDelay !== 0
+            this.game.settings.drawDelay !== 250
         ) {
             this.shuffleSound.currentTime = 0;
             this.shuffleSound.play().catch((err: unknown) => {

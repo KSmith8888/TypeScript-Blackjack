@@ -39,7 +39,7 @@ export default class Game {
     startRound() {
         let shuffleDelay = 0;
         if (this.deck.cards.length < this.settings.shoePenetration) {
-            if (this.settings.drawDelay !== 0) {
+            if (this.settings.drawDelay !== 250) {
                 shuffleDelay = 4000;
                 this.deck.shuffleModal.showModal();
             }
@@ -261,9 +261,18 @@ export default class Game {
                 setTimeout(() => {
                     this.table.resetModal.close();
                     this.resetBoard();
-                }, this.settings.drawDelay * 2);
+                }, this.settings.drawDelay * 1.5);
             } else {
                 this.table.newGameButton.classList.remove("hidden");
+            }
+        } else {
+            if (this.settings.autoReset) {
+                setTimeout(() => {
+                    this.table.resetModal.close();
+                    this.nextHand();
+                }, this.settings.drawDelay * 1.5);
+            } else {
+                this.table.nextHandBtn.classList.remove("hidden");
             }
         }
         this.table.resetModal.showModal();

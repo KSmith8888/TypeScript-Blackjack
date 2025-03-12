@@ -167,7 +167,7 @@ export default class SettingsMenu {
             document.getElementById("instant-speed-setting")
         );
         this.instantSpeedBtn.addEventListener("click", () => {
-            this.drawDelay = 0;
+            this.drawDelay = 250;
             this.instantSpeedBtn.disabled = true;
             this.relaxedSpeedBtn.disabled = false;
             this.normalSpeedBtn.disabled = false;
@@ -281,8 +281,8 @@ export default class SettingsMenu {
         const drawSpeedSetting = localStorage.getItem("draw-speed-setting");
         if (drawSpeedSetting) {
             const drawDelayNum = parseInt(drawSpeedSetting, 10);
-            if (drawDelayNum === 0) {
-                this.drawDelay = 0;
+            if (drawDelayNum === 250) {
+                this.drawDelay = 250;
                 this.instantSpeedBtn.disabled = true;
             } else if (drawDelayNum === 750) {
                 this.drawDelay = 750;
