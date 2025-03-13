@@ -97,11 +97,13 @@ export default class Game {
                 setTimeout(() => {
                     this.deck.playInitWinSound();
                 }, 500);
+                this.table.gameResultText.classList.add("green");
                 currentHand.result = "Blackjack";
                 currentHand.resultText = "Blackjack, well done!";
                 this.endRound();
             } else {
                 if (this.player.hasInsurance) this.#insurancePayout();
+                this.table.gameResultText.classList.add("blue");
                 currentHand.result = "Push";
                 currentHand.resultText = "Push. Try again?";
                 this.endRound();
@@ -111,6 +113,7 @@ export default class Game {
             setTimeout(() => {
                 this.deck.playInitLossSound();
             }, 500);
+            this.table.gameResultText.classList.add("red");
             currentHand.result = "Lost";
             currentHand.resultText =
                 "Dealer got BlackJack, better luck next time!";
@@ -183,11 +186,14 @@ export default class Game {
         this.table.playerScoreText.textContent = "0";
         this.table.dealerScoreText.textContent = "0";
         this.table.gameOverText.classList.add("hidden");
+        this.table.gameResultText.classList.remove("green", "blue", "red");
+        this.table.resultCountText.classList.add("hidden");
         this.table.disableSelections();
         this.table.activateBets(this.player.money);
         this.sideBets.countdown();
     }
     nextHand() {
+        this.table.gameResultText.classList.remove("green", "blue", "red");
         this.player.currentHand += 1;
         this.isFinalHand =
             this.player.hands.length === this.player.currentHand + 1;
@@ -241,6 +247,17 @@ export default class Game {
     }
     showResultText() {
         if (this.player.hands.length === 1 || !this.isFinalHand) {
+            if (this.player.hands[this.player.currentHand].result === "Lost") {
+                this.table.gameResultText.classList.add("red");
+            } else if (
+                this.player.hands[this.player.currentHand].result === "Push"
+            ) {
+                this.table.gameResultText.classList.add("blue");
+            } else if (
+                this.player.hands[this.player.currentHand].result === "Won"
+            ) {
+                this.table.gameResultText.classList.add("green");
+            }
             this.table.gameResultText.textContent =
                 this.player.hands[this.player.currentHand].resultText;
         } else {
@@ -252,9 +269,15 @@ export default class Game {
                 else if (hand.result === "Lost") lost += 1;
                 else push += 1;
             });
-            this.table.gameResultText.textContent = `Result: Won: ${won.toString(
+            this.table.gameResultText.textContent = `Result:`;
+            this.table.wonResultText.textContent = `Won: ${won.toString(10)}`;
+            this.table.lostResultText.textContent = `Lost: ${lost.toString(
                 10
-            )} Lost: ${lost.toString(10)} Push: ${push.toString(10)}`;
+            )}`;
+            this.table.pushResultText.textContent = `Push: ${push.toString(
+                10
+            )}`;
+            this.table.resultCountText.classList.remove("hidden");
         }
         if (this.isFinalHand) {
             if (this.settings.autoReset) {

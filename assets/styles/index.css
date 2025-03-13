@@ -10,6 +10,8 @@
     --gold: rgb(252, 215, 8);
     --dark-gold: rgb(141, 120, 4);
     --medium-blue: rgb(7, 7, 160);
+    --medium-green: rgb(19, 141, 19);
+    --dark-green: rgb(12, 110, 17);
 }
 
 * {
@@ -117,7 +119,7 @@ button:disabled {
 
 #gameplay-area {
     width: 90%;
-    background: radial-gradient(rgb(19, 141, 19), rgb(12, 110, 17));
+    background: radial-gradient(var(--medium-green), var(--dark-green));
     background-repeat: no-repeat;
     background-size: cover;
     border: 8px ridge rgb(63, 32, 4);
@@ -422,19 +424,25 @@ button:disabled {
 }
 
 #reset-section {
-    min-height: 5em;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 #game-result-text,
-#game-over-text {
+#game-over-text,
+.result-count {
     margin: 0.5em;
     text-align: center;
     font-size: 1.4rem;
-    color: var(--off-black);
     font-weight: 700;
+}
+
+#won-result-text,
+#lost-result-text,
+#push-result-text {
+    display: block;
+    margin: 0.5em 0;
 }
 
 #buy-insurance-text {
@@ -476,6 +484,18 @@ button:disabled {
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--dark-red);
+}
+
+.red {
+    color: var(--medium-red);
+}
+
+.blue {
+    color: var(--medium-blue);
+}
+
+.green {
+    color: var(--dark-green);
 }
 
 @keyframes rotate-loader {

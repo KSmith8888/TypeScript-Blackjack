@@ -20,6 +20,10 @@ export default class Table {
     #doubleDownBtn: HTMLButtonElement;
     #splitButton: HTMLButtonElement;
     gameResultText: HTMLParagraphElement;
+    resultCountText: HTMLParagraphElement;
+    wonResultText: HTMLElement;
+    lostResultText: HTMLElement;
+    pushResultText: HTMLElement;
     gameOverText: HTMLParagraphElement;
     rulesModal: HTMLDialogElement;
     resetModal: HTMLDialogElement;
@@ -99,6 +103,18 @@ export default class Table {
         });
         this.gameResultText = <HTMLParagraphElement>(
             document.getElementById("game-result-text")
+        );
+        this.resultCountText = <HTMLParagraphElement>(
+            document.getElementById("result-count-text")
+        );
+        this.wonResultText = <HTMLElement>(
+            document.getElementById("won-result-text")
+        );
+        this.lostResultText = <HTMLElement>(
+            document.getElementById("lost-result-text")
+        );
+        this.pushResultText = <HTMLElement>(
+            document.getElementById("push-result-text")
         );
         this.gameOverText = <HTMLParagraphElement>(
             document.getElementById("game-over-text")
