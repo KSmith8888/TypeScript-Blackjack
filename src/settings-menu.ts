@@ -141,7 +141,7 @@ export default class SettingsMenu {
             document.getElementById("relaxed-speed-setting")
         );
         this.relaxedSpeedBtn.addEventListener("click", () => {
-            this.drawDelay = 1500;
+            this.drawDelay = 1200;
             this.relaxedSpeedBtn.disabled = true;
             this.normalSpeedBtn.disabled = false;
             this.instantSpeedBtn.disabled = false;
@@ -288,7 +288,7 @@ export default class SettingsMenu {
                 this.drawDelay = 750;
                 this.normalSpeedBtn.disabled = true;
             } else {
-                this.drawDelay = 1500;
+                this.drawDelay = 1200;
                 this.relaxedSpeedBtn.disabled = true;
             }
         } else {

@@ -96,7 +96,7 @@ export default class Game {
             if (this.dealer.total !== 21) {
                 setTimeout(() => {
                     this.deck.playInitWinSound();
-                }, 500);
+                }, 750);
                 this.table.gameResultText.classList.add("green");
                 currentHand.result = "Blackjack";
                 currentHand.resultText = "Blackjack, well done!";
@@ -112,7 +112,7 @@ export default class Game {
             if (this.player.hasInsurance) this.#insurancePayout();
             setTimeout(() => {
                 this.deck.playInitLossSound();
-            }, 500);
+            }, 750);
             this.table.gameResultText.classList.add("red");
             currentHand.result = "Lost";
             currentHand.resultText =
@@ -284,7 +284,7 @@ export default class Game {
                 setTimeout(() => {
                     this.table.resetModal.close();
                     this.resetBoard();
-                }, this.settings.drawDelay * 1.5);
+                }, this.settings.drawDelay + 400);
             } else {
                 this.table.newGameButton.classList.remove("hidden");
             }
@@ -293,7 +293,7 @@ export default class Game {
                 setTimeout(() => {
                     this.table.resetModal.close();
                     this.nextHand();
-                }, this.settings.drawDelay * 1.5);
+                }, this.settings.drawDelay + 400);
             } else {
                 this.table.nextHandBtn.classList.remove("hidden");
             }

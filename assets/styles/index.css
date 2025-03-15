@@ -10,8 +10,9 @@
     --gold: rgb(252, 215, 8);
     --dark-gold: rgb(141, 120, 4);
     --medium-blue: rgb(7, 7, 160);
-    --medium-green: rgb(19, 141, 19);
-    --dark-green: rgb(12, 110, 17);
+    --light-green: rgb(19, 141, 19);
+    --medium-green: rgb(12, 110, 17);
+    --dark-green: rgb(8, 87, 12);
 }
 
 * {
@@ -119,7 +120,7 @@ button:disabled {
 
 #gameplay-area {
     width: 90%;
-    background: radial-gradient(var(--medium-green), var(--dark-green));
+    background: radial-gradient(var(--light-green), var(--medium-green));
     background-repeat: no-repeat;
     background-size: cover;
     border: 8px ridge rgb(63, 32, 4);
